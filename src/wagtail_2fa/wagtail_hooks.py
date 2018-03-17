@@ -1,4 +1,5 @@
-from django.urls import path, reverse
+from django.urls import reverse
+from django.conf.urls import url
 from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
 
@@ -8,12 +9,12 @@ from wagtail_2fa import views
 @hooks.register('register_admin_urls')
 def urlpatterns():
     return [
-        path('2fa/auth', views.LoginView.as_view(), name='wagtail_2fa_auth'),
-        path('2fa/devices/', views.DeviceListView.as_view(), name='wagtail_2fa_device_list'),
-        path('2fa/devices/new', views.DeviceCreateView.as_view(), name='wagtail_2fa_device_new'),
-        path('2fa/devices/<int:pk>/update', views.DeviceUpdateView.as_view(), name='wagtail_2fa_device_update'),
-        path('2fa/devices/<int:pk>/remove', views.DeviceDeleteView.as_view(), name='wagtail_2fa_device_remove'),
-        path('2fa/devices/qr-code', views.DeviceQRCodeView.as_view(), name='wagtail_2fa_device_qrcode'),
+        url(r'^2fa/auth$', views.LoginView.as_view(), name='wagtail_2fa_auth'),
+        url(r'^2fa/devices/$', views.DeviceListView.as_view(), name='wagtail_2fa_device_list'),
+        url(r'^2fa/devices/new$', views.DeviceCreateView.as_view(), name='wagtail_2fa_device_new'),
+        url(r'^2fa/devices/(?P<pk>\d+)/update$', views.DeviceUpdateView.as_view(), name='wagtail_2fa_device_update'),
+        url(r'^2fa/devices/(?P<pk>\d+)/remove$', views.DeviceDeleteView.as_view(), name='wagtail_2fa_device_remove'),
+        url(r'^2fa/devices/qr-code$', views.DeviceQRCodeView.as_view(), name='wagtail_2fa_device_qrcode'),
     ]
 
 
