@@ -163,3 +163,6 @@ BASE_URL = 'http://example.com'
 
 
 INTERNAL_IPS = ['127.0.0.1']
+
+
+WAGTAIL_2FA_REQUIRED = True

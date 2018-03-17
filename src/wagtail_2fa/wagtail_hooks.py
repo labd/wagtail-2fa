@@ -1,5 +1,6 @@
-from django.urls import reverse
+from django.conf import settings
 from django.conf.urls import url
+from django.urls import reverse
 from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
 
@@ -20,7 +21,7 @@ def urlpatterns():
 
 @hooks.register('construct_main_menu')
 def remove_menu_if_unverified(request, menu_items):
-    if not request.user.is_verified():
+    if not request.user.is_verified() and settings.WAGTAIL_2FA_REQUIRED:
         menu_items.clear()
         menu_items.append(
             MenuItem('2FA Setup', reverse('wagtail_2fa_device_list'))

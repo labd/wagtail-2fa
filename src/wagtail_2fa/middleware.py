@@ -1,4 +1,5 @@
 import django_otp
+from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.urls import reverse
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
@@ -30,7 +31,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
                     request.get_full_path(),
                     login_url=reverse('wagtail_2fa_auth'))
 
-            elif not user_has_device:
+            elif not user_has_device and settings.WAGTAIL_2FA_REQUIRED:
                 # only allow the user to visit the admin index page and the
                 # admin setup page
                 return redirect_to_login(

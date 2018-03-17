@@ -25,10 +25,23 @@ def test_superuser_force_mfa_auth(rf, superuser):
     assert response.url == '%s?next=/admin/' % reverse('wagtail_2fa_auth')
 
 
-def test_superuser_require_register_device(rf, superuser):
+def test_superuser_require_register_device(rf, superuser, settings):
+    settings.WAGTAIL_2FA_REQUIRED = True
+
     request = rf.get('/admin/')
     request.user = superuser
 
     middleware = VerifyUserMiddleware()
     response = middleware.process_request(request)
     assert response.url == '%s?next=/admin/' % reverse('wagtail_2fa_device_list')
+
+
+def test_superuser_dont_require_register_device(rf, superuser, settings):
+    settings.WAGTAIL_2FA_REQUIRED = False
+
+    request = rf.get('/admin/')
+    request.user = superuser
+
+    middleware = VerifyUserMiddleware()
+    response = middleware.process_request(request)
+    assert response is None
