@@ -1,5 +1,6 @@
 *.egg-info
 *.pyc
+*.sqlite3
 .tox
 .coverage
 .coverage.*
