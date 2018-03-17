@@ -1,0 +1,36 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+
+{% block titletag %}{% trans "Registered 2FA devices" %}{% endblock %}
+{% block content %}
+    {% trans "Two Factor Settings" as prefs_str %}
+    {% include "wagtailadmin/shared/header.html" with title=prefs_str %}
+
+    <div class="nice-padding">
+        <table class="listing">
+                <thead>
+                    <tr>
+                        <th class="name">
+                            {% trans "Name" %}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for device in object_list %}
+                        <tr>
+                            <td class="title">
+                                <h2>
+                                    {{ device.name|default:"Default token" }}
+                                </h2>
+                            </td>
+                            <td>
+                                <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button">Remove device</a>
+                            </td>
+                        </li>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        <a href="{% url 'wagtail_2fa_device_new' %}" class="button">New device</a>
+    </div>
+{% endblock %}

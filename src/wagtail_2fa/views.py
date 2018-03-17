@@ -1,20 +1,26 @@
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+from django.http import HttpResponse
+from django.urls import reverse
+from django.utils.functional import cached_property
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView, View, DeleteView
 from django_otp import login as otp_login
+from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
 
-from wagtail_2fa.forms import TokenForm
+import qrcode
+import qrcode.image.svg
+from wagtail_2fa import forms, utils
 
 
 class LoginView(SuccessURLAllowedHostsMixin, FormView):
     template_name = 'wagtail_2fa/otp_form.html'
-    form_class = TokenForm
+    form_class = forms.TokenForm
     redirect_field_name = REDIRECT_FIELD_NAME
 
     @method_decorator(sensitive_post_parameters())
@@ -52,3 +58,62 @@ class LoginView(SuccessURLAllowedHostsMixin, FormView):
     def get_success_url(self):
         url = self.get_redirect_url()
         return url or resolve_url(settings.LOGIN_REDIRECT_URL)
+
+
+class DeviceListView(ListView):
+    template_name = 'wagtail_2fa/device_list.html'
+
+    def get_queryset(self):
+        return (
+            TOTPDevice.objects
+            .devices_for_user(self.request.user, confirmed=True))
+
+
+class DeviceCreateView(FormView):
+    form_class = forms.DeviceForm
+    template_name = 'wagtail_2fa/device_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['device'] = self.device
+        return kwargs
+
+    def form_valid(self, form):
+        form.device.confirmed = True
+        form.device.save()
+        utils.delete_unconfirmed_devices(form.user)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('wagtail_2fa_device_list')
+
+    @cached_property
+    def device(self):
+        if self.request.method.lower() == 'get':
+            return utils.new_unconfirmed_device(self.request.user)
+        else:
+            return utils.get_unconfirmed_device(self.request.user)
+
+
+class DeviceDeleteView(DeleteView):
+    template_name = 'wagtail_2fa/device_confirm_delete.html'
+
+    def get_queryset(self):
+        return (
+            TOTPDevice.objects
+            .devices_for_user(self.request.user, confirmed=True))
+
+    def get_success_url(self):
+        return reverse('wagtail_2fa_device_list')
+
+
+class DeviceQRCodeView(View):
+
+    def get(self, request):
+        device = utils.get_unconfirmed_device(self.request.user)
+        img = qrcode.make(device.config_url, image_factory=qrcode.image.svg.SvgImage)
+        response = HttpResponse(content_type='image/svg+xml')
+        img.save(response)
+
+        return response
