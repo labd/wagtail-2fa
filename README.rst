@@ -1,5 +1,5 @@
 ===========
-wagtail_2fa
+wagtail-2fa
 ===========
 
 
@@ -20,4 +20,4 @@ Installation
 
 .. code-block:: shell
 
-   pip install wagtail_2fa
+   pip install wagtail-2fa
