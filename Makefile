@@ -1,4 +1,4 @@
-.PHONY: install test upload docs
+.PHONY: install test upload docs sandbox
 
 
 install:
@@ -20,3 +20,10 @@ release:
 	rm -rf dist/*
 	python setup.py sdist bdist_wheel
 	twine upload dist/*
+
+
+sandbox:
+	pip install -r sandbox/requirements.txt
+	sandbox/manage.py migrate
+	sandbox/manage.py loaddata sandbox/exampledata/users.json
+	sandbox/manage.py runserver

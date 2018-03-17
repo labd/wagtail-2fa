@@ -25,8 +25,10 @@ setup(
     author="Michael van Tellingen, Mike Dingjan",
     author_email="",
     install_requires=[
-        'Django>=1.8',
+        'Django>=1.11',
+        'django-otp>=0.4.3',
         'six>=1.1',
+        'qrcode>=5.3',
     ],
     tests_require=tests_require,
     extras_require={

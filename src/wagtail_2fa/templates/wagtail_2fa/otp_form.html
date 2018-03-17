@@ -1,0 +1,73 @@
+{% extends "wagtailadmin/admin_base.html" %}
+{% load staticfiles i18n %}
+{% block titletag %}{% trans "Sign in" %}{% endblock %}
+{% block bodyclass %}login{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+
+    <link rel="stylesheet" href="{% static 'wagtailadmin/css/layouts/login.css' %}" type="text/css" />
+{% endblock %}
+
+{% block furniture %}
+    <div class="content-wrapper">
+        {% if messages or form.errors %}
+            <div class="messages">
+                <ul>
+                    {% if form.errors %}
+                        <li class="error">{% blocktrans %}Invalid code{% endblocktrans %}</li>
+                    {% endif %}
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% block above_login %}{% endblock %}
+
+        <form action="{% url 'wagtail_2fa_auth' %}" method="post" autocomplete="off" novalidate>
+            {% block login_form %}
+            {% csrf_token %}
+
+            {% url 'wagtailadmin_home' as home_url %}
+            <input type="hidden" name="next" value="{{ next|default:home_url }}" />
+
+            <h1>{% block branding_login %}{% trans "Enter your two-factor authentication code" %}{% endblock %}</h1>
+
+            <ul class="fields">
+                {% block fields %}
+                <li class="full">
+                    <div class="field iconfield">
+                        {{ form.otp_token.label_tag }}
+                        <div class="input icon-locked">
+                            {{ form.otp_token }}
+                        </div>
+                    </div>
+                </li>
+
+                {% block extra_fields %}
+                {% for field_name, field in form.extra_fields %}gs
+                <li class="full">
+                    {{ field.label_tag }}
+                    <div class="field iconfield">
+                        {{ field }}
+                    </div>
+                </li>
+                {% endfor %}
+                {% endblock extra_fields %}
+
+                {% endblock %}
+                <li class="submit">
+                    {% block submit_buttons %}
+                    <button type="submit" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Signing in…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Sign in' %}</em></button>
+                    {% endblock %}
+                </li>
+            </ul>
+        {% endblock %}
+        </form>
+
+        {% block below_login %}{% endblock %}
+
+    </div>
+{% endblock %}
