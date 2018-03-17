@@ -1,20 +1,21 @@
+import qrcode
+import qrcode.image.svg
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.http import HttpResponse
-from django.urls import reverse
-from django.utils.functional import cached_property
 from django.shortcuts import resolve_url
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
-from django.views.generic import FormView, ListView, View, DeleteView, UpdateView
+from django.views.decorators.cache import never_cache
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.generic import (
+    DeleteView, FormView, ListView, UpdateView, View)
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from django.utils.decorators import method_decorator
-from django.views.decorators.debug import sensitive_post_parameters
-from django.views.decorators.cache import never_cache
 
-import qrcode
-import qrcode.image.svg
 from wagtail_2fa import forms, utils
 
 

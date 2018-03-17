@@ -1,8 +1,8 @@
 from django.urls import path, reverse
+from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
 
 from wagtail_2fa import views
-from wagtail.admin.menu import MenuItem
 
 
 @hooks.register('register_admin_urls')

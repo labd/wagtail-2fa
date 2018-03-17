@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 import django.contrib.auth.models
-from django.db import migrations, models
 import django.utils.timezone
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):

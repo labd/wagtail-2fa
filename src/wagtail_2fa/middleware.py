@@ -1,6 +1,6 @@
 import django_otp
-from django.urls import reverse
 from django.contrib.auth.views import redirect_to_login
+from django.urls import reverse
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 
 
