@@ -11,7 +11,8 @@ def urlpatterns():
         path('2fa/auth', views.LoginView.as_view(), name='wagtail_2fa_auth'),
         path('2fa/devices/', views.DeviceListView.as_view(), name='wagtail_2fa_device_list'),
         path('2fa/devices/new', views.DeviceCreateView.as_view(), name='wagtail_2fa_device_new'),
-        path('2fa/devices/remove/<int:pk>', views.DeviceDeleteView.as_view(), name='wagtail_2fa_device_remove'),
+        path('2fa/devices/<int:pk>/update', views.DeviceUpdateView.as_view(), name='wagtail_2fa_device_update'),
+        path('2fa/devices/<int:pk>/remove', views.DeviceDeleteView.as_view(), name='wagtail_2fa_device_remove'),
         path('2fa/devices/qr-code', views.DeviceQRCodeView.as_view(), name='wagtail_2fa_device_qrcode'),
     ]
 

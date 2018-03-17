@@ -25,6 +25,7 @@
                             </td>
                             <td>
                                 <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button">Remove device</a>
+                                <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">Update device</a>
                             </td>
                         </li>
                     {% endfor %}

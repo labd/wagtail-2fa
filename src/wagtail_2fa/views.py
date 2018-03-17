@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
-from django.views.generic import FormView, ListView, View, DeleteView
+from django.views.generic import FormView, ListView, View, DeleteView, UpdateView
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.utils.decorators import method_decorator
@@ -76,13 +76,15 @@ class DeviceCreateView(FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['device'] = self.device
+        kwargs['instance'] = self.device
         return kwargs
 
     def form_valid(self, form):
-        form.device.confirmed = True
-        form.device.save()
+        form.save()
         utils.delete_unconfirmed_devices(form.user)
+
+        if not self.request.user.is_verified():
+            otp_login(self.request, form.instance)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -94,6 +96,24 @@ class DeviceCreateView(FormView):
             return utils.new_unconfirmed_device(self.request.user)
         else:
             return utils.get_unconfirmed_device(self.request.user)
+
+
+class DeviceUpdateView(UpdateView):
+    form_class = forms.DeviceForm
+    template_name = 'wagtail_2fa/device_form.html'
+
+    def get_queryset(self):
+        return (
+            TOTPDevice.objects
+            .devices_for_user(self.request.user, confirmed=True))
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('wagtail_2fa_device_list')
 
 
 class DeviceDeleteView(DeleteView):
