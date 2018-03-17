@@ -24,7 +24,6 @@ def pytest_configure():
 
             'modelcluster',
             'taggit',
-            'debug_toolbar',
 
             'django.contrib.admin',
             'django.contrib.auth',
