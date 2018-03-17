@@ -18,7 +18,7 @@ tests_require = [
 
 setup(
     name='wagtail-2fa',
-    version='0.0.1',
+    version='0.0.2',
     description="Something I made",
     long_description=open('README.rst', 'r').read(),
     url='https://github.com/LabD/wagtail-2fa',
