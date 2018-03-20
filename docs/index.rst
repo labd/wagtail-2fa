@@ -1,11 +1,2 @@
-===================
-wagtail-2fa
-===================
+.. include:: ../README.rst
 
-
-Installation
-============
-
-.. code-block:: shell
-
-   pip install wagtail_2fa

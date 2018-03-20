@@ -49,8 +49,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'wagtail-2fa'
-copyright = u'Y, Michael van Tellingen, Mike Dingjan'
-author = u'Michael van Tellingen, Mike Dingjan'
+copyright = u'2018, Lab Digital'
+author = u'opensource@labdigital.nl'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -117,7 +117,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -125,12 +125,6 @@ html_theme = 'alabaster'
 #
 # html_theme_options = {}
 html_theme_options = {
-    'github_user': 'LabD',
-    'github_banner': True,
-    'github_repo': 'wagtail-2fa',
-    'travis_button': True,
-    'codecov_button': True,
-    'analytics_id': 'UA-75907833-X',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -273,7 +267,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'wagtail_2fa.tex', u'wagtail-2fa Documentation',
-     u'Michael van Tellingen, Mike Dingjan', 'manual'),
+     u'Lab Digital', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

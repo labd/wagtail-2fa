@@ -1,4 +1,13 @@
+import re
+
 from setuptools import find_packages, setup
+
+install_requires = [
+    'Django>=1.11',
+    'django-otp>=0.4.3',
+    'six>=1.1',
+    'qrcode>=5.3',
+]
 
 docs_require = [
     'sphinx>=1.4.0',
@@ -16,20 +25,19 @@ tests_require = [
     'flake8-debugger==1.4.0',
 ]
 
+with open('README.rst') as fh:
+    long_description = re.sub(
+        '^.. start-no-pypi.*^.. end-no-pypi', '', fh.read(), flags=re.M | re.S)
+
 setup(
     name='wagtail-2fa',
     version='0.0.2',
-    description="Something I made",
-    long_description=open('README.rst', 'r').read(),
+    description="Two factor authentication for Wagtail",
+    long_description=long_description,
     url='https://github.com/LabD/wagtail-2fa',
-    author="Michael van Tellingen, Mike Dingjan",
+    author="Lab Digital",
     author_email="opensource@labdigital.nl",
-    install_requires=[
-        'Django>=1.11',
-        'django-otp>=0.4.3',
-        'six>=1.1',
-        'qrcode>=5.3',
-    ],
+    install_requires=install_requires,
     tests_require=tests_require,
     extras_require={
         'docs': docs_require,
