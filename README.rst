@@ -87,5 +87,5 @@ the following commands:
 You can then visit http://localhost:8000/admin/ and login with the following
 credentials:
 
-    - E-mailaddress: superuser@example.com
+    - E-mail: superuser@example.com
     - Password: testing
