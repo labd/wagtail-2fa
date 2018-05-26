@@ -36,7 +36,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
                 # admin setup page
                 return redirect_to_login(
                     request.get_full_path(),
-                    login_url=reverse('wagtail_2fa_device_list'))
+                    login_url=reverse('wagtail_2fa_device_new'))
 
     def _require_verified_user(self, request):
         user = request.user
