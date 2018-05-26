@@ -33,7 +33,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Application definition
 
 INSTALLED_APPS = [
-    'wagtail_2fa',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -59,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'wagtail_2fa',
     'django_otp',
     'django_otp.plugins.otp_totp',
 

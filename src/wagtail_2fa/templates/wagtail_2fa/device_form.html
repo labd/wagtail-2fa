@@ -6,7 +6,9 @@
     {% trans "Two Factor Settings" as prefs_str %}
     {% include "wagtailadmin/shared/header.html" with title=prefs_str %}
 
+
     <div class="nice-padding">
+        <p>Intro text here</p>
         <form action="" method="POST" novalidate>
             {% csrf_token %}
             <ul class="fields">
@@ -14,19 +16,16 @@
                     <div class="field char_field text_input">
                         <label>QR Code</label>
                         <div class="field-content">
-
                             <img src="{% url 'wagtail_2fa_device_qrcode' %}">
                         </div>
-
                     </div>
                 </li>
                 {% for field in form %}
-
                     {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
                 {% endfor %}
                 <li class="submit">
                     <a href="{% url 'wagtail_2fa_device_list' %}" class="button button-secondary">{% trans "Cancel" %}</a>
-                    <input type="submit" value="{% trans 'Create' %}" class="button" />
+                    <input type="submit" value="{% if form.instance.confirmed %}{% trans 'Update' %}{% else %}{% trans 'Create' %}{% endif %}" class="button" />
                 </li>
             </ul>
         </form>

@@ -37,17 +37,17 @@ Installation
    pip install wagtail-2fa
 
 
-Then add the following lines before the wagtail apps in to the
-``INSTALLED_APPS`` list in your Django settings:
+Then add the following lines to the ``INSTALLED_APPS`` list in your Django
+settings:
 
 .. code-block:: python
 
     INSTALLED_APPS = [
+        # ...
         'wagtail_2fa',
         'django_otp',
         'django_otp.plugins.otp_totp',
-
-        # other apps
+        # ...
     ]
 
 

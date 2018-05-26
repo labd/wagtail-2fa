@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.conf.urls import url
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
+from wagtail.users.widgets import UserListingButton
 
 from wagtail_2fa import views
 
@@ -26,3 +28,20 @@ def remove_menu_if_unverified(request, menu_items):
         menu_items.append(
             MenuItem('2FA Setup', reverse('wagtail_2fa_device_list'))
         )
+
+
+@hooks.register('register_account_menu_item')
+def register(request):
+    return {
+        'url': reverse('wagtail_2fa_device_list'),
+        'label': _('Manage your 2FA devices'),
+        'help_text': _('Add or remove devices for 2 factor authentication.'),
+    }
+
+
+@hooks.register('register_user_listing_buttons')
+def register_user_listing_buttons(context, user):
+    yield UserListingButton(
+        _('Manage 2FA'),
+        reverse('wagtail_2fa_device_list',),
+        attrs={'title': _('Edit this user')}, priority=100)
