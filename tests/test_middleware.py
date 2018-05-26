@@ -33,7 +33,7 @@ def test_superuser_require_register_device(rf, superuser, settings):
 
     middleware = VerifyUserMiddleware()
     response = middleware.process_request(request)
-    assert response.url == '%s?next=/admin/' % reverse('wagtail_2fa_device_list')
+    assert response.url == '%s?next=/admin/' % reverse('wagtail_2fa_device_new')
 
 
 def test_superuser_dont_require_register_device(rf, superuser, settings):

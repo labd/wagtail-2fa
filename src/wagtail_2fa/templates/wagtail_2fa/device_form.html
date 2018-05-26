@@ -31,6 +31,7 @@
         <form action="" method="POST" novalidate>
             {% csrf_token %}
             <ul class="fields">
+                {% if not form.instance.confirmed %}
                 <li>
                     <div class="field char_field text_input">
                         <label>QR Code</label>
@@ -39,6 +40,7 @@
                         </div>
                     </div>
                 </li>
+                {% endif %}
                 {% for field in form %}
                     {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
                 {% endfor %}
