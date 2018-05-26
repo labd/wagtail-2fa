@@ -1,3 +1,10 @@
+0.1.0 (2018-05-26)
+==================
+ - Require atleast Wagtail 2.1 for the new account management hooks
+ - Add information about how to add a device
+ - Added several unittests
+
+
 0.0.1 (unreleased)
 ==================
  - Created package
