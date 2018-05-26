@@ -1,4 +1,5 @@
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from django.utils.translation import ugettext_lazy as _
 
 
 def get_unconfirmed_device(user):
@@ -10,7 +11,9 @@ def get_unconfirmed_device(user):
 
 def new_unconfirmed_device(user):
     delete_unconfirmed_devices(user)
-    return TOTPDevice.objects.create(user=user, confirmed=False)
+    num = TOTPDevice.objects.filter(user=user).count()
+    return TOTPDevice.objects.create(
+        name=_("Device #%s") % (num + 1), user=user, confirmed=False)
 
 
 def delete_unconfirmed_devices(user):
