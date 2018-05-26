@@ -22,7 +22,9 @@ class TokenForm(OTPAuthenticationFormMixin, forms.Form):
 
 
 class DeviceForm(forms.ModelForm):
-    otp_token = forms.CharField(required=True)
+    otp_token = forms.CharField(
+        label='OTP token', required=True,
+        help_text=_("Enter the numeric code displayed on your device after scanning the QR code"))
 
     class Meta:
         model = TOTPDevice
@@ -35,7 +37,6 @@ class DeviceForm(forms.ModelForm):
             'autocomplete': 'off',
         })
 
-        self.fields['name'].initial = _("Default two factor code")
         if self.instance.confirmed:
             del self.fields['otp_token']
 
