@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-26 14:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:27
+msgid ""
+"Enter the numeric code displayed on your device after scanning the QR code"
+msgstr ""
+
+#: forms.py:52
+msgid "Invalid token. Please make sure you have entered it correctly."
+msgstr ""
+
+#: templates/wagtail_2fa/device_confirm_delete.html:4
+msgid "Delete 2FA device"
+msgstr ""
+
+#: templates/wagtail_2fa/device_confirm_delete.html:6
+#: templates/wagtail_2fa/device_form.html:7
+#: templates/wagtail_2fa/device_list.html:6
+msgid "Two Factor Settings"
+msgstr ""
+
+#: templates/wagtail_2fa/device_form.html:4
+msgid "Add new 2FA device"
+msgstr ""
+
+#: templates/wagtail_2fa/device_form.html:13
+msgid ""
+"\n"
+"            <p>\n"
+"                Two-Factor authentication is a method for making your "
+"account\n"
+"                more secure, by requiring you to provide an additional "
+"piece\n"
+"                of evidence (a factor) next to your password.\n"
+"            </p>\n"
+"            <p>\n"
+"                The most common way of providing this secondary factor, is "
+"by\n"
+"                having one of your devices generate a random code that\n"
+"                changes every minute. This is called a One Time Password.\n"
+"            </p>\n"
+"            <p>\n"
+"                For generating codes, you can use one of the following "
+"apps.\n"
+"                You might even have them installed already.\n"
+"                <ul>\n"
+"                    <li>Google Authenticator for iOS or  Android</li>\n"
+"                    <li>Authy for iOS or Android</li>\n"
+"                    <li>\n"
+"                        A password manager like 1Password, that also "
+"supports\n"
+"                        generating One-Time-Passwords\n"
+"                    </li>\n"
+"                </ul>\n"
+"            </p>\n"
+"            <p>\n"
+"                To configure 2 Factor authentication for your Wagtail CMS\n"
+"                account, install one of those apps and scan the below QR\n"
+"                code. Note that in case you loose or reset your phone, you\n"
+"                will not be able to login anymore. To prevent that, after\n"
+"                having configured your 2FA device, you will be presented "
+"the\n"
+"                ability to download backup codes.\n"
+"            </p>\n"
+"            "
+msgstr ""
+
+#: templates/wagtail_2fa/device_form.html:63
+msgid "Cancel"
+msgstr ""
+
+#: templates/wagtail_2fa/device_form.html:64
+msgid "Update"
+msgstr ""
+
+#: templates/wagtail_2fa/device_form.html:64
+msgid "Create"
+msgstr ""
+
+#: templates/wagtail_2fa/device_list.html:4
+msgid "Registered 2FA devices"
+msgstr ""
+
+#: templates/wagtail_2fa/device_list.html:14
+msgid "Name"
+msgstr ""
+
+#: templates/wagtail_2fa/otp_form.html:3 templates/wagtail_2fa/otp_form.html:63
+msgid "Sign in"
+msgstr ""
+
+#: templates/wagtail_2fa/otp_form.html:18
+msgid "Invalid code"
+msgstr ""
+
+#: templates/wagtail_2fa/otp_form.html:36
+msgid "Enter your two-factor authentication code"
+msgstr ""
+
+#: templates/wagtail_2fa/otp_form.html:63
+msgid "Signing in…"
+msgstr ""
+
+#: utils.py:16
+#, python-format
+msgid "Device #%s"
+msgstr ""
+
+#: wagtail_hooks.py:37
+msgid "Manage your 2FA devices"
+msgstr ""
+
+#: wagtail_hooks.py:38
+msgid "Add or remove devices for 2 factor authentication."
+msgstr ""
+
+#: wagtail_hooks.py:45
+msgid "Manage 2FA"
+msgstr ""
+
+#: wagtail_hooks.py:47
+msgid "Edit this user"
+msgstr ""

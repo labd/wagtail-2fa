@@ -16,6 +16,12 @@ coverage:
 docs:
 	$(MAKE) -C docs html
 
+makemessages:
+	cd src/wagtail_2fa && django-admin makemessages --locale en
+
+compilemessages:
+	cd src/wagtail_2fa && django-admin compilemessages
+
 release:
 	rm -rf dist/*
 	python setup.py sdist bdist_wheel
