@@ -1,14 +1,33 @@
 {% extends "wagtailadmin/base.html" %}
 {% load i18n %}
 
-{% block titletag %}{% trans "Add new 2FA device" %}{% endblock %}
+{% trans "Add new 2FA device" as titletag %}
+{% block titletag %}{{ titletag }}{% endblock %}
 {% block content %}
     {% trans "Two Factor Settings" as prefs_str %}
     {% include "wagtailadmin/shared/header.html" with title=prefs_str %}
 
 
     <div class="nice-padding">
-        <p>Intro text here</p>
+        <div class="help-block help-info">
+            <p>
+                Two-Factor authentication is a method for making your account more secure, by requiring you to provide an additional piece of evidence (a factor) next to your password.
+            </p>
+            <p>
+                The most common way of providing this secondary factor, is by having one of your devices generate a random code that changes every minute. This is called a One Time Password.
+            </p>
+            <p>
+                For generating codes, you can use one of the following apps. You might even have them installed already.
+                <ul>
+                    <li>Google Authenticator for iOS or  Android</li>
+                    <li>Authy for iOS or Android</li>
+                    <li>A password manager like 1Password, that also supports generating One-Time-Passwords</li>
+                </ul>
+            </p>
+            <p>
+                To configure 2 Factor authentication for your Wagtail CMS account, install one of those apps and scan the below QR code. Note that in case you loose or reset your phone, you will not be able to login anymore. To prevent that, after having configured your 2FA device, you will be presented the ability to download backup codes.
+            </p>
+        </div>
         <form action="" method="POST" novalidate>
             {% csrf_token %}
             <ul class="fields">
