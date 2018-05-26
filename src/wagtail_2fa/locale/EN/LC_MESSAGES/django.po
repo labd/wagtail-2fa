@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-26 14:55+0200\n"
+"POT-Creation-Date: 2018-05-26 15:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,23 +75,20 @@ msgid ""
 "                To configure 2 Factor authentication for your Wagtail CMS\n"
 "                account, install one of those apps and scan the below QR\n"
 "                code. Note that in case you loose or reset your phone, you\n"
-"                will not be able to login anymore. To prevent that, after\n"
-"                having configured your 2FA device, you will be presented "
-"the\n"
-"                ability to download backup codes.\n"
+"                will not be able to login anymore.\n"
 "            </p>\n"
 "            "
 msgstr ""
 
-#: templates/wagtail_2fa/device_form.html:63
+#: templates/wagtail_2fa/device_form.html:61
 msgid "Cancel"
 msgstr ""
 
-#: templates/wagtail_2fa/device_form.html:64
+#: templates/wagtail_2fa/device_form.html:62
 msgid "Update"
 msgstr ""
 
-#: templates/wagtail_2fa/device_form.html:64
+#: templates/wagtail_2fa/device_form.html:62
 msgid "Create"
 msgstr ""
 
