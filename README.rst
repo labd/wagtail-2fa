@@ -77,3 +77,15 @@ The following settings are available (Set via your Django settings):
       are forced to login using two factor authentication.
 
 
+Sandbox
+=======
+First create a new virtualenv with Python 3.6.1 and activate it. Then run
+the following commands:
+
+    - make sandbox
+
+You can then visit http://localhost:8000/admin/ and login with the following
+credentials:
+
+    - E-mail: superuser@example.com
+    - Password: testing
