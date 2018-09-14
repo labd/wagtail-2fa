@@ -7,10 +7,10 @@
     {% include "wagtailadmin/shared/header.html" with title=prefs_str %}
 
     <div class="nice-padding">
-        <p>Do you want to delete the device?</p>
+        <p>{% trans 'Do you want to delete the device?' %}</p>
         <form method="post" action="{% url 'wagtail_2fa_device_remove' pk=object.pk %}">
-            <a href="{% url 'wagtail_2fa_device_list' %}" class="button button-secondary">Cancel</a>
-            <input type="submit" class="button warning">
+            <a href="{% url 'wagtail_2fa_device_list' %}" class="button button-secondary">{% trans 'Cancel' %}</a>
+            <input type="submit" class="button warning" value="{% trans 'Remove device' %}">
             {% csrf_token %}
         </form>
     </div>

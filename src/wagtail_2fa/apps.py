@@ -1,7 +1,6 @@
-
+from django.apps import AppConfig
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.apps import AppConfig
 
 
 class Wagtail2faConfig(AppConfig):

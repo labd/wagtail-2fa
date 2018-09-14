@@ -1,0 +1,203 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-14 09:24+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms.py:26
+msgid "OTP token"
+msgstr "OTP code"
+
+#: forms.py:27
+msgid ""
+"Enter the numeric code displayed on your device after scanning the QR code"
+msgstr ""
+"Voer de numerieke code in die op uw apparaat verschijnt na het scannen van "
+"de QR code."
+
+#: forms.py:30 templates/wagtail_2fa/device_list.html:14
+msgid "Name"
+msgstr "Naam"
+
+#: forms.py:31
+msgid "The human-readable name of this device."
+msgstr "Een naam waaraan je dit apparaat makkelijk kan herkennen."
+
+#: forms.py:56
+msgid "Invalid token. Please make sure you have entered it correctly."
+msgstr "Ongeldige code. Controleer of je de code correct hebt ingevuld."
+
+#: templates/wagtail_2fa/device_confirm_delete.html:4
+msgid "Delete 2FA device"
+msgstr "Verwijder 2FA apparaat"
+
+#: templates/wagtail_2fa/device_confirm_delete.html:6
+#: templates/wagtail_2fa/device_form.html:7
+#: templates/wagtail_2fa/device_list.html:6
+msgid "Two Factor Settings"
+msgstr "Twee Staps Verificatie Instellingen"
+
+#: templates/wagtail_2fa/device_confirm_delete.html:10
+msgid "Do you want to delete the device?"
+msgstr "Wil je dit 2FA apparaat verwijderen?"
+
+#: templates/wagtail_2fa/device_confirm_delete.html:12
+#: templates/wagtail_2fa/device_form.html:61
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: templates/wagtail_2fa/device_confirm_delete.html:13
+#: templates/wagtail_2fa/device_list.html:27
+msgid "Remove device"
+msgstr "Verwijder 2FA apparaat"
+
+#: templates/wagtail_2fa/device_form.html:4
+msgid "Add new 2FA device"
+msgstr "Nieuw 2FA apparaat"
+
+#: templates/wagtail_2fa/device_form.html:13
+msgid ""
+"\n"
+"            <p>\n"
+"                Two-Factor authentication is a method for making your "
+"account\n"
+"                more secure, by requiring you to provide an additional "
+"piece\n"
+"                of evidence (a factor) next to your password.\n"
+"            </p>\n"
+"            <p>\n"
+"                The most common way of providing this secondary factor, is "
+"by\n"
+"                having one of your devices generate a random code that\n"
+"                changes every minute. This is called a One Time Password.\n"
+"            </p>\n"
+"            <p>\n"
+"                For generating codes, you can use one of the following "
+"apps.\n"
+"                You might even have them installed already.\n"
+"                <ul>\n"
+"                    <li>Google Authenticator for iOS or  Android</li>\n"
+"                    <li>Authy for iOS or Android</li>\n"
+"                    <li>\n"
+"                        A password manager like 1Password, that also "
+"supports\n"
+"                        generating One-Time-Passwords\n"
+"                    </li>\n"
+"                </ul>\n"
+"            </p>\n"
+"            <p>\n"
+"                To configure 2 Factor authentication for your Wagtail CMS\n"
+"                account, install one of those apps and scan the below QR\n"
+"                code. Note that in case you loose or reset your phone, you\n"
+"                will not be able to login anymore.\n"
+"            </p>\n"
+"            "
+msgstr ""
+"\n"
+"            <p>\n"
+"                Twee Staps Verificatie (2FA) is een manier om je account "
+"extra te beveiligen\n"
+"                door middel van extra bewijs dat jij het bent (een tweede "
+"stap) boven op je wachtwoord.            </p>\n"
+"            <p>\n"
+"                De meest gebruikelijke implementatie van een tweede stap is "
+"een van je apparaten een willekeurige code te laten genereren die elke "
+"minuut verandert.\n"
+"Dit heet een One Time Password (een eenmalig geldig wachtwoord).            "
+"</p>\n"
+"            <p>\n"
+"                Om deze codes te genereren kun je een van de volgende apps "
+"gebruiken.\n"
+"                Het kan zijn dat je een van deze apps al geïnstalleerd "
+"hebt.\n"
+"                <ul>\n"
+"                    <li>Google Authenticator voor iOS of  Android</li>\n"
+"                    <li>Authy voor iOS of Android</li>\n"
+"                    <li>\n"
+"                        Een wachtwoord manager, zoals 1Password, die het "
+"genereren van One-Time-Passwords ondersteunt.\n"
+"                    </li>\n"
+"                </ul>\n"
+"            </p>\n"
+"            <p>\n"
+"                Om Twee Staps Verificatie in te stellen voor je Wagtail CMS "
+"account installeer je een van de bovenstaande apps en scan je de QR-code "
+"hier onder.\n"
+" Houd er rekening mee dat als je je telefoon kwijtraakt of reset je niet "
+"meer kan inloggen.\n"
+"            </p>\n"
+"            "
+
+#: templates/wagtail_2fa/device_form.html:50
+msgid "QR Code"
+msgstr "QR Code"
+
+#: templates/wagtail_2fa/device_form.html:62
+msgid "Update"
+msgstr "Update"
+
+#: templates/wagtail_2fa/device_form.html:62
+msgid "Create"
+msgstr "Toevoegen"
+
+#: templates/wagtail_2fa/device_list.html:4
+msgid "Registered 2FA devices"
+msgstr "Geregistreede 2FA apparaten"
+
+#: templates/wagtail_2fa/device_list.html:28
+msgid "Update device"
+msgstr "Bewerk apparaat"
+
+#: templates/wagtail_2fa/device_list.html:35
+msgid "New device"
+msgstr "Nieuw 2FA apparaat"
+
+#: templates/wagtail_2fa/otp_form.html:3 templates/wagtail_2fa/otp_form.html:63
+msgid "Sign in"
+msgstr "Inloggen"
+
+#: templates/wagtail_2fa/otp_form.html:18
+msgid "Invalid code"
+msgstr "Ongeldige code"
+
+#: templates/wagtail_2fa/otp_form.html:36
+msgid "Enter your two-factor authentication code"
+msgstr "Voer je 2FA verificatie code in"
+
+#: templates/wagtail_2fa/otp_form.html:63
+msgid "Signing in…"
+msgstr "Bezig met inloggen..."
+
+#: utils.py:16
+#, python-format
+msgid "Device #%s"
+msgstr "Apparaat #%s"
+
+#: wagtail_hooks.py:37
+msgid "Manage your 2FA devices"
+msgstr "Beheer je 2FA apparaten"
+
+#: wagtail_hooks.py:38
+msgid "Add or remove devices for 2 factor authentication."
+msgstr "Verwijder of voeg 2FA apparaten toe."
+
+#: wagtail_hooks.py:45
+msgid "Manage 2FA"
+msgstr "Beheer 2FA"
+
+#: wagtail_hooks.py:47
+msgid "Edit this user"
+msgstr "Bewerk deze gebruiker"

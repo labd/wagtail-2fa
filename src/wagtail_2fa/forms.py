@@ -23,8 +23,12 @@ class TokenForm(OTPAuthenticationFormMixin, forms.Form):
 
 class DeviceForm(forms.ModelForm):
     otp_token = forms.CharField(
-        label='OTP token', required=True,
+        label=_("OTP token"), required=True,
         help_text=_("Enter the numeric code displayed on your device after scanning the QR code"))
+
+    name = forms.CharField(
+        label=_("Name"), required=True,
+        help_text=_("The human-readable name of this device."))
 
     class Meta:
         model = TOTPDevice

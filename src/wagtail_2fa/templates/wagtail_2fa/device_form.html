@@ -47,7 +47,7 @@
                 {% if not form.instance.confirmed %}
                 <li>
                     <div class="field char_field text_input">
-                        <label>QR Code</label>
+                        <label>{% trans 'QR Code' %}</label>
                         <div class="field-content">
                             <img src="{% url 'wagtail_2fa_device_qrcode' %}">
                         </div>
