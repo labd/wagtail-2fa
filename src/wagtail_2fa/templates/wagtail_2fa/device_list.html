@@ -24,14 +24,14 @@
                                 </h2>
                             </td>
                             <td>
-                                <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button">Remove device</a>
-                                <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">Update device</a>
+                                <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button">{% trans 'Remove device' %}</a>
+                                <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">{% trans 'Update device' %}</a>
                             </td>
                         </li>
                     {% endfor %}
                 </tbody>
             </table>
 
-        <a href="{% url 'wagtail_2fa_device_new' %}" class="button">New device</a>
+        <a href="{% url 'wagtail_2fa_device_new' %}" class="button">{% trans 'New device' %}</a>
     </div>
 {% endblock %}
