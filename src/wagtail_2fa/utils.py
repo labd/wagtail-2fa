@@ -1,5 +1,5 @@
-from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.utils.translation import ugettext_lazy as _
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
 def get_unconfirmed_device(user):
