@@ -75,6 +75,7 @@ The following settings are available (Set via your Django settings):
     - ``WAGTAIL_2FA_REQUIRED`` (default ``False``): When set to True all
       staff, superuser and other users with access to the Wagtail Admin site
       are forced to login using two factor authentication.
+    - ``WAGTAIL_MOUNT_PATH``: The uWSGI mount point that Wagtail is running at. Ex. ``/wagtail``
 
 
 Sandbox

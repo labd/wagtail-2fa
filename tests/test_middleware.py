@@ -45,3 +45,18 @@ def test_superuser_dont_require_register_device(rf, superuser, settings):
     middleware = VerifyUserMiddleware()
     response = middleware.process_request(request)
     assert response is None
+
+
+def test_not_specifiying_wagtail_mount_point_does_not_prepend_allowed_paths_with_wagtail_mount_point():
+    allowed_paths = VerifyUserMiddleware()._allowed_paths
+
+    for allowed_path in allowed_paths:
+        assert allowed_path.startswith('/admin')
+
+
+def test_specifiying_wagtail_mount_point_does_prepend_allowed_paths_with_wagtail_mount_point():
+    settings.WAGTAIL_MOUNT_POINT = '/wagtail'
+    allowed_paths = VerifyUserMiddleware()._allowed_paths
+
+    for allowed_path in allowed_paths:
+        assert allowed_path.startswith(settings.WAGTAIL_MOUNT_POINT)

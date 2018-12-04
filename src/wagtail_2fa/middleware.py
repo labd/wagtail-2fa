@@ -17,7 +17,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._allowed_paths = [reverse(n) for n in self._allowed_url_names]
+        self._allowed_paths = [settings.WAGTAIL_MOUNT_PATH + reverse(n) for n in self._allowed_url_names]
 
     def process_request(self, request):
         super().process_request(request)
