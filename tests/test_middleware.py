@@ -51,10 +51,10 @@ def test_not_specifiying_wagtail_mount_point_does_not_prepend_allowed_paths_with
     allowed_paths = VerifyUserMiddleware()._allowed_paths
 
     for allowed_path in allowed_paths:
-        assert allowed_path.startswith('/admin')
+        assert allowed_path.startswith('/cms')
 
 
-def test_specifiying_wagtail_mount_point_does_prepend_allowed_paths_with_wagtail_mount_point():
+def test_specifiying_wagtail_mount_point_does_prepend_allowed_paths_with_wagtail_mount_point(rf, superuser, settings):
     settings.WAGTAIL_MOUNT_POINT = '/wagtail'
     allowed_paths = VerifyUserMiddleware()._allowed_paths
 
