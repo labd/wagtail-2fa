@@ -16,3 +16,6 @@ class Wagtail2faConfig(AppConfig):
 
         if not hasattr(settings, 'WAGTAIL_2FA_REQUIRED'):
             settings.WAGTAIL_2FA_REQUIRED = False
+
+        if not hasattr(settings, 'WAGTAIL_MOUNT_PATH'):
+            settings.WAGTAIL_MOUNT_PATH = ''
