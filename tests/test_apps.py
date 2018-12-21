@@ -1,23 +1,33 @@
+import pytest
 from django.apps import apps
 
+from wagtail_2fa.apps import WAGTAIL_2FA_DEFAULT_SETTINGS
 
-def test_sets_default_wagtail_2fa_required(settings):
-    # WAGTAIL_2FA_REQUIRED was already populated in the test environment
-    # Explicitly deleting it to ensure it's added when ready() is called
-    delattr(settings, 'WAGTAIL_2FA_REQUIRED')
-    assert not hasattr(settings, 'WAGTAIL_2FA_REQUIRED')
+
+@pytest.mark.parametrize("setting_name,expected_value", [
+    ('WAGTAIL_2FA_REQUIRED', False),
+    ('WAGTAIL_2FA_OTP_TOTP_NAME', False),
+    ('WAGTAIL_MOUNT_PATH', ''),
+])
+def test_setting_default_values(setting_name, expected_value, settings):
+    # Explicitly deleting settings to ensure it's added when ready() is called
+    delattr(settings, setting_name)
+
     app_config = apps.get_app_config('wagtail_2fa')
     app_config.ready()
 
-    assert not settings.WAGTAIL_2FA_REQUIRED
-    
+    assert getattr(settings, setting_name) == expected_value
 
-def test_sets_default_wagtail_mount_path(settings):
-    # WAGTAIL_MOUNT_PATH was already populated in the test environment
-    # Explicitly deleting it to ensure it's added when ready() is called
-    delattr(settings, 'WAGTAIL_MOUNT_PATH')
-    assert not hasattr(settings, 'WAGTAIL_MOUNT_PATH')
+
+@pytest.mark.parametrize("setting_name", [
+    'WAGTAIL_2FA_OTP_TOTP_NAME',
+    'WAGTAIL_SITE_NAME',
+    'OTP_TOTP_ISSUER'
+])
+def test_otp_totp_issuer(setting_name, settings):
+    setattr(settings, setting_name, 'wagtail-2fa')
+
     app_config = apps.get_app_config('wagtail_2fa')
     app_config.ready()
 
-    assert settings.WAGTAIL_MOUNT_PATH == ''
+    assert settings.OTP_TOTP_ISSUER == 'wagtail-2fa'
