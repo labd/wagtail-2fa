@@ -1,3 +1,11 @@
+1.0.1 (2019-01-18)
+==================
+ - Add Dutch translations (#9)
+ - Add support for Wagtail running in a subdirectory (#10)
+ - Add WAGTAIL_2FA_OTP_TOTP_NAME for easier identification the site (#11)
+ - Update badges in README file (GitHub organisation rename)
+
+
 0.1.0 (2018-05-26)
 ==================
  - Require atleast Wagtail 2.1 for the new account management hooks
