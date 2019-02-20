@@ -7,7 +7,7 @@ install_requires = [
     'Wagtail>=2.1',
     'django-otp>=0.5.2',
     'six>=1.1',
-    'qrcode>=6.3',
+    'qrcode>=6.1',
 ]
 
 docs_require = [
