@@ -15,6 +15,7 @@
 /dist/
 /docs/_build/
 /htmlcov/
+/.mypy_cache/
 
 
 # Editors

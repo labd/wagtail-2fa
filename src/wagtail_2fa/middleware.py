@@ -1,6 +1,7 @@
 import django_otp
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
+from django.urls import NoReverseMatch
 from django.urls import reverse
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 
@@ -17,7 +18,6 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._allowed_paths = [settings.WAGTAIL_MOUNT_PATH + reverse(n) for n in self._allowed_url_names]
 
     def process_request(self, request):
         super().process_request(request)
@@ -58,3 +58,21 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
         # For all other cases require that the user is verfied via otp
         return True
+
+    @property
+    def _allowed_paths(self):
+        """Return the paths the user may visit when not verified via otp
+
+        This result cannot be cached since we want to be compatible with the
+        django-hosts package. Django-hosts alters the urlconf based on the
+        hostname in the request, so the urls might exist for admin.<domain> but
+        not for www.<domain>.
+
+        """
+        results = []
+        for route_name in self._allowed_url_names:
+            try:
+                results.append(settings.WAGTAIL_MOUNT_PATH + reverse(route_name))
+            except NoReverseMatch:
+                pass
+        return results
