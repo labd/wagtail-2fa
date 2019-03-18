@@ -50,7 +50,12 @@ settings:
         # ...
     ]
 
+Migrate your database:
 
+.. code-block:: shell
+
+   python manage.py migrate
+   
 Next add the required middleware to the ``MIDDLEWARE``. It should come
 after the AuthenticationMiddleware:
 
