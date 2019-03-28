@@ -8,12 +8,12 @@ from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 
 class VerifyUserMiddleware(_OTPMiddleware):
     _allowed_url_names = [
-        'wagtail_2fa_auth',
-        'wagtail_2fa_device_list',
-        'wagtail_2fa_device_new',
-        'wagtail_2fa_device_qrcode',
-        'wagtailadmin_login',
-        'wagtailadmin_logout',
+        "wagtail_2fa_auth",
+        "wagtail_2fa_device_list",
+        "wagtail_2fa_device_new",
+        "wagtail_2fa_device_qrcode",
+        "wagtailadmin_login",
+        "wagtailadmin_logout",
     ]
 
     def __init__(self, *args, **kwargs):
@@ -28,15 +28,15 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
             if user_has_device and not user.is_verified():
                 return redirect_to_login(
-                    request.get_full_path(),
-                    login_url=reverse('wagtail_2fa_auth'))
+                    request.get_full_path(), login_url=reverse("wagtail_2fa_auth")
+                )
 
             elif not user_has_device and settings.WAGTAIL_2FA_REQUIRED:
                 # only allow the user to visit the admin index page and the
                 # admin setup page
                 return redirect_to_login(
-                    request.get_full_path(),
-                    login_url=reverse('wagtail_2fa_device_new'))
+                    request.get_full_path(), login_url=reverse("wagtail_2fa_device_new")
+                )
 
     def _require_verified_user(self, request):
         user = request.user
@@ -47,8 +47,9 @@ class VerifyUserMiddleware(_OTPMiddleware):
         # If the user has no access to the admin anyway then don't require a
         # verified user here
         if not (
-            user.is_staff or user.is_superuser or
-            user.has_perms(['wagtailadmin.access_admin'])
+            user.is_staff
+            or user.is_superuser
+            or user.has_perms(["wagtailadmin.access_admin"])
         ):
             return False
 

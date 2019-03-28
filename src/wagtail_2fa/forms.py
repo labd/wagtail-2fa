@@ -11,10 +11,9 @@ class TokenForm(OTPAuthenticationFormMixin, forms.Form):
         self.user = user
         super().__init__(*args, **kwargs)
 
-        self.fields['otp_token'].widget.attrs.update({
-            'autofocus': 'autofocus',
-            'autocomplete': 'off',
-        })
+        self.fields["otp_token"].widget.attrs.update(
+            {"autofocus": "autofocus", "autocomplete": "off"}
+        )
 
     def clean(self):
         self.clean_otp(self.user)
@@ -23,44 +22,50 @@ class TokenForm(OTPAuthenticationFormMixin, forms.Form):
 
 class DeviceForm(forms.ModelForm):
     otp_token = forms.CharField(
-        label=_("OTP token"), required=True,
-        help_text=_("Enter the numeric code displayed on your device after scanning the QR code"))
+        label=_("OTP token"),
+        required=True,
+        help_text=_(
+            "Enter the numeric code displayed on your device after scanning the QR code"
+        ),
+    )
 
     name = forms.CharField(
-        label=_("Name"), required=True,
-        help_text=_("The human-readable name of this device."))
+        label=_("Name"),
+        required=True,
+        help_text=_("The human-readable name of this device."),
+    )
 
     password = forms.CharField(
         label=_("Current password"),
         help_text=_("As an extra security measurement we need your current password"),
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
     )
 
     class Meta:
         model = TOTPDevice
-        fields = ['name', 'otp_token']
+        fields = ["name", "otp_token"]
 
     def __init__(self, user, **kwargs):
         super().__init__(**kwargs)
-        self.fields['otp_token'].widget.attrs.update({
-            'autofocus': 'autofocus',
-            'autocomplete': 'off',
-        })
+        self.fields["otp_token"].widget.attrs.update(
+            {"autofocus": "autofocus", "autocomplete": "off"}
+        )
 
         if self.instance.confirmed:
-            del self.fields['otp_token']
+            del self.fields["otp_token"]
 
         self.user = user
 
     def clean_otp_token(self):
-        token = self.cleaned_data.get('otp_token')
+        token = self.cleaned_data.get("otp_token")
 
         if token and self.instance.verify_token(token):
             return token
 
         raise forms.ValidationError(
-            _('Invalid token. Please make sure you have entered it correctly.'),
-            code='invalid')
+            _("Invalid token. Please make sure you have entered it correctly."),
+            code="invalid",
+        )
 
     def clean_password(self):
         password = self.cleaned_data.get("password")
