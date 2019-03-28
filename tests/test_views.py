@@ -20,6 +20,7 @@ def test_device_list_create(admin_client, monkeypatch):
         reverse('wagtail_2fa_device_new'), {
             'name': 'Test device',
             'otp_token': '123456',
+            'password': 'password',
         })
 
     assert response.status_code == 302, response.context['form'].errors
@@ -43,7 +44,10 @@ def test_device_list_update(admin_client, monkeypatch):
     assert response.status_code == 200
 
     # Post new name
-    response = admin_client.post(endpoint, {'name': 'Test device'})
+    response = admin_client.post(endpoint, {
+        'name': 'Test device',
+        'password': 'password',
+    })
     assert response.status_code == 302, response.context['form'].errors
     assert TOTPDevice.objects.filter(name='Test device').count() == 1
 

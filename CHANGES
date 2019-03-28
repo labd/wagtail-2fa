@@ -1,3 +1,7 @@
+1.2.0 (2019-03-28)
+==================
+ - Require the user to enter their password when creating a new token. This is
+   done based on feedback of a security test by an external company.
 1.1.0 (2019-02-27)
 ==================
  - Make the package compatible with django-hosts. The middleware initially
