@@ -30,6 +30,12 @@ class DeviceForm(forms.ModelForm):
         label=_("Name"), required=True,
         help_text=_("The human-readable name of this device."))
 
+    password = forms.CharField(
+        label=_("Current password"),
+        help_text=_("As an extra security measurement we need your current password"),
+        widget=forms.PasswordInput()
+    )
+
     class Meta:
         model = TOTPDevice
         fields = ['name', 'otp_token']
@@ -55,6 +61,11 @@ class DeviceForm(forms.ModelForm):
         raise forms.ValidationError(
             _('Invalid token. Please make sure you have entered it correctly.'),
             code='invalid')
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+        if not self.user.check_password(password):
+            raise forms.ValidationError(_("Invalid password"))
 
     def save(self):
         self.instance.confirmed = True
