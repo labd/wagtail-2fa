@@ -2,6 +2,11 @@
 ==================
  - Require the user to enter their password when creating a new token. This is
    done based on feedback of a security test by an external company.
+ - Remove the "Manage 2FA button" on the user listing for now since that didn't
+   actually work. It always managed the devices of the current logged in user.
+   This will be added properly in a later version.
+
+
 1.1.0 (2019-02-27)
 ==================
  - Make the package compatible with django-hosts. The middleware initially

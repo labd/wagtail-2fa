@@ -43,11 +43,3 @@ def register(request):
         'label': _('Manage your 2FA devices'),
         'help_text': _('Add or remove devices for 2 factor authentication.'),
     }
-
-
-@hooks.register('register_user_listing_buttons')
-def register_user_listing_buttons(context, user):
-    yield UserListingButton(
-        _('Manage 2FA'),
-        reverse('wagtail_2fa_device_list',),
-        attrs={'title': _('Edit this user')}, priority=100)
