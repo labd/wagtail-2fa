@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-14 09:24+0200\n"
+"POT-Creation-Date: 2019-03-29 14:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,25 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: forms.py:26
+#: forms.py:25
 msgid "OTP token"
 msgstr ""
 
-#: forms.py:27
+#: forms.py:28
 msgid ""
 "Enter the numeric code displayed on your device after scanning the QR code"
 msgstr ""
 
-#: forms.py:30 templates/wagtail_2fa/device_list.html:14
+#: forms.py:33 templates/wagtail_2fa/device_list.html:14
 msgid "Name"
 msgstr ""
 
-#: forms.py:31
+#: forms.py:35
 msgid "The human-readable name of this device."
 msgstr ""
 
-#: forms.py:56
+#: forms.py:39
+msgid "Current password"
+msgstr ""
+
+#: forms.py:40
+msgid "As an extra security measurement we need your current password"
+msgstr ""
+
+#: forms.py:66
 msgid "Invalid token. Please make sure you have entered it correctly."
+msgstr ""
+
+#: forms.py:73
+msgid "Invalid password"
 msgstr ""
 
 #: templates/wagtail_2fa/device_confirm_delete.html:4
@@ -54,7 +66,7 @@ msgid "Do you want to delete the device?"
 msgstr ""
 
 #: templates/wagtail_2fa/device_confirm_delete.html:12
-#: templates/wagtail_2fa/device_form.html:61
+#: templates/wagtail_2fa/device_form.html:62
 msgid "Cancel"
 msgstr ""
 
@@ -88,7 +100,8 @@ msgid ""
 "apps.\n"
 "                You might even have them installed already.\n"
 "                <ul>\n"
-"                    <li>Google Authenticator for iOS or  Android</li>\n"
+"                    <li>Google Authenticator for iOS or Android</li>\n"
+"                    <li>Microsoft Authenticator</li>\n"
 "                    <li>Authy for iOS or Android</li>\n"
 "                    <li>\n"
 "                        A password manager like 1Password, that also "
@@ -98,23 +111,23 @@ msgid ""
 "                </ul>\n"
 "            </p>\n"
 "            <p>\n"
-"                To configure 2 Factor authentication for your Wagtail CMS\n"
+"                To configure two-factor authentication for your Wagtail CMS\n"
 "                account, install one of those apps and scan the below QR\n"
-"                code. Note that in case you loose or reset your phone, you\n"
-"                will not be able to login anymore.\n"
+"                code. Note that if you lose or reset your phone, you\n"
+"                will no longer be able to log in.\n"
 "            </p>\n"
 "            "
 msgstr ""
 
-#: templates/wagtail_2fa/device_form.html:50
+#: templates/wagtail_2fa/device_form.html:51
 msgid "QR Code"
 msgstr ""
 
-#: templates/wagtail_2fa/device_form.html:62
+#: templates/wagtail_2fa/device_form.html:63
 msgid "Update"
 msgstr ""
 
-#: templates/wagtail_2fa/device_form.html:62
+#: templates/wagtail_2fa/device_form.html:63
 msgid "Create"
 msgstr ""
 
@@ -146,23 +159,15 @@ msgstr ""
 msgid "Signing in…"
 msgstr ""
 
-#: utils.py:16
+#: utils.py:13
 #, python-format
 msgid "Device #%s"
 msgstr ""
 
-#: wagtail_hooks.py:37
+#: wagtail_hooks.py:55
 msgid "Manage your 2FA devices"
 msgstr ""
 
-#: wagtail_hooks.py:38
+#: wagtail_hooks.py:56
 msgid "Add or remove devices for 2 factor authentication."
-msgstr ""
-
-#: wagtail_hooks.py:45
-msgid "Manage 2FA"
-msgstr ""
-
-#: wagtail_hooks.py:47
-msgid "Edit this user"
 msgstr ""
