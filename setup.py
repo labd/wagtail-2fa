@@ -12,6 +12,7 @@ install_requires = [
 
 docs_require = [
     'sphinx>=1.4.0',
+    'sphinx_rtd_theme>=0.4.3',
 ]
 
 tests_require = [
