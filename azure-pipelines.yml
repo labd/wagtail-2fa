@@ -1,4 +1,13 @@
 jobs:
+  - job: UpdateBuildNumber
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - script: |
+          pip3 install --upgrade setuptools
+          echo "##vso[build.UpdateBuildNumber]`python3 setup.py --version`-$BUILD_BUILDNUMBER"
+        displayName: Set Version number
+
   - job: Test
     pool:
       vmImage: "ubuntu-16.04"
@@ -27,6 +36,7 @@ jobs:
           codecov
         condition: succeeded()
         displayName: "Upload coverage information to codecov.io"
+
   - job: Publish
     pool:
       vmImage: "ubuntu-16.04"
@@ -34,13 +44,13 @@ jobs:
     condition: in(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: "Publish artifacts"
     steps:
-    - task: CopyFiles@2
-      displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
-      inputs:
-        SourceFolder: '$(Build.SourcesDirectory)'
-        Contents: |
-         **/*
-         !.git/**/*
-        TargetFolder: '$(Build.ArtifactStagingDirectory)'
-    - task: PublishBuildArtifacts@1
-      displayName: drop
+      - task: CopyFiles@2
+        displayName: "Copy Files to: $(Build.ArtifactStagingDirectory)"
+        inputs:
+          SourceFolder: "$(Build.SourcesDirectory)"
+          Contents: |
+            **/*
+            !.git/**/*
+          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+      - task: PublishBuildArtifacts@1
+        displayName: drop
