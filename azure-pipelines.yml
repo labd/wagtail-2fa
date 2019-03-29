@@ -5,6 +5,7 @@ jobs:
     steps:
       - script: |
           pip3 install --upgrade setuptools
+          env
           echo "##vso[build.UpdateBuildNumber]`python3 setup.py --version`-$BUILD_BUILDNUMBER"
         displayName: Set Version number
 
