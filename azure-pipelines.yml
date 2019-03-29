@@ -5,7 +5,7 @@ jobs:
     steps:
       - script: |
           pip3 install --upgrade setuptools
-          echo "##vso[build.UpdateBuildNumber]`python3 setup.py --version`-$BUILD_BUILDNUMBER"
+          echo "##vso[build.UpdateBuildNumber]`python3 setup.py --version`-$BUILD_BUILDID"
         displayName: Set Version number
 
   - job: Test
