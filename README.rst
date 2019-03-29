@@ -9,6 +9,10 @@
 .. image:: https://img.shields.io/pypi/v/wagtail-2fa.svg
     :target: https://pypi.python.org/pypi/wagtail-2fa/
 
+.. image:: https://readthedocs.org/projects/wagtail-2fa/badge/?version=latest
+    :target: https://wagtail-2fa.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 .. image:: https://img.shields.io/github/stars/labd/wagtail-2fa.svg?style=social&logo=github
     :target: https://github.com/labd/wagtail-2fa/stargazers
 
@@ -55,7 +59,7 @@ Migrate your database:
 .. code-block:: shell
 
    python manage.py migrate
-   
+
 Next add the required middleware to the ``MIDDLEWARE``. It should come
 after the AuthenticationMiddleware:
 
