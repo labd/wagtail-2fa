@@ -1,10 +1,11 @@
 import qrcode
 import qrcode.image.svg
 from django.conf import settings
-from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth import REDIRECT_FIELD_NAME, logout
+from django.contrib import messages
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.http import HttpResponse
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -14,19 +15,25 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import DeleteView, FormView, ListView, UpdateView, View
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from ratelimit.mixins import RatelimitMixin
+from ratelimit.decorators import ratelimit
 
 from wagtail_2fa import forms, utils
 
 
-class LoginView(RatelimitMixin, SuccessURLAllowedHostsMixin, FormView):
+class LoginView(SuccessURLAllowedHostsMixin, FormView):
     template_name = "wagtail_2fa/otp_form.html"
     form_class = forms.TokenForm
     redirect_field_name = REDIRECT_FIELD_NAME
-    ratelimit_key = 'ip'
-    ratelimit_rate = '10/m'
-    ratelimit_method = 'POST'
 
+
+    @method_decorator(ratelimit(key='ip', method='POST', rate='10/m'))
+    def post(self,request, *args, **kwargs):
+        if request.limited:
+            logout(request)
+            messages.error(request, "You've hit the rate limit please try again later")
+            return redirect('wagtailadmin_login')
+        
+        return super().post(request, *args, **kwargs)
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
     def dispatch(self, *args, **kwargs):

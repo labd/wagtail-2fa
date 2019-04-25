@@ -8,7 +8,7 @@ install_requires = [
     'django-otp>=0.5.2',
     'six>=1.1',
     'qrcode>=6.1',
-    'django-ratelimit>=2.0.0',
+    'django-ratelimit',
 ]
 
 docs_require = [
@@ -41,6 +41,7 @@ setup(
     author="Lab Digital",
     author_email="opensource@labdigital.nl",
     install_requires=install_requires,
+    dependency_links=['git+ssh://git@github.com/jsocol/django-ratelimit.git@c946c076acf2e62374114242620d9170612f83d7#egg=django-ratelimit'],
     tests_require=tests_require,
     extras_require={
         'docs': docs_require,

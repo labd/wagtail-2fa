@@ -60,3 +60,17 @@ def test_device_qr(admin_client, monkeypatch):
     endpoint = reverse('wagtail_2fa_device_qrcode')
     response = admin_client.get(endpoint)
     assert response.status_code == 200
+
+
+def test_device_auth(admin_client):
+        response = admin_client.post(reverse('wagtail_2fa_auth'))
+        max_response = 10
+        count_response = 0
+        while count_response < max_response:
+            response = admin_client.post(reverse('wagtail_2fa_auth'))
+            if response.status_code == 302:
+                break
+            assert response.status_code == 200
+            count_response += 1
+
+        assert response.status_code == 302
