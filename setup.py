@@ -8,7 +8,7 @@ install_requires = [
     'django-otp>=0.5.2',
     'six>=1.1',
     'qrcode>=6.1',
-    'django-ratelimit @ git+ssh://git@github.com/jsocol/django-ratelimit.git@c946c076acf2e62374114242620d9170612f83d7#egg=django-ratelimit',
+    'django-ratelimit @ git+https://github.com/jsocol/django-ratelimit.git@c946c076acf2e62374114242620d9170612f83d7#egg=django-ratelimit',
 ]
 
 docs_require = [
