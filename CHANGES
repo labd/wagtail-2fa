@@ -9,6 +9,8 @@
    resolved a number of paths on start up time, this is now lazy.
  - Update django-otp to version 5.2.0
  - Update qrcode to version 6.1
+ - Added missing deps for generation of the docs
+ - Added Microsoft Authenticator as example app and removed double space
 
 
 1.0.1 (2019-01-18)
