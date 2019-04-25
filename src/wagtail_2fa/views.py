@@ -14,14 +14,18 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import DeleteView, FormView, ListView, UpdateView, View
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from ratelimit.mixins import RatelimitMixin
 
 from wagtail_2fa import forms, utils
 
 
-class LoginView(SuccessURLAllowedHostsMixin, FormView):
+class LoginView(RatelimitMixin, SuccessURLAllowedHostsMixin, FormView):
     template_name = "wagtail_2fa/otp_form.html"
     form_class = forms.TokenForm
     redirect_field_name = REDIRECT_FIELD_NAME
+    ratelimit_key = 'ip'
+    ratelimit_rate = '10/m'
+    ratelimit_method = 'POST'
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)

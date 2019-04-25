@@ -8,6 +8,7 @@ install_requires = [
     'django-otp>=0.5.2',
     'six>=1.1',
     'qrcode>=6.1',
+    'django-ratelimit>=2.0.0',
 ]
 
 docs_require = [
