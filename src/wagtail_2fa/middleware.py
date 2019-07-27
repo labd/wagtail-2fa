@@ -41,6 +41,10 @@ class VerifyUserMiddleware(_OTPMiddleware):
     def _require_verified_user(self, request):
         user = request.user
 
+        if not settings.WAGTAIL_2FA_REQUIRED:
+            # If two factor authentication is disabled in the settings
+            return False
+
         if not user.is_authenticated:
             return False
 
