@@ -3,7 +3,9 @@ from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.urls import NoReverseMatch
 from django.urls import reverse
+from django.utils.functional import SimpleLazyObject
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
+from functools import partial
 
 
 class VerifyUserMiddleware(_OTPMiddleware):
@@ -16,13 +18,19 @@ class VerifyUserMiddleware(_OTPMiddleware):
         "wagtailadmin_logout",
     ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __call__(self, request):
+        if hasattr(self, 'process_request'):
+            response = self.process_request(request)
+        if not response:
+            response = self.get_response(request)
+        if hasattr(self, 'process_response'):
+            response = self.process_response(request, response)
+        return response
 
     def process_request(self, request):
-        super().process_request(request)
+        if request.user:
+            request.user = SimpleLazyObject(partial(self._verify_user, request, request.user))
         user = request.user
-
         if self._require_verified_user(request):
             user_has_device = django_otp.user_has_device(user, confirmed=True)
 

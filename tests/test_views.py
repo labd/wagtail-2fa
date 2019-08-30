@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.contrib.auth import get_user_model
+from unittest.mock import patch
 
 def test_device_list_view(admin_client):
     response = admin_client.get(reverse('wagtail_2fa_device_list'))
@@ -11,17 +12,14 @@ def test_device_list_create(admin_client, monkeypatch):
     response = admin_client.get(reverse('wagtail_2fa_device_new'))
     assert response.status_code == 200
 
-    def verify_token(self, value):
-        return value == '123456'
-
-    monkeypatch.setattr(TOTPDevice, 'verify_token', verify_token)
-
-    response = admin_client.post(
-        reverse('wagtail_2fa_device_new'), {
-            'name': 'Test device',
-            'otp_token': '123456',
-            'password': 'password',
-        })
+    with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
+        fn.return_value = True
+        response = admin_client.post(
+            reverse('wagtail_2fa_device_new'), {
+                'name': 'Test device',
+                'otp_token': '123456',
+                'password': 'password',
+            })
 
     assert response.status_code == 302, response.context['form'].errors
     assert TOTPDevice.objects.filter(confirmed=True).count() == 1

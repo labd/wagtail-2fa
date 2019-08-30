@@ -50,7 +50,6 @@ class DeviceForm(forms.ModelForm):
         self.fields["otp_token"].widget.attrs.update(
             {"autofocus": "autofocus", "autocomplete": "off"}
         )
-
         if self.instance.confirmed:
             del self.fields["otp_token"]
 
