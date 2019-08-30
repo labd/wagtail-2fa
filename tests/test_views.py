@@ -1,7 +1,9 @@
+from unittest.mock import patch
+
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django_otp.plugins.otp_totp.models import TOTPDevice
-from django.contrib.auth import get_user_model
-from unittest.mock import patch
+
 
 def test_device_list_view(admin_client):
     response = admin_client.get(reverse('wagtail_2fa_device_list'))

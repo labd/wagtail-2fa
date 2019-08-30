@@ -1,11 +1,11 @@
+from functools import partial
+
 import django_otp
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
-from django.urls import NoReverseMatch
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.functional import SimpleLazyObject
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
-from functools import partial
 
 
 class VerifyUserMiddleware(_OTPMiddleware):
