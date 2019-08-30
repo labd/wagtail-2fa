@@ -11,7 +11,8 @@ from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import DeleteView, FormView, ListView, UpdateView, View
+from django.views.generic import (
+    DeleteView, FormView, ListView, UpdateView, View)
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
