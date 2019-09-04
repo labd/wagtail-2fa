@@ -1,0 +1,41 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        include:
+          - python-version: 3.6
+            tox_env: py36-django111-wagtail-23
+          - python-version: 3.6
+            tox_env: py36-django111-wagtail-26
+          - python-version: 3.6
+            tox_env: py36-django22-wagtail-23
+          - python-version: 3.6
+            tox_env: py36-django22-wagtail-26
+          - python-version: 3.7
+            tox_env: py37-django111-wagtail-23
+          - python-version: 3.7
+            tox_env: py37-django111-wagtail-26
+          - python-version: 3.7
+            tox_env: py37-django22-wagtail-23
+          - python-version: 3.7
+            tox_env: py37-django22-wagtail-26
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip tox
+    - name: Test with pytest
+      run: |
+        tox -e ${{ matrix.tox_env }}
