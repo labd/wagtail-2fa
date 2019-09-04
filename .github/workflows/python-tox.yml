@@ -9,7 +9,6 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7]
         tox_env:
           - py36-django111-wagtail23
           - py36-django111-wagtail26
