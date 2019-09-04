@@ -11,21 +11,21 @@ jobs:
       matrix:
         python-version: [3.6, 3.7]
         include:
-          - python-version: 3.6
+          - python-version: "3.6"
             tox_env: py36-django111-wagtail-23
-          - python-version: 3.6
+          - python-version: "3.6"
             tox_env: py36-django111-wagtail-26
-          - python-version: 3.6
+          - python-version: "3.6"
             tox_env: py36-django22-wagtail-23
-          - python-version: 3.6
+          - python-version: "3.6"
             tox_env: py36-django22-wagtail-26
-          - python-version: 3.7
+          - python-version: "3.7"
             tox_env: py37-django111-wagtail-23
-          - python-version: 3.7
+          - python-version: "3.7"
             tox_env: py37-django111-wagtail-26
-          - python-version: 3.7
+          - python-version: "3.7"
             tox_env: py37-django22-wagtail-23
-          - python-version: 3.7
+          - python-version: "3.7"
             tox_env: py37-django22-wagtail-26
 
     steps:
