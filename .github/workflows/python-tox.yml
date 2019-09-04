@@ -12,21 +12,21 @@ jobs:
         python-version: [3.6, 3.7]
         include:
           - python-version: "3.6"
-            tox_env: py36-django111-wagtail-23
+            tox_env: py36-django111-wagtail23
           - python-version: "3.6"
-            tox_env: py36-django111-wagtail-26
+            tox_env: py36-django111-wagtail26
           - python-version: "3.6"
-            tox_env: py36-django22-wagtail-23
+            tox_env: py36-django22-wagtail23
           - python-version: "3.6"
-            tox_env: py36-django22-wagtail-26
+            tox_env: py36-django22-wagtail26
           - python-version: "3.7"
-            tox_env: py37-django111-wagtail-23
+            tox_env: py37-django111-wagtail23
           - python-version: "3.7"
-            tox_env: py37-django111-wagtail-26
+            tox_env: py37-django111-wagtail26
           - python-version: "3.7"
-            tox_env: py37-django22-wagtail-23
+            tox_env: py37-django22-wagtail23
           - python-version: "3.7"
-            tox_env: py37-django22-wagtail-26
+            tox_env: py37-django22-wagtail26
 
     steps:
     - uses: actions/checkout@v1
