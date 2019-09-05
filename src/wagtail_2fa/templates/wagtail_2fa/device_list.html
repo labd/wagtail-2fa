@@ -32,7 +32,14 @@
                                     <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">{% trans 'Update device' %}</a>
                                 {% endif %}
                             </td>
-                        </li>
+                        </tr>
+                    {% empty %}
+
+                        <tr>
+                            <td colspan="2">
+                                There are no devices for this user.
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
