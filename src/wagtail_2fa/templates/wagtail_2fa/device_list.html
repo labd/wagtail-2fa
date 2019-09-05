@@ -24,14 +24,22 @@
                                 </h2>
                             </td>
                             <td>
+                                {# Admins can remove existing devices from another user's account. #}
                                 <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button">{% trans 'Remove device' %}</a>
-                                <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">{% trans 'Update device' %}</a>
+
+                                {# Admins cannot update existing devices on another user's account. #}
+                                {% if request.user.id == device.user_id %}
+                                    <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">{% trans 'Update device' %}</a>
+                                {% endif %}
                             </td>
                         </li>
                     {% endfor %}
                 </tbody>
             </table>
 
-        <a href="{% url 'wagtail_2fa_device_new' %}" class="button">{% trans 'New device' %}</a>
+        {# Users can only add devices to their own account #}
+        {% if user_id == request.user.id %}
+            <a href="{% url 'wagtail_2fa_device_new' %}" class="button">{% trans 'New device' %}</a>
+        {% endif %}
     </div>
 {% endblock %}
