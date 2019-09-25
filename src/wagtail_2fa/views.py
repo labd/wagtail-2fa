@@ -67,7 +67,7 @@ class DeviceListView(ListView):
         return TOTPDevice.objects.devices_for_user(self.kwargs['user_id'], confirmed=True)
 
     def get_context_data(self, **kwargs):
-        context = super(DeviceListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['user_id'] = int(self.kwargs['user_id'])
         return context
 
