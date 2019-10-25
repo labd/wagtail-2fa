@@ -60,3 +60,27 @@ def test_device_qr(admin_client, monkeypatch):
     endpoint = reverse('wagtail_2fa_device_qrcode')
     response = admin_client.get(endpoint)
     assert response.status_code == 200
+
+
+def test_delete_user_device_as_admin(admin_client, user, monkeypatch):
+    user = get_user_model().objects.filter(is_staff=False).first()
+    device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+
+    endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
+    response = admin_client.post(endpoint, {
+        'user_id': user.id
+    })
+    assert response.status_code == 302
+    assert TOTPDevice.objects.all().count() == 0
+
+
+def test_delete_user_device_unauthorized(client, user, monkeypatch):
+    user = get_user_model().objects.filter(is_staff=False).first()
+    device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+
+    endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
+    response = client.post(endpoint, {
+        'user_id': user.id
+    })
+    assert response.status_code == 302
+    assert TOTPDevice.objects.all().count() == 1
