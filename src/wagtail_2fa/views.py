@@ -64,7 +64,12 @@ class DeviceListView(ListView):
     template_name = "wagtail_2fa/device_list.html"
 
     def get_queryset(self):
-        return TOTPDevice.objects.devices_for_user(self.request.user, confirmed=True)
+        return TOTPDevice.objects.devices_for_user(self.kwargs['user_id'], confirmed=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_id'] = int(self.kwargs['user_id'])
+        return context
 
 
 class DeviceCreateView(FormView):
@@ -86,7 +91,7 @@ class DeviceCreateView(FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("wagtail_2fa_device_list")
+        return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.user.id})
 
     @cached_property
     def device(self):
@@ -109,17 +114,18 @@ class DeviceUpdateView(UpdateView):
         return kwargs
 
     def get_success_url(self):
-        return reverse("wagtail_2fa_device_list")
+        return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.user.id})
 
 
 class DeviceDeleteView(DeleteView):
     template_name = "wagtail_2fa/device_confirm_delete.html"
 
     def get_queryset(self):
-        return TOTPDevice.objects.devices_for_user(self.request.user, confirmed=True)
+        device = TOTPDevice.objects.get(**self.kwargs)
+        return TOTPDevice.objects.devices_for_user(device.user, confirmed=True)
 
     def get_success_url(self):
-        return reverse("wagtail_2fa_device_list")
+        return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.POST.get('user_id')})
 
 
 class DeviceQRCodeView(View):
