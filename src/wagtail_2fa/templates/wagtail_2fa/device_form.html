@@ -59,7 +59,7 @@
                     {% include "wagtailadmin/shared/field_as_li.html" with field=field %}
                 {% endfor %}
                 <li class="submit">
-                    <a href="{% url 'wagtail_2fa_device_list' %}" class="button button-secondary">{% trans "Cancel" %}</a>
+                    <a href="{% url 'wagtail_2fa_device_list' user.id %}" class="button button-secondary">{% trans "Cancel" %}</a>
                     <input type="submit" value="{% if form.instance.confirmed %}{% trans 'Update' %}{% else %}{% trans 'Create' %}{% endif %}" class="button" />
                 </li>
             </ul>
