@@ -50,7 +50,7 @@ msgstr "Ongeldige code. Controleer of je de code correct hebt ingevuld."
 
 #: forms.py:73
 msgid "Invalid password"
-msgstr "Ongeldige wachtwoord"
+msgstr "Ongeldig wachtwoord"
 
 #: templates/wagtail_2fa/device_confirm_delete.html:4
 msgid "Delete 2FA device"
@@ -169,7 +169,7 @@ msgstr "Toevoegen"
 
 #: templates/wagtail_2fa/device_list.html:4
 msgid "Registered 2FA devices"
-msgstr "Geregistreede 2FA apparaten"
+msgstr "Geregistreerde 2FA apparaten"
 
 #: templates/wagtail_2fa/device_list.html:28
 msgid "Update device"
@@ -189,7 +189,7 @@ msgstr "Ongeldige code"
 
 #: templates/wagtail_2fa/otp_form.html:36
 msgid "Enter your two-factor authentication code"
-msgstr "Voer je 2FA verificatie code in"
+msgstr "Voer je 2FA verificatiecode in"
 
 #: templates/wagtail_2fa/otp_form.html:63
 msgid "Signing in…"
