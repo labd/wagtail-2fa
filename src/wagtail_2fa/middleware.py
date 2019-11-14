@@ -65,6 +65,10 @@ class VerifyUserMiddleware(_OTPMiddleware):
         ):
             return False
 
+        # Don't require verification if the user has 2FA disabled
+        if user.has_perms(["wagtailadmin.disable_2fa"]):
+            return False
+
         # Allow the user to a fixed number of paths when not verified
         if request.path in self._allowed_paths:
             return False
