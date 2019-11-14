@@ -6,7 +6,8 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
 def test_device_list_view(admin_client):
-    response = admin_client.get(reverse('wagtail_2fa_device_list'))
+    user = get_user_model().objects.filter(is_staff=True).first()
+    response = admin_client.get(reverse('wagtail_2fa_device_list', kwargs={'user_id': user.id}))
     assert response.status_code == 200
 
 
