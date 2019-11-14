@@ -7,6 +7,7 @@ from wagtail.core import hooks
 from wagtail.users.widgets import UserListingButton
 
 from wagtail_2fa import views
+from django.contrib.auth.models import Permission
 
 
 @hooks.register("register_admin_urls")
@@ -62,3 +63,8 @@ def register_user_listing_buttons(context, user):
         _('Manage 2FA'),    
         reverse('wagtail_2fa_device_list', kwargs={'user_id': user.id}),
         attrs={'title': _('Edit this user')}, priority=100)
+
+
+@hooks.register('register_permissions')
+def register_2fa_permission():
+    return Permission.objects.filter(content_type__app_label='wagtailadmin', codename='disable_2fa')
