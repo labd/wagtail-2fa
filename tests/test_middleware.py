@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Permission
 from django.test import override_settings
 from django.urls import reverse
 from django_otp import login as otp_login
@@ -46,6 +47,34 @@ def test_superuser_dont_require_register_device(rf, superuser, settings):
     middleware = VerifyUserMiddleware(lambda x: x)
     response = middleware.process_request(request)
     assert response is None
+
+
+def test_disable_2fa_permission_does_not_require_verification(rf, staff_user):
+    disable_2fa_permission = Permission.objects.get(codename='disable_2fa')
+    user_no_2fa = staff_user
+    user_no_2fa.user_permissions.add(disable_2fa_permission)
+
+    request = rf.get('/admin/')
+    request.user = user_no_2fa
+    middleware = VerifyUserMiddleware(lambda x: x)
+
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        result = middleware._require_verified_user(request)
+
+    assert result is False
+
+
+def test_no_disable_2fa_permission_does_require_verification(rf, staff_user):
+    user_2fa = staff_user
+
+    request = rf.get('/admin/')
+    request.user = user_2fa
+    middleware = VerifyUserMiddleware(lambda x: x)
+
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        result = middleware._require_verified_user(request)
+
+    assert result is True
 
 
 def test_not_specifiying_wagtail_mount_point_does_not_prepend_allowed_paths_with_wagtail_mount_path(settings):
