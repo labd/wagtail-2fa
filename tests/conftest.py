@@ -105,3 +105,9 @@ def user(django_user_model):
 def superuser(django_user_model):
     return django_user_model.objects.create(
         username='super-user', is_superuser=True, is_staff=True)
+
+
+@pytest.fixture
+def staff_user(django_user_model):
+    return django_user_model.objects.create(
+        username='staff-user', is_superuser=False, is_staff=True)
