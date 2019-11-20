@@ -6,7 +6,6 @@ from django.db import migrations
 def create_2fa_permissions(apps, schema_editor):
     ContentType = apps.get_model('contenttypes.ContentType')
     Permission = apps.get_model('auth.Permission')
-    Group = apps.get_model('auth.Group')
 
     wagtailadmin_content_type, created = ContentType.objects.get_or_create(
         app_label='wagtailadmin',
@@ -19,10 +18,6 @@ def create_2fa_permissions(apps, schema_editor):
         codename='disable_2fa',
         name='Disable 2FA'
     )
-
-    # Assign it to Editors and Moderators groups
-    for group in Group.objects.filter(name__in=['Editors', 'Moderators']):
-        group.permissions.add(disable_2fa_permission)
 
 
 def remove_2fa_permissions(apps, schema_editor):
