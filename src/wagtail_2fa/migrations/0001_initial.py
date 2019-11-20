@@ -28,7 +28,8 @@ def remove_2fa_permissions(apps, schema_editor):
         app_label='wagtailadmin',
         model='admin',
     )
-    # This cascades to Group
+
+    # This also removes the permission from all groups
     Permission.objects.filter(
         content_type=wagtailadmin_content_type,
         codename='disable_2fa',
@@ -37,8 +38,7 @@ def remove_2fa_permissions(apps, schema_editor):
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.RunPython(create_2fa_permissions, remove_2fa_permissions),
