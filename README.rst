@@ -89,6 +89,12 @@ The following settings are available (Set via your Django settings):
       under the hood.
 
 
+Permissions
+===========
+It is possible to disable 2FA per group in the CMS settings.
+For techical and security reasons it is not possible to
+disable 2FA for superusers.
+
 
 Sandbox
 =======
