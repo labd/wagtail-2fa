@@ -82,8 +82,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
         """Return the paths the user may visit when not verified via otp.
 
         If the user already has a registered device, return a limited set of
-        paths to prevent them from adding or listing devices to prevent them
-        from adding or listing devices.
+        paths to prevent them from adding or listing devices.
         """
         allowed_url_names = self._allowed_url_names
         if not has_device:
