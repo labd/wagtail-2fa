@@ -14,13 +14,12 @@ class VerifyUserMiddleware(_OTPMiddleware):
         "wagtailadmin_login",
         "wagtailadmin_logout",
     ]
+
+    # These URLs do not require verification if the user has no devices
     _allowed_url_names_no_device = [
-        "wagtail_2fa_auth",
         "wagtail_2fa_device_list",
         "wagtail_2fa_device_new",
         "wagtail_2fa_device_qrcode",
-        "wagtailadmin_login",
-        "wagtailadmin_logout",
     ]
 
     def __call__(self, request):
@@ -70,26 +69,24 @@ class VerifyUserMiddleware(_OTPMiddleware):
         ):
             return False
 
-        # Allow the user to a fixed number of paths when not verified
-        user_has_device = django_otp.user_has_device(user, confirmed=True)
-        if request.path in self._get_allowed_paths(user_has_device):
+        # Don't require verification for specified paths
+        if request.path in self._get_paths(self._allowed_url_names):
             return False
+
+        # If the user does not have a device, don't require verification
+        # for the specified paths
+        allowed_no_device_paths = self._get_paths(self._allowed_url_names_no_device)
+        if request.path in allowed_no_device_paths:
+            user_has_device = django_otp.user_has_device(user, confirmed=True)
+            if not user_has_device:
+                return False
 
         # For all other cases require that the user is verfied via otp
         return True
 
-    def _get_allowed_paths(self, has_device):
-        """Return the paths the user may visit when not verified via otp.
-
-        If the user already has a registered device, return a limited set of
-        paths to prevent them from adding or listing devices.
-        """
-        allowed_url_names = self._allowed_url_names
-        if not has_device:
-            allowed_url_names = self._allowed_url_names_no_device
-
+    def _get_paths(self, route_names):
         results = []
-        for route_name in allowed_url_names:
+        for route_name in route_names:
             try:
                 results.append(settings.WAGTAIL_MOUNT_PATH + reverse(route_name))
             except NoReverseMatch:
