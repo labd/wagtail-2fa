@@ -9,7 +9,8 @@ def test_device_list_view(admin_client, django_assert_num_queries):
     user = get_user_model().objects.filter(is_staff=True).first()
 
     with django_assert_num_queries(8):
-        response = admin_client.get(reverse('wagtail_2fa_device_list', kwargs={'user_id': user.id}))
+        response = admin_client.get(reverse('wagtail_2fa_device_list',
+                                    kwargs={'user_id': user.id}))
         assert response.status_code == 200
 
 
