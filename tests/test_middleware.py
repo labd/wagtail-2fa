@@ -49,12 +49,13 @@ def test_superuser_dont_require_register_device(rf, superuser, settings):
 
 
 def test_adding_new_device_requires_verification_when_user_has_device(rf, superuser, settings, django_assert_num_queries):
-    with django_assert_num_queries(3):
+    TOTPDevice.objects.create(user=superuser, confirmed=True)
+
+    with django_assert_num_queries(2):
         url_new_device = reverse('wagtail_2fa_device_new')
         url_auth = reverse('wagtail_2fa_auth')
         request = rf.get(url_new_device)
         request.user = superuser
-        TOTPDevice.objects.create(user=superuser, confirmed=True)
 
         middleware = VerifyUserMiddleware(lambda x: x)
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
