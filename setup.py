@@ -19,7 +19,7 @@ tests_require = [
     'coverage==.4.2',
     'pytest==3.6.0',
     'pytest-cov==2.5.1',
-    'pytest-django==3.1.2',
+    'pytest-django==3.7.0',
 
     # Linting
     'isort==4.2.5',
