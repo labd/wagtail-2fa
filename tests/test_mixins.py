@@ -23,8 +23,7 @@ class TestOtpRequiredMixin:
         assert response.status_code == 302
         assert response.url == '/accounts/login/?next=/admin/'
 
-    @pytest.mark.django_db
-    def test_user_allowed_with_verified_user_returns_true(self, rf, user, monkeypatch):
+    def test_user_allowed_with_verified_user_returns_true(self, rf, user):
         device = TOTPDevice.objects.create(user=user, confirmed=True)
         request = rf.get('/admin/')
         request.user = user
