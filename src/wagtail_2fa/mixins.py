@@ -22,14 +22,14 @@ class OtpRequiredMixin(object):
             )
         raise PermissionDenied
 
-    def test(self, user):
+    def user_allowed(self, user):
         return user.is_verified() or (
             self.if_configured and user.is_authenticated and not user_has_device(user)
         )
 
     def dispatch(self, request, *args, **kwargs):
 
-        if not self.test(request.user):
+        if not self.user_allowed(request.user):
             return self.handle_no_permission(request)
 
         return super(OtpRequiredMixin, self).dispatch(request, *args, **kwargs)
