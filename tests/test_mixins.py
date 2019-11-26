@@ -1,3 +1,5 @@
+from django_otp.middleware import OTPMiddleware as _OTPMiddleware
+from django_otp.plugins.otp_totp.models import TOTPDevice
 from django.core.exceptions import PermissionDenied
 import pytest
 from wagtail_2fa.mixins import OtpRequiredMixin
@@ -20,3 +22,16 @@ class TestOtpRequiredMixin:
         response = mixin.handle_no_permission(request)
         assert response.status_code == 302
         assert response.url == '/accounts/login/?next=/admin/'
+
+    @pytest.mark.django_db
+    def test_user_allowed_with_verified_user_returns_true(self, rf, user, monkeypatch):
+        device = TOTPDevice.objects.create(user=user, confirmed=True)
+        request = rf.get('/admin/')
+        request.user = user
+        middleware = _OTPMiddleware()
+        user = middleware._verify_user(request, user)
+        user.otp_device = device
+
+        mixin = OtpRequiredMixin()
+        result = mixin.user_allowed(user)
+        assert result is True
