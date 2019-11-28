@@ -69,4 +69,7 @@ def register_user_listing_buttons(context, user):
 
 @hooks.register('register_permissions')
 def register_2fa_permission():
-    return Permission.objects.filter(content_type__app_label='wagtailadmin', codename='enable_2fa')
+    if "wagtail_2fa.middleware.VerifyUserPermissionsMiddleware" in settings.MIDDLEWARE:
+        return Permission.objects.filter(content_type__app_label='wagtailadmin', codename='enable_2fa')
+
+    return Permission.objects.none()
