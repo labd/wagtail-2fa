@@ -51,6 +51,16 @@ settings:
         # ...
     ]
 
+Add the following line to the ``MIDDLEWARE`` list in your Django settings:
+
+.. code-block:: python
+
+    MIDDLEWARE = [
+        # ...
+        'wagtail_2fa.middleware.VerifyUserMiddleware',
+        # ...
+    ]
+
 Migrate your database:
 
 .. code-block:: shell
