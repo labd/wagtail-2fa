@@ -15,5 +15,22 @@
         "groups": [],
         "user_permissions": []
     }
+},
+{
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$jW4Pr4OWkdVf$1KeQmcYPL1/qZvRX9ECQvoYuXTRbs+tlV480K2AqFUM=",
+        "last_login": "2017-05-08T07:38:49.391Z",
+        "is_superuser": false,
+        "first_name": "J.",
+        "last_name": "Doe",
+        "email": "moderator@example.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2015-10-17T11:32:57.969Z",
+        "groups": [1],
+        "user_permissions": []
+    }
 }
 ]

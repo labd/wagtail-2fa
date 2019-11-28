@@ -1,6 +1,5 @@
 from django.apps import AppConfig
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 
 WAGTAIL_2FA_DEFAULT_SETTINGS = {
     "WAGTAIL_2FA_REQUIRED": False,
@@ -15,12 +14,6 @@ class Wagtail2faConfig(AppConfig):
     verbose_name = "Wagtail 2FA"
 
     def ready(self):
-        if "wagtail_2fa.middleware.VerifyUserMiddleware" not in settings.MIDDLEWARE:
-            raise ImproperlyConfigured(
-                "Please add 'wagtail_2fa.middleware.VerifyUserMiddleware' "
-                "to django.conf.settings.MIDDLEWARE"
-            )
-
         for setting_name, setting_default_value in WAGTAIL_2FA_DEFAULT_SETTINGS.items():
             if not hasattr(settings, setting_name):
                 setattr(settings, setting_name, setting_default_value)
