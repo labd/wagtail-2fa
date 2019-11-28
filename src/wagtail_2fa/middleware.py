@@ -108,10 +108,9 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
 
     def _require_verified_user(self, request):
         result = super()._require_verified_user(request)
-        user = request.user
 
         # Don't require verification if the user has 2FA disabled
-        if not user.has_perms(["wagtailadmin.enable_2fa"]):
+        if not request.user.has_perms(["wagtailadmin.enable_2fa"]):
             return False
 
         return result
