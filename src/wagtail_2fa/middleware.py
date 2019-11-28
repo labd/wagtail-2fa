@@ -65,11 +65,6 @@ class VerifyUserMiddleware(_OTPMiddleware):
         ):
             return False
 
-        # Don't require verification if the user has 2FA disabled. Because superusers
-        # always have all permissions, always require them to verify.
-        if not user.is_superuser and user.has_perms(["wagtailadmin.disable_2fa"]):
-            return False
-
         # Allow the user to a fixed number of paths when not verified
         if request.path in self._allowed_paths:
             return False
@@ -94,3 +89,16 @@ class VerifyUserMiddleware(_OTPMiddleware):
             except NoReverseMatch:
                 pass
         return results
+
+
+class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
+    def _require_verified_user(self, request):
+        result = super()._require_verified_user(request)
+        user = request.user
+
+        # Don't require verification if the user has 2FA disabled. Because superusers
+        # always have all permissions, always require them to verify.
+        if not user.is_superuser and user.has_perms(["wagtailadmin.disable_2fa"]):
+            return False
+
+        return result
