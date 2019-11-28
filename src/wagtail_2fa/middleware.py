@@ -95,6 +95,8 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
 
 class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
+    """A variant of VerifyUserMiddleware which makes 2FA optional."""
+
     def process_request(self, request):
         result = super().process_request(request)
 
