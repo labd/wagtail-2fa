@@ -99,11 +99,11 @@ The following settings are available (Set via your Django settings):
       under the hood.
 
 
-Permissions
-===========
-It is possible to disable 2FA per group in the CMS settings.
-For techical and security reasons it is not possible to
-disable 2FA for superusers.
+Making 2FA optional
+===================
+
+With the default ``VerifyUserMiddleware`` middleware, 2FA is enabled for every user.
+To make 2FA optional, use the ``VerifyUserPermissionsMiddleware`` middleware instead.
 
 To do so, use the ``VerifyUserPermissionsMiddleware`` middleware instead of the ``VerifyUserMiddleware`` in your Django settings:
 
@@ -115,6 +115,11 @@ To do so, use the ``VerifyUserPermissionsMiddleware`` middleware instead of the 
         'wagtail_2fa.middleware.VerifyUserPermissionsMiddleware',
         # ...
     ]
+
+When this middleware is used, a checkbox is added to the group permissions
+and 2FA can be enabled or disabled per group.
+
+2FA is always enabled for superusers, regardless of the middleware used.
 
 Sandbox
 =======
