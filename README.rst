@@ -105,6 +105,16 @@ It is possible to disable 2FA per group in the CMS settings.
 For techical and security reasons it is not possible to
 disable 2FA for superusers.
 
+To do so, use the ``VerifyUserPermissionsMiddleware`` middleware instead of the ``VerifyUserMiddleware`` in your Django settings:
+
+.. code-block:: python
+
+    MIDDLEWARE = [
+        # ...
+        # 'wagtail_2fa.middleware.VerifyUserMiddleware',
+        'wagtail_2fa.middleware.VerifyUserPermissionsMiddleware',
+        # ...
+    ]
 
 Sandbox
 =======
