@@ -116,10 +116,10 @@ def test_specifiying_wagtail_mount_point_does_prepend_allowed_paths_with_wagtail
 
 
 class TestVerifyUserPermissionsMiddleware:
-    def test_disable_2fa_permission_does_not_require_verification(self, rf, staff_user):
-        disable_2fa_permission = Permission.objects.get(codename='disable_2fa')
+    def test_enforce_2fa_permission_does_not_require_verification(self, rf, staff_user):
+        enforce_2fa_permission = Permission.objects.get(codename='enforce_2fa')
         user_no_2fa = staff_user
-        user_no_2fa.user_permissions.add(disable_2fa_permission)
+        user_no_2fa.user_permissions.add(enforce_2fa_permission)
 
         request = rf.get('/admin/')
         request.user = user_no_2fa
@@ -128,9 +128,9 @@ class TestVerifyUserPermissionsMiddleware:
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             result = middleware._require_verified_user(request)
 
-        assert result is False
+        assert result is True
 
-    def test_no_disable_2fa_permission_does_require_verification(self, rf, staff_user):
+    def test_no_enforce_2fa_permission_does_require_verification(self, rf, staff_user):
         user_2fa = staff_user
 
         request = rf.get('/admin/')
@@ -140,4 +140,4 @@ class TestVerifyUserPermissionsMiddleware:
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             result = middleware._require_verified_user(request)
 
-        assert result is True
+        assert result is False

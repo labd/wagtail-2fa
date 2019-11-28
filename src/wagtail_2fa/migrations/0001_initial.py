@@ -13,10 +13,10 @@ def create_2fa_permissions(apps, schema_editor):
     )
 
     # Create 2FA permission
-    disable_2fa_permission, created = Permission.objects.get_or_create(
+    enforce_2fa_permission, created = Permission.objects.get_or_create(
         content_type=wagtailadmin_content_type,
-        codename='disable_2fa',
-        name='Disable 2FA'
+        codename='enforce_2fa',
+        name='Enforce 2FA'
     )
 
 
@@ -32,7 +32,7 @@ def remove_2fa_permissions(apps, schema_editor):
     # This also removes the permission from all groups
     Permission.objects.filter(
         content_type=wagtailadmin_content_type,
-        codename='disable_2fa',
+        codename='enforce_2fa',
     ).delete()
 
 

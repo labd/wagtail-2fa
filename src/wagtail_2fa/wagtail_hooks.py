@@ -44,11 +44,10 @@ def urlpatterns():
 
 @hooks.register("construct_main_menu")
 def remove_menu_if_unverified(request, menu_items):
-    if not request.user.is_superuser:
-        if not request.user.has_perms(["wagtailadmin.disable_2fa"]):
-            if not (request.user.is_verified() and settings.WAGTAIL_2FA_REQUIRED):
-                menu_items.clear()
-                menu_items.append(MenuItem("2FA Setup", reverse('wagtail_2fa_device_list', kwargs={'user_id': request.user.id})))
+    if getattr(request.user, "enforce_2fa", True):
+        if not (request.user.is_verified() and settings.WAGTAIL_2FA_REQUIRED):
+            menu_items.clear()
+            menu_items.append(MenuItem("2FA Setup", reverse('wagtail_2fa_device_list', kwargs={'user_id': request.user.id})))
 
 
 @hooks.register("register_account_menu_item")
@@ -69,4 +68,4 @@ def register_user_listing_buttons(context, user):
 
 @hooks.register('register_permissions')
 def register_2fa_permission():
-    return Permission.objects.filter(content_type__app_label='wagtailadmin', codename='disable_2fa')
+    return Permission.objects.filter(content_type__app_label='wagtailadmin', codename='enforce_2fa')

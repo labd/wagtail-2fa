@@ -95,13 +95,24 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
 
 class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
+    def process_request(self, request):
+        result = super().process_request(request)
+
+        # Add an attribute to the user so we can easily determine if 2FA should
+        # be enforced for them.
+        if request.user.has_perms(["wagtailadmin.enforce_2fa"]):
+            request.user.enforce_2fa = True
+        else:
+            request.user.enforce_2fa = False
+
+        return result
+
     def _require_verified_user(self, request):
         result = super()._require_verified_user(request)
         user = request.user
 
-        # Don't require verification if the user has 2FA disabled. Because superusers
-        # always have all permissions, always require them to verify.
-        if not user.is_superuser and user.has_perms(["wagtailadmin.disable_2fa"]):
+        # Don't require verification if the user has 2FA disabled
+        if not user.has_perms(["wagtailadmin.enforce_2fa"]):
             return False
 
         return result
