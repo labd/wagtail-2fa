@@ -99,11 +99,11 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
         result = super().process_request(request)
 
         # Add an attribute to the user so we can easily determine if 2FA should
-        # be enforced for them.
-        if request.user.has_perms(["wagtailadmin.enforce_2fa"]):
-            request.user.enforce_2fa = True
+        # be enabled for them.
+        if request.user.has_perms(["wagtailadmin.enable_2fa"]):
+            request.user.enable_2fa = True
         else:
-            request.user.enforce_2fa = False
+            request.user.enable_2fa = False
 
         return result
 
@@ -112,7 +112,7 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
         user = request.user
 
         # Don't require verification if the user has 2FA disabled
-        if not user.has_perms(["wagtailadmin.enforce_2fa"]):
+        if not user.has_perms(["wagtailadmin.enable_2fa"]):
             return False
 
         return result
