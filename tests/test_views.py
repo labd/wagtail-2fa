@@ -2,18 +2,23 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django_otp import DEVICE_ID_SESSION_KEY
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
-def test_device_list_view(admin_client):
+def test_device_list_view(admin_client, django_assert_num_queries):
     user = get_user_model().objects.filter(is_staff=True).first()
-    response = admin_client.get(reverse('wagtail_2fa_device_list', kwargs={'user_id': user.id}))
-    assert response.status_code == 200
+
+    with django_assert_num_queries(9):
+        response = admin_client.get(reverse('wagtail_2fa_device_list',
+                                    kwargs={'user_id': user.id}))
+        assert response.status_code == 200
 
 
-def test_device_list_create(admin_client, monkeypatch):
-    response = admin_client.get(reverse('wagtail_2fa_device_new'))
-    assert response.status_code == 200
+def test_device_list_create(admin_client, monkeypatch, django_assert_num_queries):
+    with django_assert_num_queries(11):
+        response = admin_client.get(reverse('wagtail_2fa_device_new'))
+        assert response.status_code == 200
 
     with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
         fn.return_value = True
@@ -63,7 +68,29 @@ def test_device_qr(admin_client, monkeypatch):
     assert response.status_code == 200
 
 
-def test_delete_user_device_as_admin(admin_client, user, monkeypatch):
+def test_delete_user_device_as_admin(client, admin_user, user, monkeypatch):
+    device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+
+    # verify admin
+    admin_device = TOTPDevice.objects.create(name='Initial', user=admin_user, confirmed=True)
+
+    client.login(username="admin", password="password")
+
+    session = client.session
+    session[DEVICE_ID_SESSION_KEY] = admin_device.persistent_id
+    session.save()
+
+    assert TOTPDevice.objects.all().count() == 2
+
+    endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
+    response = client.post(endpoint, {
+        'user_id': user.id
+    })
+    assert response.status_code == 302
+    print(response)
+    assert TOTPDevice.objects.all().count() == 1
+
+def test_delete_user_device_as_admin_unverified(admin_client, user, monkeypatch):
     user = get_user_model().objects.filter(is_staff=False).first()
     device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
 
@@ -71,8 +98,8 @@ def test_delete_user_device_as_admin(admin_client, user, monkeypatch):
     response = admin_client.post(endpoint, {
         'user_id': user.id
     })
-    assert response.status_code == 302
-    assert TOTPDevice.objects.all().count() == 0
+    assert response.status_code == 403
+    assert TOTPDevice.objects.all().count() == 1
 
 
 def test_delete_user_device_unauthorized(client, user, monkeypatch):

@@ -102,6 +102,22 @@ def user(django_user_model):
 
 
 @pytest.fixture
+def verified_user(django_user_model, rf):
+    """Create a user and verify it using the OTP middleware. Add a device
+    to complete the verification for the user."""
+    from django_otp.plugins.otp_totp.models import TOTPDevice
+    from django_otp.middleware import OTPMiddleware as _OTPMiddleware
+    user = django_user_model.objects.create(username='verified-user')
+    device = TOTPDevice.objects.create(user=user, confirmed=True)
+    request = rf.get('/foo/')
+    request.user = user
+    middleware = _OTPMiddleware()
+    user = middleware._verify_user(request, user)
+    user.otp_device = device
+    return user
+
+
+@pytest.fixture
 def superuser(django_user_model):
     return django_user_model.objects.create(
         username='super-user', is_superuser=True, is_staff=True)

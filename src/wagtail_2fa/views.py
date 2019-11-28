@@ -17,6 +17,7 @@ from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from wagtail_2fa import forms, utils
+from wagtail_2fa.mixins import OtpRequiredMixin
 
 
 class LoginView(SuccessURLAllowedHostsMixin, FormView):
@@ -60,8 +61,11 @@ class LoginView(SuccessURLAllowedHostsMixin, FormView):
         return url or resolve_url(settings.LOGIN_REDIRECT_URL)
 
 
-class DeviceListView(ListView):
+class DeviceListView(OtpRequiredMixin, ListView):
     template_name = "wagtail_2fa/device_list.html"
+
+    # require OTP if configured
+    if_configured = True
 
     def get_queryset(self):
         return TOTPDevice.objects.devices_for_user(self.kwargs['user_id'], confirmed=True)
@@ -72,9 +76,12 @@ class DeviceListView(ListView):
         return context
 
 
-class DeviceCreateView(FormView):
+class DeviceCreateView(OtpRequiredMixin, FormView):
     form_class = forms.DeviceForm
     template_name = "wagtail_2fa/device_form.html"
+
+    # require OTP if configured
+    if_configured = True
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -101,7 +108,7 @@ class DeviceCreateView(FormView):
             return utils.get_unconfirmed_device(self.request.user)
 
 
-class DeviceUpdateView(UpdateView):
+class DeviceUpdateView(OtpRequiredMixin, UpdateView):
     form_class = forms.DeviceForm
     template_name = "wagtail_2fa/device_form.html"
 
@@ -117,7 +124,7 @@ class DeviceUpdateView(UpdateView):
         return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.user.id})
 
 
-class DeviceDeleteView(DeleteView):
+class DeviceDeleteView(OtpRequiredMixin, DeleteView):
     template_name = "wagtail_2fa/device_confirm_delete.html"
 
     def get_queryset(self):
@@ -128,7 +135,10 @@ class DeviceDeleteView(DeleteView):
         return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.POST.get('user_id')})
 
 
-class DeviceQRCodeView(View):
+class DeviceQRCodeView(OtpRequiredMixin, View):
+    # require OTP if configured
+    if_configured = True
+
     def get(self, request):
         device = utils.get_unconfirmed_device(self.request.user)
         img = qrcode.make(device.config_url, image_factory=qrcode.image.svg.SvgImage)

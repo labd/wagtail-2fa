@@ -19,7 +19,7 @@ tests_require = [
     'coverage==.4.2',
     'pytest==3.6.0',
     'pytest-cov==2.5.1',
-    'pytest-django==3.1.2',
+    'pytest-django==3.7.0',
 
     # Linting
     'isort==4.2.5',
@@ -34,7 +34,7 @@ with open('README.rst') as fh:
 
 setup(
     name='wagtail-2fa',
-    version='1.2.0',
+    version='1.3.0',
     description="Two factor authentication for Wagtail",
     long_description=long_description,
     url='https://github.com/LabD/wagtail-2fa',
