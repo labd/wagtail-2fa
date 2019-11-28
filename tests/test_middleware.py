@@ -141,3 +141,29 @@ class TestVerifyUserPermissionsMiddleware:
             result = middleware._require_verified_user(request)
 
         assert result is False
+
+    def test_process_request_enforce_2fa_permission_sets_attribute_on_user_to_true(self, rf, staff_user):
+        enforce_2fa_permission = Permission.objects.get(codename='enforce_2fa')
+        user_no_2fa = staff_user
+        user_no_2fa.user_permissions.add(enforce_2fa_permission)
+
+        request = rf.get('/admin/')
+        request.user = user_no_2fa
+        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            middleware.process_request(request)
+
+        assert request.user.enforce_2fa is True
+
+    def test_process_no_request_enforce_2fa_permission_sets_attribute_on_user_to_false(self, rf, staff_user):
+        user_2fa = staff_user
+
+        request = rf.get('/admin/')
+        request.user = user_2fa
+        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            middleware.process_request(request)
+
+        assert request.user.enforce_2fa is False
