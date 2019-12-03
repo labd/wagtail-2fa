@@ -92,3 +92,25 @@ class VerifyUserMiddleware(_OTPMiddleware):
             except NoReverseMatch:
                 pass
         return results
+
+
+class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
+    """A variant of VerifyUserMiddleware which makes 2FA optional."""
+
+    def process_request(self, request):
+        result = super().process_request(request)
+
+        # Add an attribute to the user so we can easily determine if 2FA should
+        # be enabled for them.
+        request.user.enable_2fa = request.user.has_perms(["wagtailadmin.enable_2fa"])
+
+        return result
+
+    def _require_verified_user(self, request):
+        result = super()._require_verified_user(request)
+
+        # Don't require verification if the user has 2FA disabled
+        if not request.user.has_perms(["wagtailadmin.enable_2fa"]):
+            return False
+
+        return result

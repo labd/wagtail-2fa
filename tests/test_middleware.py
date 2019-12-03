@@ -1,9 +1,10 @@
+from django.contrib.auth.models import Permission
 from django.test import override_settings
 from django.urls import NoReverseMatch, reverse
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
-from wagtail_2fa.middleware import VerifyUserMiddleware
+from wagtail_2fa.middleware import VerifyUserMiddleware, VerifyUserPermissionsMiddleware
 
 
 def test_verified_request(rf, superuser):
@@ -112,3 +113,57 @@ def test_specifiying_wagtail_mount_point_does_prepend_allowed_paths_with_wagtail
 
     for allowed_path in allowed_paths:
         assert allowed_path.startswith(settings.WAGTAIL_MOUNT_PATH)
+
+
+class TestVerifyUserPermissionsMiddleware:
+    def test_enable_2fa_permission_does_require_verification(self, rf, staff_user):
+        enable_2fa_permission = Permission.objects.get(codename='enable_2fa')
+        user_no_2fa = staff_user
+        user_no_2fa.user_permissions.add(enable_2fa_permission)
+
+        request = rf.get('/admin/')
+        request.user = user_no_2fa
+        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            result = middleware._require_verified_user(request)
+
+        assert result is True
+
+    def test_no_enable_2fa_permission_does_not_require_verification(self, rf, staff_user):
+        user_2fa = staff_user
+
+        request = rf.get('/admin/')
+        request.user = user_2fa
+        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            result = middleware._require_verified_user(request)
+
+        assert result is False
+
+    def test_process_request_enable_2fa_permission_sets_attribute_on_user_to_true(self, rf, staff_user):
+        enable_2fa_permission = Permission.objects.get(codename='enable_2fa')
+        user_no_2fa = staff_user
+        user_no_2fa.user_permissions.add(enable_2fa_permission)
+
+        request = rf.get('/admin/')
+        request.user = user_no_2fa
+        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            middleware.process_request(request)
+
+        assert request.user.enable_2fa is True
+
+    def test_process_no_request_enable_2fa_permission_sets_attribute_on_user_to_false(self, rf, staff_user):
+        user_2fa = staff_user
+
+        request = rf.get('/admin/')
+        request.user = user_2fa
+        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            middleware.process_request(request)
+
+        assert request.user.enable_2fa is False
