@@ -9,14 +9,14 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 def test_device_list_view(admin_client, django_assert_num_queries):
     user = get_user_model().objects.filter(is_staff=True).first()
 
-    with django_assert_num_queries(6):
+    with django_assert_num_queries(9):
         response = admin_client.get(reverse('wagtail_2fa_device_list',
                                     kwargs={'user_id': user.id}))
         assert response.status_code == 200
 
 
 def test_device_list_create(admin_client, monkeypatch, django_assert_num_queries):
-    with django_assert_num_queries(8):
+    with django_assert_num_queries(11):
         response = admin_client.get(reverse('wagtail_2fa_device_new'))
         assert response.status_code == 200
 
