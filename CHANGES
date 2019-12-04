@@ -1,3 +1,8 @@
+1.3.2 (2019-12-04)
+==================
+ - Fix bug: menu is unusable if 2FA is disabled in settings (#33)
+
+
 1.3.1 (2019-12-04)
 ==================
  - Add possibility to enable/disable 2fa via permisisons
