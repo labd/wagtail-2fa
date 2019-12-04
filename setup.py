@@ -34,7 +34,7 @@ with open('README.rst') as fh:
 
 setup(
     name='wagtail-2fa',
-    version='1.3.1',
+    version='1.3.2',
     description="Two factor authentication for Wagtail",
     long_description=long_description,
     url='https://github.com/LabD/wagtail-2fa',
