@@ -61,6 +61,7 @@
                 <li class="submit">
                     {% block submit_buttons %}
                     <button type="submit" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Signing in…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Sign in' %}</em></button>
+                    <a href="{% url "wagtailadmin_logout" %}" class="button button-secondary" tabindex="4">{% trans 'Sign out' %}</a>
                     {% endblock %}
                 </li>
             </ul>
