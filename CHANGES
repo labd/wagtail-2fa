@@ -1,3 +1,7 @@
+1.3.4 (unreleased)
+==================
+ - allow to cancel the login if the 2fa code isn't known
+
 1.3.3 (2019-12-05)
 ==================
  - Update django to 1.11.26 LTS
