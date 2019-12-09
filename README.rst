@@ -21,7 +21,7 @@
 wagtail-2fa
 ===========
 
-This Django app add's two factor authentication to Wagtail. Behind the scenes
+This Django app adds two factor authentication to Wagtail. Behind the scenes
 it use django-otp_ which supports Time-based One-Time Passwords (TOTP). This
 allows you to use various apps like Authy, Google Authenticator, or
 1Password.
