@@ -3,6 +3,7 @@ from django.test import override_settings
 from django.urls import NoReverseMatch, reverse
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
+import pytest
 
 from wagtail_2fa.middleware import VerifyUserMiddleware, VerifyUserPermissionsMiddleware
 
@@ -77,6 +78,20 @@ def test_adding_new_device_does_not_require_verification_when_user_has_no_device
             response = middleware(request)
 
         assert response is request
+
+@pytest.mark.skip
+def test_always_require_verification_when_user_has_device(rf, user, settings):
+    TOTPDevice.objects.create(user=user, confirmed=True)
+
+    url_auth = reverse('wagtail_2fa_auth')
+    request = rf.get("/admin/")
+    request.user = user
+
+    middleware = VerifyUserMiddleware(lambda x: x)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        response = middleware(request)
+
+    assert response.url == f"{url_auth}?next=/admin/"
 
 
 def test_get_paths(settings):

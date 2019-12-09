@@ -1,114 +1,126 @@
+from django.test import override_settings
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django_otp import DEVICE_ID_SESSION_KEY
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from wagtail_2fa.views import DeviceListView
 
 
 def test_device_list_view(admin_client, django_assert_num_queries):
-    user = get_user_model().objects.filter(is_staff=True).first()
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        user = get_user_model().objects.filter(is_staff=True).first()
 
-    with django_assert_num_queries(9):
-        response = admin_client.get(reverse('wagtail_2fa_device_list',
-                                    kwargs={'user_id': user.id}))
-        assert response.status_code == 200
+        with django_assert_num_queries(9):
+            response = admin_client.get(reverse('wagtail_2fa_device_list',
+                                        kwargs={'user_id': user.id}))
+            assert response.status_code == 200
 
 
 def test_device_list_create(admin_client, monkeypatch, django_assert_num_queries):
-    with django_assert_num_queries(11):
-        response = admin_client.get(reverse('wagtail_2fa_device_new'))
-        assert response.status_code == 200
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        with django_assert_num_queries(9):
+            response = admin_client.get(reverse('wagtail_2fa_device_new'))
+            assert response.status_code == 200
 
-    with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
-        fn.return_value = True
-        response = admin_client.post(
-            reverse('wagtail_2fa_device_new'), {
-                'name': 'Test device',
-                'otp_token': '123456',
-                'password': 'password',
-            })
+        with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
+            fn.return_value = True
+            response = admin_client.post(
+                reverse('wagtail_2fa_device_new'), {
+                    'name': 'Test device',
+                    'otp_token': '123456',
+                    'password': 'password',
+                })
 
-    assert response.status_code == 302, response.context['form'].errors
-    assert TOTPDevice.objects.filter(confirmed=True).count() == 1
+        assert response.status_code == 302, response.context['form'].errors
+        assert TOTPDevice.objects.filter(confirmed=True).count() == 1
 
 
 def test_device_list_update(admin_client, monkeypatch):
-    user = get_user_model().objects.filter(is_staff=True).first()
-    instance = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        user = get_user_model().objects.filter(is_staff=True).first()
+        instance = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
 
-    monkeypatch.setattr(TOTPDevice, 'verify_token', lambda self, value: True)
+        monkeypatch.setattr(TOTPDevice, 'verify_token', lambda self, value: True)
 
-    # Login with 2fa
-    endpoint = reverse('wagtail_2fa_auth')
-    response = admin_client.post(endpoint, {'otp_token': '123456', 'next': '/cms/'})
-    assert response.status_code == 302,  response.context['form'].errors
+        # Login with 2fa
+        endpoint = reverse('wagtail_2fa_auth')
+        response = admin_client.post(endpoint, {'otp_token': '123456', 'next': '/cms/'})
+        assert response.status_code == 302,  response.context['form'].errors
 
-    # Get update view
-    endpoint = reverse('wagtail_2fa_device_update', kwargs={'pk': instance.pk})
-    response = admin_client.get(endpoint)
-    assert response.status_code == 200
+        # Get update view
+        endpoint = reverse('wagtail_2fa_device_update', kwargs={'pk': instance.pk})
+        response = admin_client.get(endpoint)
+        assert response.status_code == 200
 
-    # Post new name
-    response = admin_client.post(endpoint, {
-        'name': 'Test device',
-        'password': 'password',
-    })
-    assert response.status_code == 302, response.context['form'].errors
-    assert TOTPDevice.objects.filter(name='Test device').count() == 1
+        # Post new name
+        response = admin_client.post(endpoint, {
+            'name': 'Test device',
+            'password': 'password',
+        })
+        assert response.status_code == 302, response.context['form'].errors
+        assert TOTPDevice.objects.filter(name='Test device').count() == 1
 
 
 def test_device_qr(admin_client, monkeypatch):
-    user = get_user_model().objects.filter(is_staff=True).first()
-    TOTPDevice.objects.create(name='Initial', user=user, confirmed=False)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        user = get_user_model().objects.filter(is_staff=True).first()
+        TOTPDevice.objects.create(name='Initial', user=user, confirmed=False)
 
-    # Get update view
-    endpoint = reverse('wagtail_2fa_device_qrcode')
-    response = admin_client.get(endpoint)
-    assert response.status_code == 200
+        # Get update view
+        endpoint = reverse('wagtail_2fa_device_qrcode')
+        response = admin_client.get(endpoint)
+        assert response.status_code == 200
 
 
 def test_delete_user_device_as_admin(client, admin_user, user, monkeypatch):
-    device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
 
-    # verify admin
-    admin_device = TOTPDevice.objects.create(name='Initial', user=admin_user, confirmed=True)
+        # verify admin
+        admin_device = TOTPDevice.objects.create(name='Initial', user=admin_user, confirmed=True)
 
-    client.login(username="admin", password="password")
+        client.login(username="admin", password="password")
 
-    session = client.session
-    session[DEVICE_ID_SESSION_KEY] = admin_device.persistent_id
-    session.save()
+        session = client.session
+        session[DEVICE_ID_SESSION_KEY] = admin_device.persistent_id
+        session.save()
 
-    assert TOTPDevice.objects.all().count() == 2
+        assert TOTPDevice.objects.all().count() == 2
 
-    endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
-    response = client.post(endpoint, {
-        'user_id': user.id
-    })
-    assert response.status_code == 302
-    print(response)
-    assert TOTPDevice.objects.all().count() == 1
+        endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
+        response = client.post(endpoint, {
+            'user_id': user.id
+        })
+        assert response.status_code == 302
+        print(response)
+        assert TOTPDevice.objects.all().count() == 1
 
 def test_delete_user_device_as_admin_unverified(admin_client, user, monkeypatch):
-    user = get_user_model().objects.filter(is_staff=False).first()
-    device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        user = get_user_model().objects.filter(is_staff=False).first()
+        device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
 
-    endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
-    response = admin_client.post(endpoint, {
-        'user_id': user.id
-    })
-    assert response.status_code == 403
-    assert TOTPDevice.objects.all().count() == 1
+        endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
+        response = admin_client.post(endpoint, {
+            'user_id': user.id
+        })
+        assert response.status_code == 302
+
+        new_device_url = reverse('wagtail_2fa_device_new')
+        assert response.url == f"{new_device_url}?next={endpoint}"
+        assert TOTPDevice.objects.all().count() == 1
 
 
 def test_delete_user_device_unauthorized(client, user, monkeypatch):
-    user = get_user_model().objects.filter(is_staff=False).first()
-    device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        user = get_user_model().objects.filter(is_staff=False).first()
+        device = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
 
-    endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
-    response = client.post(endpoint, {
-        'user_id': user.id
-    })
-    assert response.status_code == 302
-    assert TOTPDevice.objects.all().count() == 1
+        endpoint = reverse('wagtail_2fa_device_remove', kwargs={'pk': device.id})
+        response = client.post(endpoint, {
+            'user_id': user.id
+        })
+        assert response.status_code == 302
+        assert TOTPDevice.objects.all().count() == 1

@@ -30,6 +30,9 @@ class OtpRequiredMixin(object):
         raise PermissionDenied
 
     def user_allowed(self, user):
+        if not settings.WAGTAIL_2FA_REQUIRED:
+            return True
+
         return user.is_verified() or (
             self.if_configured and user.is_authenticated and not user_has_device(user)
         )
