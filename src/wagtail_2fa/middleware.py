@@ -109,8 +109,10 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
     def _require_verified_user(self, request):
         result = super()._require_verified_user(request)
 
-        # Don't require verification if the user has 2FA disabled
-        if not request.user.has_perms(["wagtailadmin.enable_2fa"]):
+        # Always require verification if the user has a device, even if they have
+        # 2FA disabled.
+        user_has_device = django_otp.user_has_device(request.user, confirmed=True)
+        if not user_has_device and not request.user.has_perms(["wagtailadmin.enable_2fa"]):
             return False
 
         return result
