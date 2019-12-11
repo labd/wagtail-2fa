@@ -8,13 +8,18 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from wagtail_2fa.views import DeviceListView
 
 
-def test_device_list_view(admin_client, django_assert_num_queries):
+def test_device_list_view(admin_client, admin_user, django_assert_num_queries):
     with override_settings(WAGTAIL_2FA_REQUIRED=True):
-        user = get_user_model().objects.filter(is_staff=True).first()
+        admin_device = TOTPDevice.objects.create(name='Initial', user=admin_user, confirmed=True)
 
-        with django_assert_num_queries(9):
+        session = admin_client.session
+        session[DEVICE_ID_SESSION_KEY] = admin_device.persistent_id
+        session.save()
+
+
+        with django_assert_num_queries(10):
             response = admin_client.get(reverse('wagtail_2fa_device_list',
-                                        kwargs={'user_id': user.id}))
+                                        kwargs={'user_id': admin_user.id}))
             assert response.status_code == 200
 
 
