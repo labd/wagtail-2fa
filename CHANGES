@@ -1,6 +1,8 @@
-1.3.4 (unreleased)
+1.3.4 (2019-12-11)
 ==================
  - Allow signing out on OTP authentication page (#36)
+ - Always require verification if user has a device (#37)
+
 
 1.3.3 (2019-12-05)
 ==================
