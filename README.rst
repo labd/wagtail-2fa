@@ -97,7 +97,7 @@ The following settings are available (Set via your Django settings):
       identify which site is which in your authenticator app. If not set and
       ``WAGTAIL_SITE_NAME`` is defined it uses this. sets ``OTP_TOTP_ISSUER``
       under the hood.
-    - ``WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE`` (default: ``True``): The boolean
+    - ``WAGTAIL_CHECK_PASSWORD_IN_DEVICE_FORM`` (default: ``True``): The boolean
       value used to determine whether a password check will be present when creating
       or updating a device. If you are not using the
       django.contrib.auth.backends.ModelBackend for authentication you will want to

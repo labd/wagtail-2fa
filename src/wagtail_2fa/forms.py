@@ -84,6 +84,6 @@ class DeviceFormNoPassword(BaseDeviceForm):
     If a user of this library uses something other than django.contrib.auth.backends.ModelBackend,
     the extra password check, on the device form, will fail validation. This class allows for
     users to hide the extra password check if they have the
-    WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE setting set to False
+    WAGTAIL_CHECK_PASSWORD_IN_DEVICE_FORM setting set to False
     """
     pass

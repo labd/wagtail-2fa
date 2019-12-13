@@ -23,5 +23,5 @@ def delete_unconfirmed_devices(user):
 
 def get_device_form():
     return forms.DeviceForm if (
-        settings.WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE
+        settings.WAGTAIL_CHECK_PASSWORD_IN_DEVICE_FORM
     ) else forms.DeviceFormNoPassword

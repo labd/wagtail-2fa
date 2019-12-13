@@ -36,7 +36,7 @@ def test_device_list_create(
 ):
     with override_settings(
         WAGTAIL_2FA_REQUIRED=True,
-        WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE=setting_value,
+        WAGTAIL_CHECK_PASSWORD_IN_DEVICE_FORM=setting_value,
     ):
         with django_assert_num_queries(9):
             response = admin_client.get(reverse('wagtail_2fa_device_new'))
@@ -64,7 +64,7 @@ def test_device_list_create(
 def test_device_list_update(admin_client, monkeypatch, setting_value, expected_password):
     with override_settings(
         WAGTAIL_2FA_REQUIRED=True,
-        WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE=setting_value,
+        WAGTAIL_CHECK_PASSWORD_IN_DEVICE_FORM=setting_value,
     ):
         user = get_user_model().objects.filter(is_staff=True).first()
         instance = TOTPDevice.objects.create(name='Initial', user=user, confirmed=True)
