@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
 from django_otp.forms import OTPAuthenticationFormMixin
 from django_otp.plugins.otp_totp.models import TOTPDevice
@@ -68,7 +69,7 @@ class DeviceForm(forms.ModelForm):
 
     def clean_password(self):
         password = self.cleaned_data.get("password")
-        if not self.user.check_password(password):
+        if not authenticate(username=self.user.username, password=password):
             raise forms.ValidationError(_("Invalid password"))
 
     def save(self):
