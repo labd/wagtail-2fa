@@ -20,7 +20,7 @@ class TokenForm(OTPAuthenticationFormMixin, forms.Form):
         return self.cleaned_data
 
 
-class DeviceForm(forms.ModelForm):
+class BaseDeviceForm(forms.ModelForm):
     otp_token = forms.CharField(
         label=_("OTP token"),
         required=True,
@@ -33,12 +33,6 @@ class DeviceForm(forms.ModelForm):
         label=_("Name"),
         required=True,
         help_text=_("The human-readable name of this device."),
-    )
-
-    password = forms.CharField(
-        label=_("Current password"),
-        help_text=_("As an extra security measurement we need your current password"),
-        widget=forms.PasswordInput(),
     )
 
     class Meta:
@@ -66,11 +60,30 @@ class DeviceForm(forms.ModelForm):
             code="invalid",
         )
 
+    def save(self):
+        self.instance.confirmed = True
+        self.instance.save()
+
+
+class DeviceForm(BaseDeviceForm):
+
+    password = forms.CharField(
+        label=_("Current password"),
+        help_text=_("As an extra security measurement we need your current password"),
+        widget=forms.PasswordInput(),
+    )
+
     def clean_password(self):
         password = self.cleaned_data.get("password")
         if not self.user.check_password(password):
             raise forms.ValidationError(_("Invalid password"))
 
-    def save(self):
-        self.instance.confirmed = True
-        self.instance.save()
+
+class DeviceFormNoPassword(BaseDeviceForm):
+    """
+    If a user of this library uses something other than django.contrib.auth.backends.ModelBackend,
+    the extra password check, on the device form, will fail validation. This class allows for
+    users to hide the extra password check if they have the
+    WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE setting set to False
+    """
+    pass

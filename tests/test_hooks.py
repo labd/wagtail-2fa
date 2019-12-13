@@ -19,7 +19,7 @@ class TestHooks:
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
                 MenuItem("Dummy item 3", "/stub3/")
-                ]
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 
@@ -36,7 +36,7 @@ class TestHooks:
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
                 MenuItem("Dummy item 3", "/stub3/")
-                ]
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 
@@ -57,7 +57,7 @@ class TestHooks:
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
                 MenuItem("Dummy item 3", "/stub3/")
-                ]
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 
@@ -73,7 +73,7 @@ class TestHooks:
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
                 MenuItem("Dummy item 3", "/stub3/")
-                ]
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 

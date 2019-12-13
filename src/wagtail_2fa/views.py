@@ -77,7 +77,7 @@ class DeviceListView(OtpRequiredMixin, ListView):
 
 
 class DeviceCreateView(OtpRequiredMixin, FormView):
-    form_class = forms.DeviceForm
+    form_class = utils.get_device_form()
     template_name = "wagtail_2fa/device_form.html"
 
     # require OTP if configured
@@ -109,7 +109,7 @@ class DeviceCreateView(OtpRequiredMixin, FormView):
 
 
 class DeviceUpdateView(OtpRequiredMixin, UpdateView):
-    form_class = forms.DeviceForm
+    form_class = utils.get_device_form()
     template_name = "wagtail_2fa/device_form.html"
 
     def get_queryset(self):

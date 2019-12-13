@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django_otp.plugins.otp_totp.models import TOTPDevice
+
+from wagtail_2fa import forms
 
 
 def get_unconfirmed_device(user):
@@ -16,3 +19,9 @@ def new_unconfirmed_device(user):
 
 def delete_unconfirmed_devices(user):
     (TOTPDevice.objects.devices_for_user(user, confirmed=False).delete())
+
+
+def get_device_form():
+    return forms.DeviceForm if (
+        settings.WAGTAIL_CONFIRM_PASSWORD_ON_DEVICE_CREATE
+    ) else forms.DeviceFormNoPassword
