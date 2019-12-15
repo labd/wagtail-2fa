@@ -85,13 +85,13 @@ class DeviceCreateView(OtpRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
+        kwargs["request"] = self.request
         kwargs["instance"] = self.device
         return kwargs
 
     def form_valid(self, form):
         form.save()
-        utils.delete_unconfirmed_devices(form.user)
+        utils.delete_unconfirmed_devices(self.request.user)
 
         if not self.request.user.is_verified():
             otp_login(self.request, form.instance)
@@ -117,7 +117,7 @@ class DeviceUpdateView(OtpRequiredMixin, UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
+        kwargs["request"] = self.request
         return kwargs
 
     def get_success_url(self):
