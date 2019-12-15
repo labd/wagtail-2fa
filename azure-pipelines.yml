@@ -1,7 +1,7 @@
 jobs:
   - job: UpdateBuildNumber
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: ubuntu-latest
     steps:
       - script: |
           pip3 install --upgrade setuptools
@@ -10,7 +10,7 @@ jobs:
 
   - job: Test
     pool:
-      vmImage: "ubuntu-16.04"
+      vmImage: "ubuntu-latest"
     strategy:
       matrix:
         python 3.6:
@@ -19,6 +19,9 @@ jobs:
         python 3.7:
           python.version: "3.7"
           TOXENV: "py37"
+        python 3.8:
+          python.version: "3.8"
+          TOXENV: "py38"
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -39,7 +42,7 @@ jobs:
 
   - job: Publish
     pool:
-      vmImage: "ubuntu-16.04"
+      vmImage: "ubuntu-latest"
     dependsOn: Test
     condition: in(variables['Build.SourceBranch'], 'refs/heads/master')
     displayName: "Publish artifacts"
