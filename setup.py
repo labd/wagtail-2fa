@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 install_requires = [
     'Django>=1.11.26',
-    'Wagtail>=2.1',
+    'Wagtail>=2.2',
     'django-otp>=0.7.4',
     'six>=1.1',
     'qrcode>=6.1',
@@ -46,6 +46,7 @@ setup(
         'docs': docs_require,
         'test': tests_require,
     },
+    python_requires='>=3.6',
     use_scm_version=True,
     entry_points={},
     package_dir={'': 'src'},
@@ -57,10 +58,12 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Django',
         'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2.0',
+        'Framework :: Django :: 2.2',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     zip_safe=False,
 )
