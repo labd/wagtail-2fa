@@ -51,22 +51,6 @@ settings:
         # ...
     ]
 
-Add the following line to the ``MIDDLEWARE`` list in your Django settings:
-
-.. code-block:: python
-
-    MIDDLEWARE = [
-        # ...
-        'wagtail_2fa.middleware.VerifyUserMiddleware',
-        # ...
-    ]
-
-Migrate your database:
-
-.. code-block:: shell
-
-   python manage.py migrate
-
 Next add the required middleware to the ``MIDDLEWARE``. It should come
 after the AuthenticationMiddleware:
 
@@ -81,6 +65,13 @@ after the AuthenticationMiddleware:
         # 'wagtail.core.middleware.SiteMiddleware',
         # .. other middleware
     ]
+
+Migrate your database:
+
+.. code-block:: shell
+
+   python manage.py migrate
+
 
 
 Settings
