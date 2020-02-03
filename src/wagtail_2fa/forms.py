@@ -70,7 +70,7 @@ class DeviceForm(forms.ModelForm):
     def clean_password(self):
         password = self.cleaned_data.get("password")
         if not authenticate(
-            self.request, username=self.request.user.username, password=password
+            self.request, username=self.request.user.get_username(), password=password
         ):
             raise forms.ValidationError(_("Invalid password"))
 
