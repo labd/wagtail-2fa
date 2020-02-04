@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.utils.translation import ugettext_lazy as _
 from django_otp.forms import OTPAuthenticationFormMixin
 from django_otp.plugins.otp_totp.models import TOTPDevice
@@ -45,7 +46,7 @@ class DeviceForm(forms.ModelForm):
         model = TOTPDevice
         fields = ["name", "otp_token"]
 
-    def __init__(self, user, **kwargs):
+    def __init__(self, request, **kwargs):
         super().__init__(**kwargs)
         self.fields["otp_token"].widget.attrs.update(
             {"autofocus": "autofocus", "autocomplete": "off"}
@@ -53,7 +54,7 @@ class DeviceForm(forms.ModelForm):
         if self.instance.confirmed:
             del self.fields["otp_token"]
 
-        self.user = user
+        self.request = request
 
     def clean_otp_token(self):
         token = self.cleaned_data.get("otp_token")
@@ -68,7 +69,9 @@ class DeviceForm(forms.ModelForm):
 
     def clean_password(self):
         password = self.cleaned_data.get("password")
-        if not self.user.check_password(password):
+        if not authenticate(
+            self.request, username=self.request.user.get_username(), password=password
+        ):
             raise forms.ValidationError(_("Invalid password"))
 
     def save(self):
