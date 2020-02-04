@@ -1,3 +1,3 @@
 default_app_config = "wagtail_2fa.apps.Wagtail2faConfig"
 
-__version__ = "1.3.4"
+__version__ = "1.4.0"
