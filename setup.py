@@ -11,7 +11,7 @@ install_requires = [
 ]
 
 docs_require = [
-    'sphinx>=1.4.0',
+    'sphinx>=1.4.1',
     'sphinx_rtd_theme>=0.4.3',
 ]
 
@@ -25,7 +25,7 @@ tests_require = [
     'isort==4.2.5',
     'flake8==3.0.3',
     'flake8-blind-except==0.1.1',
-    'flake8-debugger==1.4.0',
+    'flake8-debugger==1.4.1',
 ]
 
 with open('README.rst') as fh:
@@ -34,7 +34,7 @@ with open('README.rst') as fh:
 
 setup(
     name='wagtail-2fa',
-    version='1.4.0',
+    version='1.4.1',
     description="Two factor authentication for Wagtail",
     long_description=long_description,
     url='https://github.com/LabD/wagtail-2fa',
