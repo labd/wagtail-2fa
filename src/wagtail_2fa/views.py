@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 import qrcode
 import qrcode.image.svg
 from django.conf import settings
@@ -75,6 +76,15 @@ class DeviceListView(OtpRequiredMixin, ListView):
         context['user_id'] = int(self.kwargs['user_id'])
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if (int(self.kwargs["user_id"]) == request.user.pk or
+                request.user.has_perm("user.change_user")):
+            if not self.user_allowed(request.user):
+                return self.handle_no_permission(request)
+
+            return super(OtpRequiredMixin, self).dispatch(request, *args, **kwargs)
+        raise PermissionDenied
+
 
 class DeviceCreateView(OtpRequiredMixin, FormView):
     form_class = forms.DeviceForm
@@ -133,6 +143,17 @@ class DeviceDeleteView(OtpRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.POST.get('user_id')})
+
+    def dispatch(self, request, *args, **kwargs):
+        device = TOTPDevice.objects.get(**self.kwargs)
+
+        if device.user.pk == request.user.pk or request.user.has_perm("user.change_user"):
+            if not self.user_allowed(request.user):
+                return self.handle_no_permission(request)
+
+            return super(OtpRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+        raise PermissionDenied
 
 
 class DeviceQRCodeView(OtpRequiredMixin, View):
