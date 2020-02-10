@@ -88,7 +88,7 @@ class DeviceListView(OtpRequiredMixin, ListView):
             if not self.user_allowed(request.user):
                 return self.handle_no_permission(request)
 
-            return super(OtpRequiredMixin, self).dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
         raise PermissionDenied
 
 
@@ -162,7 +162,7 @@ class DeviceDeleteView(OtpRequiredMixin, DeleteView):
             if not self.user_allowed(request.user):
                 return self.handle_no_permission(request)
 
-            return super(OtpRequiredMixin, self).dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
 
         raise PermissionDenied
 
