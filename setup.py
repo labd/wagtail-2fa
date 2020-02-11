@@ -3,10 +3,10 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    'Django>=1.11.26',
+    'Django>=1.11.28',
     'Wagtail>=2.2',
-    'django-otp>=0.7.4',
-    'six>=1.1',
+    'django-otp>=0.8.1',
+    'six>=1.14.0',
     'qrcode>=6.1',
 ]
 
@@ -16,16 +16,16 @@ docs_require = [
 ]
 
 tests_require = [
-    'coverage==.4.2',
-    'pytest==3.6.0',
-    'pytest-cov==2.5.1',
-    'pytest-django==3.7.0',
+    'coverage==5.0.3',
+    'pytest==5.3.5',
+    'pytest-cov==2.8.1',
+    'pytest-django==3.8.0',
 
     # Linting
-    'isort==4.2.5',
-    'flake8==3.0.3',
+    'isort==4.3.21',
+    'flake8==3.7.9', # 3.7.9
     'flake8-blind-except==0.1.1',
-    'flake8-debugger==1.4.0',
+    'flake8-debugger==3.2.1',
 ]
 
 with open('README.rst') as fh:
