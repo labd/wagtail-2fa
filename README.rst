@@ -1,7 +1,7 @@
 .. start-no-pypi
 
-.. image:: https://dev.azure.com/lab-digital-opensource/wagtail-2fa/_apis/build/status/labd.wagtail-2fa?branchName=master
-    :target: https://dev.azure.com/lab-digital-opensource/wagtail-2fa/_build/latest?definitionId=3&branchName=master
+.. image:: https://github.com/labd/wagtail-2fa/workflows/Python%20Tests/badge.svg
+    :target: https://github.com/labd/wagtail-2fa/actions?query=workflow%3A%22Python+Tests%22
 
 .. image:: http://codecov.io/github/labd/wagtail-2fa/coverage.svg?branch=master
     :target: http://codecov.io/github/labd/wagtail-2fa?branch=master
