@@ -75,7 +75,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
             return False
 
         # If the user does not have a device, don't require verification
-        # for the specified paths
+        # for the specified URL names
         if request_url_name in self._allowed_url_names_no_device:
             user_has_device = django_otp.user_has_device(user, confirmed=True)
             if not user_has_device:
