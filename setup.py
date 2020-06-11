@@ -18,7 +18,7 @@ docs_require = [
 tests_require = [
     'coverage==5.1',
     'pytest==5.4.3',
-    'pytest-cov==2.8.1',
+    'pytest-cov==2.9.0',
     'pytest-django==3.9.0',
 
     # Linting
