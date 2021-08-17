@@ -16,16 +16,16 @@ docs_require = [
 ]
 
 tests_require = [
-    'coverage==5.0.3',
-    'pytest==5.3.5',
-    'pytest-cov==2.8.1',
-    'pytest-django==3.8.0',
+    'coverage==5.5',
+    'pytest==6.2.4',
+    'pytest-cov==2.12.1',
+    'pytest-django==4.4.0',
 
     # Linting
-    'isort==4.3.21',
-    'flake8==3.7.9', # 3.7.9
-    'flake8-blind-except==0.1.1',
-    'flake8-debugger==3.2.1',
+    'flake8==3.9.2', # 3.7.9
+    'isort==5.9.3',
+    'flake8-blind-except==0.2.0',
+    'flake8-debugger==4.0.0',
 ]
 
 with open('README.rst') as fh:
