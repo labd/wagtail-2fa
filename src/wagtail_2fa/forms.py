@@ -38,7 +38,7 @@ class DeviceForm(forms.ModelForm):
 
     password = forms.CharField(
         label=_("Current password"),
-        help_text=_("As an extra security measurement we need your current password"),
+        help_text=_("As an extra security measure, we need your current password."),
         widget=forms.PasswordInput(),
     )
 
