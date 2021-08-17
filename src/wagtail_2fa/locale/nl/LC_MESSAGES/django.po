@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-17 21:46+0200\n"
-"PO-Revision-Date: 2021-08-17 21:47+0200\n"
+"POT-Creation-Date: 2021-08-17 21:49+0200\n"
+"PO-Revision-Date: 2021-08-17 21:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -158,6 +158,13 @@ msgstr ""
 #: templates/wagtail_2fa/device_form.html:51
 msgid "QR Code"
 msgstr "QR Code"
+
+#: templates/wagtail_2fa/device_form.html:54
+msgid ""
+"If you're unable to scan the image, try pasting the following into your app:"
+msgstr ""
+"Als het niet lukt om de afbeelding te scannen, probeer dan om het volgende "
+"te kopiëren en plakken in je app:"
 
 #: templates/wagtail_2fa/device_form.html:80
 msgid "Update"
