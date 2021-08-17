@@ -51,9 +51,23 @@
                         <label>{% trans 'QR Code' %}</label>
                         <div class="field-content">
                             <img src="{% url 'wagtail_2fa_device_qrcode' %}">
-                            <p class="help">
-                                <b>URL: </b>{{ form.instance.config_url }}
-                            </p>
+                            <p>If you're unable to scan the image, try pasting the following into your app:</p>
+                            <ul class="listing">
+                                <li>
+                                    <div class="row row-flush">
+                                        <div class="col2 title">
+                                            <h2>URL:</h2>
+                                        </div>
+                                        <div class="col10">
+                                            {% spaceless %}
+                                            <pre style="white-space:pre;overflow:auto;margin:0;padding:5px 0px;">
+                                                <code style="padding:8px; 0px;">{{ form.instance.config_url }}</code>
+                                            </pre>
+                                            {% endspaceless %}
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </li>
