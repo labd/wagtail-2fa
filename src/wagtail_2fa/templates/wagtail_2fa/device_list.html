@@ -23,14 +23,14 @@
                                     {{ device.name|default:"Default token" }}
                                 </h2>
                             </td>
-                            <td>
-                                {# Admins can remove existing devices from another user's account. #}
-                                <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button">{% trans 'Remove device' %}</a>
-
+                            <td align="right">
                                 {# Admins cannot update existing devices on another user's account. #}
                                 {% if request.user.id == device.user_id %}
-                                    <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button">{% trans 'Update device' %}</a>
+                                    <a href="{% url 'wagtail_2fa_device_update' pk=device.pk %}" class="button button-secondary button-small">{% trans 'Update device' %}</a>
                                 {% endif %}
+
+                                {# Admins can remove existing devices from another user's account. #}
+                                <a href="{% url 'wagtail_2fa_device_remove' pk=device.pk %}" class="button button-secondary button-small no">{% trans 'Remove device' %}</a>
                             </td>
                         </tr>
                     {% empty %}
@@ -46,7 +46,7 @@
 
         {# Users can only add devices to their own account #}
         {% if user_id == request.user.id %}
-            <a href="{% url 'wagtail_2fa_device_new' %}" class="button">{% trans 'New device' %}</a>
+            <a href="{% url 'wagtail_2fa_device_new' %}" class="button bicolor icon icon-plus">{% trans 'New device' %}</a>
         {% endif %}
     </div>
 {% endblock %}

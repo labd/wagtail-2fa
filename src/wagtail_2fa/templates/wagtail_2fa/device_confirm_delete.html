@@ -10,8 +10,8 @@
         <p>{% trans 'Do you want to delete the device?' %}</p>
         <form method="post" action="{% url 'wagtail_2fa_device_remove' pk=object.pk %}">
             <input type="hidden" name="user_id" value="{{object.user.id}}" />
-            <a href="{% url 'wagtail_2fa_device_list' user_id=object.user.id %}" class="button button-secondary">{% trans 'Cancel' %}</a>
-            <input type="submit" class="button warning" value="{% trans 'Remove device' %}">
+            <a href="{% url 'wagtail_2fa_device_list' user_id=object.user.id %}" class="button">{% trans 'Cancel' %}</a>
+            <input type="submit" class="button button-secondary no" value="{% trans 'Remove device' %}">
             {% csrf_token %}
         </form>
     </div>
