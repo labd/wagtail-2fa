@@ -4,7 +4,6 @@ from django.conf import settings
 WAGTAIL_2FA_DEFAULT_SETTINGS = {
     "WAGTAIL_2FA_REQUIRED": False,
     "WAGTAIL_2FA_OTP_TOTP_NAME": False,
-    "WAGTAIL_MOUNT_PATH": "",
 }
 
 

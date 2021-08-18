@@ -7,7 +7,6 @@ from wagtail_2fa.apps import WAGTAIL_2FA_DEFAULT_SETTINGS
 @pytest.mark.parametrize("setting_name,expected_value", [
     ('WAGTAIL_2FA_REQUIRED', False),
     ('WAGTAIL_2FA_OTP_TOTP_NAME', False),
-    ('WAGTAIL_MOUNT_PATH', ''),
 ])
 def test_setting_default_values(setting_name, expected_value, settings):
     # Explicitly deleting settings to ensure it's added when ready() is called
