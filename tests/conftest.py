@@ -15,6 +15,7 @@ def pytest_configure():
             "django.middleware.clickjacking.XFrameOptionsMiddleware",
             "wagtail_2fa.middleware.VerifyUserMiddleware",
         ],
+        SECRET_KEY="supersecret!",
         STATIC_URL="/static/",
         INSTALLED_APPS=[
             "wagtail.contrib.forms",
