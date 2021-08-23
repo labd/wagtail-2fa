@@ -94,42 +94,6 @@ def test_always_require_verification_when_user_has_device(rf, user, settings):
     assert response.url == f"{url_auth}?next=/admin/"
 
 
-def test_get_paths(settings):
-    middleware = VerifyUserMiddleware(lambda x: x)
-    route_names = middleware._allowed_url_names_no_device
-
-    expected_paths = []
-    for route_name in route_names:
-        try:
-            expected_paths.append(settings.WAGTAIL_MOUNT_PATH + reverse(route_name))
-        except NoReverseMatch:
-            pass
-
-    # Make sure non-existing paths don't get added
-    route_names.append("/non/existing/path/")
-    paths = middleware._get_paths(route_names)
-
-    assert paths == expected_paths
-
-
-def test_not_specifiying_wagtail_mount_point_does_not_prepend_allowed_paths_with_wagtail_mount_path(settings):
-    settings.WAGTAIL_MOUNT_PATH = ''
-    route_names = VerifyUserMiddleware()._allowed_url_names
-    allowed_paths = VerifyUserMiddleware()._get_paths(route_names)
-
-    for allowed_path in allowed_paths:
-        assert allowed_path.startswith('/cms')
-
-
-def test_specifiying_wagtail_mount_point_does_prepend_allowed_paths_with_wagtail_mount_path(settings):
-    settings.WAGTAIL_MOUNT_PATH = '/wagtail'
-    route_names = VerifyUserMiddleware()._allowed_url_names
-    allowed_paths = VerifyUserMiddleware()._get_paths(route_names)
-
-    for allowed_path in allowed_paths:
-        assert allowed_path.startswith(settings.WAGTAIL_MOUNT_PATH)
-
-
 class TestVerifyUserPermissionsMiddleware:
     def test_enable_2fa_permission_does_require_verification(self, rf, staff_user):
         enable_2fa_permission = Permission.objects.get(codename='enable_2fa')
