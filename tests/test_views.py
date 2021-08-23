@@ -21,7 +21,7 @@ def test_device_list_view(admin_client, admin_user, django_assert_max_num_querie
         session.save()
 
 
-        with django_assert_max_num_queries(13):
+        with django_assert_max_num_queries(14):
             response = admin_client.get(reverse('wagtail_2fa_device_list',
                                         kwargs={'user_id': admin_user.id}))
             assert response.status_code == 200
