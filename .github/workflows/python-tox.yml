@@ -12,41 +12,59 @@ jobs:
         tox_env:
           - py37-django22-wagtail210
           - py37-django22-wagtail211
+          - py37-django22-wagtail212
           - py37-django30-wagtail210
           - py37-django30-wagtail211
+          - py37-django30-wagtail212
           - py37-django31-wagtail210
           - py37-django31-wagtail211
+          - py37-django31-wagtail212
           - py38-django22-wagtail210
           - py38-django22-wagtail211
+          - py38-django22-wagtail212
           - py38-django30-wagtail210
           - py38-django30-wagtail211
+          - py38-django30-wagtail212
           - py38-django31-wagtail210
           - py38-django31-wagtail211
+          - py38-django31-wagtail212
         include:
           - python-version: "3.7"
             tox_env: py37-django22-wagtail210
           - python-version: "3.7"
             tox_env: py37-django22-wagtail211
           - python-version: "3.7"
+            tox_env: py37-django22-wagtail212
+          - python-version: "3.7"
             tox_env: py37-django30-wagtail210
           - python-version: "3.7"
             tox_env: py37-django30-wagtail211
           - python-version: "3.7"
+            tox_env: py37-django30-wagtail212
+          - python-version: "3.7"
             tox_env: py37-django31-wagtail210
           - python-version: "3.7"
             tox_env: py37-django31-wagtail211
+          - python-version: "3.7"
+            tox_env: py37-django31-wagtail212
           - python-version: "3.8"
             tox_env: py38-django22-wagtail210
           - python-version: "3.8"
             tox_env: py38-django22-wagtail211
           - python-version: "3.8"
+            tox_env: py38-django22-wagtail212
+          - python-version: "3.8"
             tox_env: py38-django30-wagtail210
           - python-version: "3.8"
             tox_env: py38-django30-wagtail211
           - python-version: "3.8"
+            tox_env: py38-django30-wagtail212
+          - python-version: "3.8"
             tox_env: py38-django31-wagtail210
           - python-version: "3.8"
             tox_env: py38-django31-wagtail211
+          - python-version: "3.8"
+            tox_env: py38-django31-wagtail212
 
     steps:
     - uses: actions/checkout@v1
