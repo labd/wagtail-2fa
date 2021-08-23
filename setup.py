@@ -3,8 +3,8 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "Django>=1.11.28",
-    "Wagtail>=2.2",
+    "Django>=2.2",
+    "Wagtail>=2.10",
     "django-otp>=0.8.1",
     "six>=1.14.0",
     "qrcode>=6.1",
