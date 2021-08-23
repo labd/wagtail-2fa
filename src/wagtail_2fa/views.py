@@ -1,9 +1,9 @@
-from django.core.exceptions import PermissionDenied
 import qrcode
 import qrcode.image.svg
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import resolve_url
 from django.urls import reverse
@@ -12,8 +12,7 @@ from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import (
-    DeleteView, FormView, ListView, UpdateView, View)
+from django.views.generic import DeleteView, FormView, ListView, UpdateView, View
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
@@ -69,11 +68,13 @@ class DeviceListView(OtpRequiredMixin, ListView):
     if_configured = True
 
     def get_queryset(self):
-        return TOTPDevice.objects.devices_for_user(self.kwargs['user_id'], confirmed=True)
+        return TOTPDevice.objects.devices_for_user(
+            self.kwargs["user_id"], confirmed=True
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_id'] = int(self.kwargs['user_id'])
+        context["user_id"] = int(self.kwargs["user_id"])
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -84,8 +85,9 @@ class DeviceListView(OtpRequiredMixin, ListView):
         to list other users' 2FA devices.
 
         """
-        if (int(self.kwargs["user_id"]) == request.user.pk or
-                request.user.has_perm("user.change_user")):
+        if int(self.kwargs["user_id"]) == request.user.pk or request.user.has_perm(
+            "user.change_user"
+        ):
             if not self.user_allowed(request.user):
                 return self.handle_no_permission(request)
 
@@ -115,7 +117,9 @@ class DeviceCreateView(OtpRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.user.id})
+        return reverse(
+            "wagtail_2fa_device_list", kwargs={"user_id": self.request.user.id}
+        )
 
     @cached_property
     def device(self):
@@ -138,7 +142,9 @@ class DeviceUpdateView(OtpRequiredMixin, UpdateView):
         return kwargs
 
     def get_success_url(self):
-        return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.user.id})
+        return reverse(
+            "wagtail_2fa_device_list", kwargs={"user_id": self.request.user.id}
+        )
 
 
 class DeviceDeleteView(OtpRequiredMixin, DeleteView):
@@ -149,7 +155,10 @@ class DeviceDeleteView(OtpRequiredMixin, DeleteView):
         return TOTPDevice.objects.devices_for_user(device.user, confirmed=True)
 
     def get_success_url(self):
-        return reverse('wagtail_2fa_device_list', kwargs={'user_id': self.request.POST.get('user_id')})
+        return reverse(
+            "wagtail_2fa_device_list",
+            kwargs={"user_id": self.request.POST.get("user_id")},
+        )
 
     def dispatch(self, request, *args, **kwargs):
         """Override dispatch to ensure user is allowed to delete the device.
@@ -159,7 +168,9 @@ class DeviceDeleteView(OtpRequiredMixin, DeleteView):
         to delete other users' 2FA devices.
         """
         device = TOTPDevice.objects.get(**self.kwargs)
-        if device.user.pk == request.user.pk or request.user.has_perm("user.change_user"):
+        if device.user.pk == request.user.pk or request.user.has_perm(
+            "user.change_user"
+        ):
             if not self.user_allowed(request.user):
                 return self.handle_no_permission(request)
 

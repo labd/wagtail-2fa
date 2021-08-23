@@ -3,7 +3,7 @@ from functools import partial
 import django_otp
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 from django.utils.functional import SimpleLazyObject
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 
@@ -23,17 +23,19 @@ class VerifyUserMiddleware(_OTPMiddleware):
     ]
 
     def __call__(self, request):
-        if hasattr(self, 'process_request'):
+        if hasattr(self, "process_request"):
             response = self.process_request(request)
         if not response:
             response = self.get_response(request)
-        if hasattr(self, 'process_response'):
+        if hasattr(self, "process_response"):
             response = self.process_response(request, response)
         return response
 
     def process_request(self, request):
         if request.user:
-            request.user = SimpleLazyObject(partial(self._verify_user, request, request.user))
+            request.user = SimpleLazyObject(
+                partial(self._verify_user, request, request.user)
+            )
         user = request.user
         if self._require_verified_user(request):
             user_has_device = django_otp.user_has_device(user, confirmed=True)
@@ -103,7 +105,9 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
         # Always require verification if the user has a device, even if they have
         # 2FA disabled.
         user_has_device = django_otp.user_has_device(request.user, confirmed=True)
-        if not user_has_device and not request.user.has_perms(["wagtailadmin.enable_2fa"]):
+        if not user_has_device and not request.user.has_perms(
+            ["wagtailadmin.enable_2fa"]
+        ):
             return False
 
         return result

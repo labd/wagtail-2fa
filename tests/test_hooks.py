@@ -1,14 +1,15 @@
-from wagtail_2fa.wagtail_hooks import remove_menu_if_unverified
 from django.test import override_settings
-from wagtail.admin.menu import MenuItem
-from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 from django_otp import user_has_device
+from django_otp.middleware import OTPMiddleware as _OTPMiddleware
+from wagtail.admin.menu import MenuItem
+
+from wagtail_2fa.wagtail_hooks import remove_menu_if_unverified
 
 
 class TestHooks:
     def test_remove_menu_if_unverified(self, user, rf):
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
-            request = rf.get('/cms/')
+            request = rf.get("/cms/")
             request.user = user
             middleware = _OTPMiddleware()
             user = middleware._verify_user(request, user)
@@ -18,8 +19,8 @@ class TestHooks:
             menu_items = [
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
-                MenuItem("Dummy item 3", "/stub3/")
-                ]
+                MenuItem("Dummy item 3", "/stub3/"),
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 
@@ -29,23 +30,22 @@ class TestHooks:
 
     def test_do_not_remove_menu_if_verified(self, verified_user, rf):
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
-            request = rf.get('/cms/')
+            request = rf.get("/cms/")
             request.user = verified_user
 
             menu_items = [
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
-                MenuItem("Dummy item 3", "/stub3/")
-                ]
+                MenuItem("Dummy item 3", "/stub3/"),
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 
             assert menu_items == menu_items
 
-    def test_do_not_remove_menu_if_2fa_required_is_false(
-            self, user, rf):
+    def test_do_not_remove_menu_if_2fa_required_is_false(self, user, rf):
         with override_settings(WAGTAIL_2FA_REQUIRED=False):
-            request = rf.get('/cms/')
+            request = rf.get("/cms/")
 
             # Use a regular user here to make sure the menu still works
             # even when the middleware is not loaded and the user does not have the
@@ -56,24 +56,25 @@ class TestHooks:
             menu_items = [
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
-                MenuItem("Dummy item 3", "/stub3/")
-                ]
+                MenuItem("Dummy item 3", "/stub3/"),
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 
             assert menu_items == menu_items
 
     def test_do_not_remove_menu_if_2fa_required_is_false_for_verified_user(
-            self, verified_user, rf):
+        self, verified_user, rf
+    ):
         with override_settings(WAGTAIL_2FA_REQUIRED=False):
-            request = rf.get('/cms/')
+            request = rf.get("/cms/")
             request.user = verified_user
 
             menu_items = [
                 MenuItem("Dummy item 1", "/stub1/"),
                 MenuItem("Dummy item 2", "/stub2/"),
-                MenuItem("Dummy item 3", "/stub3/")
-                ]
+                MenuItem("Dummy item 3", "/stub3/"),
+            ]
 
             remove_menu_if_unverified(request, menu_items)
 

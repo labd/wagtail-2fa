@@ -1,9 +1,8 @@
-from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
-
+from django.urls import reverse
 from django_otp import user_has_device
 
 
