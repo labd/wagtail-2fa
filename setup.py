@@ -19,7 +19,7 @@ tests_require = [
     "coverage==5.5",
     "pytest==6.2.4",
     "pytest-cov==2.12.1",
-    "pytest-django==4.4.0",
+    "pytest-django==4.5.2",
     # Linting
     "flake8==3.9.2",  # 3.7.9
     "isort==5.9.3",
