@@ -3,8 +3,8 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "Django>=2.2",
-    "Wagtail>=2.10",
+    "Django>=3.2",
+    "Wagtail>=2.15",
     "django-otp>=0.8.1",
     "six>=1.14.0",
     "qrcode>=6.1",
@@ -46,7 +46,7 @@ setup(
         "docs": docs_require,
         "test": tests_require,
     },
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     use_scm_version=True,
     entry_points={},
     package_dir={"": "src"},
@@ -57,14 +57,14 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",
-        "Framework :: Django :: 1.11",
-        "Framework :: Django :: 2.2",
-        "Framework :: Django :: 3.0",
+        "Framework :: Django :: 3.2",
+        "Framework :: Django :: 4.0",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     zip_safe=False,
 )
