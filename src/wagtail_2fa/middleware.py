@@ -96,7 +96,7 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
 
         # Add an attribute to the user so we can easily determine if 2FA should
         # be enabled for them.
-        request.user.enable_2fa = request.user.has_perms(["wagtailadmin.enable_2fa"])
+        request.user.enable_2fa = request.user.has_perms(["wagtail_2fa.enable_2fa"])
 
         return result
 
@@ -107,7 +107,7 @@ class VerifyUserPermissionsMiddleware(VerifyUserMiddleware):
         # 2FA disabled.
         user_has_device = django_otp.user_has_device(request.user, confirmed=True)
         if not user_has_device and not request.user.has_perms(
-            ["wagtailadmin.enable_2fa"]
+            ["wagtail_2fa.enable_2fa"]
         ):
             return False
 

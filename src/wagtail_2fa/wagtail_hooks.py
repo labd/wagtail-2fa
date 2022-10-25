@@ -81,7 +81,7 @@ def register_user_listing_buttons(context, user):
 def register_2fa_permission():
     if "wagtail_2fa.middleware.VerifyUserPermissionsMiddleware" in settings.MIDDLEWARE:
         return Permission.objects.filter(
-            content_type__app_label="wagtailadmin", codename="enable_2fa"
+            content_type__app_label="wagtail_2fa", codename="enable_2fa"
         )
 
     return Permission.objects.none()
