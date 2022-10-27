@@ -5,7 +5,8 @@ from django.urls import reverse
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
-from wagtail_2fa.middleware import VerifyUserMiddleware, VerifyUserPermissionsMiddleware
+from wagtail_2fa.middleware import (
+    VerifyUserMiddleware, VerifyUserPermissionsMiddleware)
 
 
 def test_verified_request(rf, superuser):

@@ -9,7 +9,8 @@ from django.urls import reverse
 from django_otp import DEVICE_ID_SESSION_KEY
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
-from wagtail_2fa.views import DeviceDeleteView, DeviceListView, DeviceUpdateView
+from wagtail_2fa.views import (
+    DeviceDeleteView, DeviceListView, DeviceUpdateView)
 
 
 def test_device_list_view(admin_client, admin_user, django_assert_max_num_queries):
