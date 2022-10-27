@@ -16,8 +16,6 @@ jobs:
           - py37-django32-wagtail40
           - py37-django40-wagtail216
           - py37-django40-wagtail30
-          - py37-django40-wagtail40
-          - py37-django41-wagtail40
           - py38-django32-wagtail215
           - py38-django32-wagtail216
           - py38-django32-wagtail30
