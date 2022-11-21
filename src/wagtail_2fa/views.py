@@ -16,12 +16,16 @@ from django.views.generic import DeleteView, FormView, ListView, UpdateView, Vie
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail_2fa import forms, utils
 from wagtail_2fa.mixins import OtpRequiredMixin
 
 
 class LoginView(SuccessURLAllowedHostsMixin, FormView):
-    template_name = "wagtail_2fa/otp_form.html"
+    if WAGTAIL_VERSION >= (4, 0, 0):
+        template_name = "wagtail_2fa/otp_form.html"
+    else:
+        template_name = "wagtail_2fa/legacy/otp_form.html"
     form_class = forms.TokenForm
     redirect_field_name = REDIRECT_FIELD_NAME
 
