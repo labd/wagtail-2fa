@@ -1,18 +1,15 @@
 {% extends "wagtailadmin/admin_base.html" %}
-{% load static i18n %}
+{% load i18n wagtailadmin_tags %}
 {% block titletag %}{% trans "Sign in" %}{% endblock %}
 {% block bodyclass %}login{% endblock %}
 
-{% block extra_css %}
-    {{ block.super }}
-
-    <link rel="stylesheet" href="{% static 'wagtailadmin/css/layouts/login.css' %}" type="text/css" />
-{% endblock %}
-
 {% block furniture %}
-    <div class="content-wrapper">
-        {% if messages or form.errors %}
-            <div class="messages">
+    <main class="content-wrapper" id="main">
+        <h1>{% block branding_login %}{% trans "Enter your two-factor authentication code" %}{% endblock %}</h1>
+
+        <div class="messages" role="status">
+            {# Always show messages div so it can be appended to by JS #}
+            {% if messages or form.errors %}
                 <ul>
                     {% if form.errors %}
                         <li class="error">{% blocktrans %}Invalid code{% endblocktrans %}</li>
@@ -21,54 +18,43 @@
                         <li class="{{ message.tags }}">{{ message }}</li>
                     {% endfor %}
                 </ul>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
 
         {% block above_login %}{% endblock %}
 
         <form action="{% url 'wagtail_2fa_auth' %}" method="post" autocomplete="off" novalidate>
             {% block login_form %}
-            {% csrf_token %}
+                {% csrf_token %}
 
-            {% url 'wagtailadmin_home' as home_url %}
-            <input type="hidden" name="next" value="{{ next|default:home_url }}" />
+                {% url 'wagtailadmin_home' as home_url %}
+                <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
-            <h1>{% block branding_login %}{% trans "Enter your two-factor authentication code" %}{% endblock %}</h1>
-
-            <ul class="fields">
                 {% block fields %}
-                <li class="full">
-                    <div class="field iconfield">
-                        {{ form.otp_token.label_tag }}
-                        <div class="input icon-locked">
-                            {{ form.otp_token }}
-                        </div>
-                    </div>
-                </li>
+                    {% field field=form.otp_token %}{% endfield %}
 
-                {% block extra_fields %}
-                {% for field_name, field in form.extra_fields %}gs
-                <li class="full">
-                    {{ field.label_tag }}
-                    <div class="field iconfield">
-                        {{ field }}
-                    </div>
-                </li>
-                {% endfor %}
-                {% endblock extra_fields %}
+                    {% block extra_fields %}
+                        {% for field_name, field in form.extra_fields %}
+                            {% field field=field %}{% endfield %}
+                        {% endfor %}
+                    {% endblock extra_fields %}
 
                 {% endblock %}
-                <li class="submit">
-                    {% block submit_buttons %}
-                    <button type="submit" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Signing in…' %}"><span class="icon icon-spinner"></span><em>{% trans 'Sign in' %}</em></button>
+            {% endblock %}
+            <footer class="form-actions">
+                {% block submit_buttons %}
+                    <button type="submit" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Signing in…' %}">{% icon name="spinner" %}<em>{% trans 'Sign in' %}</em></button>
                     <a href="{% url "wagtailadmin_logout" %}" class="button button-secondary" tabindex="4">{% trans 'Sign out' %}</a>
-                    {% endblock %}
-                </li>
-            </ul>
-        {% endblock %}
+                {% endblock %}
+            </footer>
         </form>
 
         {% block below_login %}{% endblock %}
 
-    </div>
+        {% block branding_logo %}
+            <div class="login-logo">
+                <img class="login-logo-img" alt="" src="{% versioned_static 'wagtailadmin/images/wagtail-logo.svg' %}" />
+            </div>
+        {% endblock %}
+    </main>
 {% endblock %}
