@@ -2,8 +2,14 @@ from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.urls import path, re_path, reverse
 from django.utils.translation import gettext_lazy as _
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
-from wagtail.core import hooks
+
+if WAGTAIL_VERSION >= (3, 0):
+    from wagtail import hooks
+else:
+    from wagtail.core import hooks
+
 from wagtail.users.widgets import UserListingButton
 
 from wagtail_2fa import views

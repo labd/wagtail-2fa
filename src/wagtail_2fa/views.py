@@ -1,8 +1,14 @@
 import qrcode
 import qrcode.image.svg
+from django import VERSION as DJANGO_VERSION
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+
+if DJANGO_VERSION >= (4, 1):
+    from django.contrib.auth.views import RedirectURLMixin
+else:
+    from django.contrib.auth.views import SuccessURLAllowedHostsMixin as RedirectURLMixin
+
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import resolve_url
@@ -12,7 +18,8 @@ from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import DeleteView, FormView, ListView, UpdateView, View
+from django.views.generic import (
+    DeleteView, FormView, ListView, UpdateView, View)
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
@@ -20,7 +27,7 @@ from wagtail_2fa import forms, utils
 from wagtail_2fa.mixins import OtpRequiredMixin
 
 
-class LoginView(SuccessURLAllowedHostsMixin, FormView):
+class LoginView(RedirectURLMixin, FormView):
     template_name = "wagtail_2fa/otp_form.html"
     form_class = forms.TokenForm
     redirect_field_name = REDIRECT_FIELD_NAME
