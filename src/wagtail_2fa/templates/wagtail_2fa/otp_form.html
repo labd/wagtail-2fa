@@ -2,6 +2,15 @@
 {% load i18n wagtailadmin_tags %}
 {% block titletag %}{% trans "Sign in" %}{% endblock %}
 {% block bodyclass %}login{% endblock %}
+{% block extra_css %}
+    <style>
+        .form-actions .button+.button {
+            margin-top: 0.75rem;
+            margin-left: 0;
+        }
+    </style>
+{% endblock %}
+
 
 {% block furniture %}
     <main class="content-wrapper" id="main">
