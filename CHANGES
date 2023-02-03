@@ -1,3 +1,9 @@
+Unreleased
+=================
+ - Added tests for Python 3.11
+ - Added tests for Wagtail 4.2
+
+
 1.5.0 (2021-8-23)
 =================
  - Add support for Wagtail 2.13
