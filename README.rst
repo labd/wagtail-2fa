@@ -62,7 +62,7 @@ after the AuthenticationMiddleware:
 
         'wagtail_2fa.middleware.VerifyUserMiddleware',
 
-        # 'wagtail.core.middleware.SiteMiddleware',
+        # 'wagtail.middleware.SiteMiddleware',
         # .. other middleware
     ]
 

@@ -1,7 +1,8 @@
 Unreleased
 =================
- - Added tests for Python 3.11
- - Added tests for Wagtail 4.2
+ - Added tests for Python 3.11 (#213)
+ - Added tests for Wagtail 4.2 (#213)
+ - Drop support for Wagtail versions prior to 4.1 (#213)
 
 
 1.5.0 (2021-8-23)
