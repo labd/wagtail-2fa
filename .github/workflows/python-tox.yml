@@ -34,6 +34,12 @@ jobs:
           - wagtail: '4.0'
             django: '4.1'
             python: '3.10'
+          - wagtail: '4.1'
+            django: '4.1'
+            python: '3.11'
+          - wagtail: '4.2'
+            django: '4.1'
+            python: '3.11'
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python }}
