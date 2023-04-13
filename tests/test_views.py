@@ -9,8 +9,11 @@ from django.urls import reverse
 from django_otp import DEVICE_ID_SESSION_KEY
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
+from wagtail import VERSION as WAGTAIL_VERSION
+
 from wagtail_2fa.views import (
     DeviceDeleteView, DeviceListView, DeviceUpdateView)
+
 
 
 def test_device_list_view(admin_client, admin_user, django_assert_max_num_queries):
@@ -32,9 +35,14 @@ def test_device_list_view(admin_client, admin_user, django_assert_max_num_querie
 
 def test_device_list_create(admin_client, django_assert_max_num_queries):
     with override_settings(WAGTAIL_2FA_REQUIRED=True):
-        with django_assert_max_num_queries(10):
-            response = admin_client.get(reverse("wagtail_2fa_device_new"))
-            assert response.status_code == 200
+        if WAGTAIL_VERSION <= (4, 0):
+            with django_assert_max_num_queries(10):
+                response = admin_client.get(reverse("wagtail_2fa_device_new"))
+                assert response.status_code == 200
+        else:
+            with django_assert_max_num_queries(14):
+                response = admin_client.get(reverse("wagtail_2fa_device_new"))
+                assert response.status_code == 200
 
         with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
             fn.return_value = True
