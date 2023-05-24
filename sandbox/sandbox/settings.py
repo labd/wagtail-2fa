@@ -166,3 +166,5 @@ INTERNAL_IPS = ['127.0.0.1']
 
 
 WAGTAIL_2FA_REQUIRED = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
