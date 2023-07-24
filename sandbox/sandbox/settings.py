@@ -15,8 +15,6 @@ from __future__ import absolute_import, unicode_literals
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-from wagtail import VERSION as WAGTAIL_VERSION
-
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -46,7 +44,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail' if WAGTAIL_VERSION >= (3, 0) else 'wagtail.core',
+    'wagtail',
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.styleguide',
 
@@ -161,13 +159,12 @@ WAGTAIL_SITE_NAME = "sandbox"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-if WAGTAIL_VERSION >= (3, 0):
-    WAGTAILADMIN_BASE_URL = 'http://example.com'
-else:
-    BASE_URL = 'http://example.com'
 
+WAGTAILADMIN_BASE_URL = 'http://example.com'
 
 INTERNAL_IPS = ['127.0.0.1']
 
 
 WAGTAIL_2FA_REQUIRED = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
