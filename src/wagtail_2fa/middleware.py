@@ -14,6 +14,10 @@ class VerifyUserMiddleware(_OTPMiddleware):
         "wagtailadmin_login",
         "wagtailadmin_logout",
         "wagtailadmin_javascript_catalog",
+
+        # Needed because Wagtail will try to load HTML from this url and inserts it in the DOM.
+        # We don't want it to inject the HTML from the 2FA required page.
+        "wagtailadmin_sprite",
     ]
 
     # These URLs do not require verification if the user has no devices
