@@ -14,6 +14,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
         "wagtailadmin_login",
         "wagtailadmin_logout",
         "wagtailadmin_javascript_catalog",
+        "wagtailadmin_sprite",
     ]
 
     # These URLs do not require verification if the user has no devices
