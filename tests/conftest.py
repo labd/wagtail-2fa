@@ -1,6 +1,5 @@
 import pytest
 from django.conf import settings
-from wagtail import VERSION as WAGTAIL_VERSION
 
 
 def pytest_configure():
@@ -29,8 +28,9 @@ def pytest_configure():
             "wagtail.images",
             "wagtail.search",
             "wagtail.admin",
-            "wagtail" if WAGTAIL_VERSION >= (3, 0) else "wagtail.core",
-            "wagtail.contrib.modeladmin",
+            "wagtail",
+            # "wagtail_modeladmin",          # if Wagtail >=5.1; Don't repeat if it's there already
+            "wagtail.contrib.modeladmin",    # if Wagtail <5.1;  Don't repeat if it's there already
             "modelcluster",
             "taggit",
             "django.contrib.admin",

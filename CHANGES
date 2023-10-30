@@ -1,3 +1,10 @@
+2.0.0 (2023-07-24)
+=================
+
+- Includes [217](https://github.com/labd/wagtail-2fa/pull/217)
+- Includes [220](https://github.com/labd/wagtail-2fa/pull/220)
+- Adds support for Wagtail v4.1+ upto v5.0
+
 1.5.0 (2021-8-23)
 =================
  - Add support for Wagtail 2.13
