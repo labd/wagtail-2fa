@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 install_requires = [
     "Django>=3.2",
-    "Wagtail>=4.1",
+    "Wagtail>=5.2",
     "django-otp>=0.8.1",
     "six>=1.14.0",
     "qrcode>=6.1",
@@ -25,6 +25,7 @@ tests_require = [
     "isort==5.9.3",
     "flake8-blind-except==0.2.0",
     "flake8-debugger==4.0.0",
+    "wagtail-modeladmin==2.0.0"
 ]
 
 with open("README.rst") as fh:
@@ -58,18 +59,18 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Django",
         "Framework :: Django :: 3.2",
-        "Framework :: Django :: 4.1",
         "Framework :: Django :: 4.2",
+        "Framework :: Django :: 5.0",
         "Framework :: Wagtail",
-        "Framework :: Wagtail :: 2",
-        "Framework :: Wagtail :: 3",
-        "Framework :: Wagtail :: 4",
+        "Framework :: Wagtail :: 5",
+        "Framework :: Wagtail :: 6",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
     zip_safe=False,
 )
