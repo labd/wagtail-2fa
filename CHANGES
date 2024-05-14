@@ -1,8 +1,8 @@
 Unreleased
 ==========
- - Add support for Wagtail 5.2 and 6.0
+ - Add support for Wagtail 5.2 and 6.x
  - Drop support for Wagtail < 5.2
- - Update `otp_form` to be compatible with Wagtail 5.2 and 6.0
+ - Update `otp_form` to be compatible with Wagtail 5.2 and 6.x
  - Add support for Django 5.0
 
 
