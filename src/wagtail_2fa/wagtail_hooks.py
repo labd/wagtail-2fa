@@ -3,9 +3,10 @@ from django.contrib.auth.models import Permission
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import hooks
+from wagtail import hooks, VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
 from wagtail.users.widgets import UserListingButton
+
 
 from wagtail_2fa import views
 
@@ -68,14 +69,24 @@ def register(request):
     }
 
 
-@hooks.register("register_user_listing_buttons")
-def register_user_listing_buttons(context, user):
-    yield UserListingButton(
-        _("Manage 2FA"),
-        reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
-        attrs={"title": _("Edit this user")},
-        priority=100,
-    )
+if WAGTAIL_VERSION >= (6, 1):
+    @hooks.register("register_user_listing_buttons")
+    def register_user_listing_buttons(user, request_user):
+        yield UserListingButton(
+            _("Manage 2FA"),
+            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
+            attrs={"title": _("Edit this user")},
+            priority=100,
+        )
+else:
+    @hooks.register("register_user_listing_buttons")
+    def register_user_listing_buttons(context, user):
+        yield UserListingButton(
+            _("Manage 2FA"),
+            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
+            attrs={"title": _("Edit this user")},
+            priority=100,
+        )
 
 
 @hooks.register("register_permissions")
