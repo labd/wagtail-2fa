@@ -46,7 +46,10 @@
 
         {# Users can only add devices to their own account #}
         {% if user_id == request.user.id %}
-            <a href="{% url 'wagtail_2fa_device_new' %}" class="button bicolor icon icon-plus">{% trans 'New device' %}</a>
+            <a href="{% url 'wagtail_2fa_device_new' %}" class="button bicolor button--icon">
+                <span class="icon-wrapper"><svg class="icon icon-plus icon" aria-hidden="true"><use href="#icon-plus"></use></svg></span>
+                {% trans 'New device' %}
+            </a>
         {% endif %}
     </div>
 {% endblock %}
