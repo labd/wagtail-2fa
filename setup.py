@@ -3,7 +3,7 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "Django>=3.2",
+    "Django>=4.2",
     "Wagtail>=5.2",
     "django-otp>=0.8.1",
     "six>=1.14.0",
@@ -58,7 +58,6 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",
-        "Framework :: Django :: 3.2",
         "Framework :: Django :: 4.2",
         "Framework :: Django :: 5.0",
         "Framework :: Wagtail",
