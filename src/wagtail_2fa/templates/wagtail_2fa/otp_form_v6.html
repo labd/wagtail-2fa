@@ -1,0 +1,66 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n wagtailadmin_tags %}
+{% block titletag %}{% trans "Sign in" %}{% endblock %}
+{% block bodyclass %}login{% endblock %}
+
+{% block furniture %}
+    <main class="content-wrapper" id="main">
+        <h1>{% block branding_login %}{% trans "Enter your two-factor authentication code" %}{% endblock %}</h1>
+
+        <div class="messages" role="status">
+            {# Always show messages div so it can be appended to by JS #}
+            {% if messages or form.errors %}
+                <ul>
+                    {% if form.errors %}
+                        <li class="error">{% blocktrans %}Invalid code{% endblocktrans %}</li>
+                    {% endif %}
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        {% block above_login %}{% endblock %}
+
+        <form action="{% url 'wagtail_2fa_auth' %}" method="post" autocomplete="off" novalidate>
+            {% block login_form %}
+                {% csrf_token %}
+
+                {% url 'wagtailadmin_home' as home_url %}
+                <input type="hidden" name="next" value="{{ next|default:home_url }}" />
+
+                {% block fields %}
+                    {% formattedfield field=form.otp_token %}
+                    {% block extra_fields %}
+                        {% for field_name, field in form.extra_fields %}
+                            {% formattedfield field=field %}
+                        {% endfor %}
+                    {% endblock extra_fields %}
+                {% endblock %}
+            {% endblock %}
+            <footer class="form-actions">
+                {% block submit_buttons %}
+                    <button type="submit" class="button button-longrunning" tabindex="3" data-controller="w-progress" data-action="w-progress#activate" data-w-progress-active-value="{% trans 'Signing in…' %}">{% icon name="spinner" %}<em>{% trans 'Sign in' %}</em></button>
+
+                    <span style="margin-top:1rem;display:block;">
+                        <button type="submit" class="button button-secondary"
+                            formaction="{% url 'wagtailadmin_logout' %}?next={% url 'wagtailadmin_login' %}" formmethod="post" tabindex="4">
+                            {% trans "Sign out" %}
+                        </button>
+                    </span>
+                {% endblock %}
+            </footer>
+        </form>
+
+        {% block below_login %}{% endblock %}
+
+        {% block branding_logo %}
+            <div class="login-logo">
+                {% include "wagtailadmin/icons/wagtail.svg" %}
+            </div>
+        {% endblock %}
+
+        
+    </main>
+{% endblock %}

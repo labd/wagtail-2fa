@@ -9,6 +9,8 @@ from wagtail.users.widgets import UserListingButton
 
 from wagtail_2fa import views
 
+from wagtail import VERSION as WAGTAIL_VERSION
+
 
 @hooks.register("register_admin_urls")
 def urlpatterns():
@@ -68,14 +70,25 @@ def register(request):
     }
 
 
-@hooks.register("register_user_listing_buttons")
-def register_user_listing_buttons(context, user):
-    yield UserListingButton(
-        _("Manage 2FA"),
-        reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
-        attrs={"title": _("Edit this user")},
-        priority=100,
-    )
+if WAGTAIL_VERSION >= (6, 0):
+    @hooks.register("register_user_listing_buttons")
+    def register_user_listing_buttons(user, request_user):
+        yield UserListingButton(
+            _("Manage 2FA"),
+            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
+            attrs={"title": _("Edit this user")},
+            priority=100,
+        )
+else:
+    @hooks.register("register_user_listing_buttons")
+    def register_user_listing_buttons(context, user):
+        yield UserListingButton(
+            _("Manage 2FA"),
+            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
+            attrs={"title": _("Edit this user")},
+            priority=100,
+        )
+
 
 
 @hooks.register("register_permissions")
