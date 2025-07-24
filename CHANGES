@@ -1,3 +1,8 @@
+1.7.0 (2025-07-24)
+=================
+ - Added support for wagtail 6.2 and above
+ 
+
 1.6.9 (2023-12-20)
 =================
  - Include template for branding logo for wagtail > 5.0 
