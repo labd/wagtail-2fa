@@ -1,3 +1,34 @@
+1.7.1 (2025-07-24)
+=================
+ - Update python release workflow to use Python 3.11
+
+
+1.7.0 (2025-07-24)
+=================
+ - Added support for wagtail 6.2 and above
+ 
+
+1.6.9 (2023-12-20)
+=================
+ - Include template for branding logo for wagtail > 5.0 
+
+
+1.6.8 (2023-12-20)
+=================
+ - Use correct path for branding logo
+
+
+1.6.7 (2023-12-20)
+=================
+ - Fix branding logo
+
+1.6.6 (2023-07-24)
+=================
+
+- Includes [217](https://github.com/labd/wagtail-2fa/pull/217)
+- Includes [220](https://github.com/labd/wagtail-2fa/pull/220)
+- Adds support for Wagtail v4.1+ upto v5.0
+
 1.5.0 (2021-8-23)
 =================
  - Add support for Wagtail 2.13

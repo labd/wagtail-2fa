@@ -1,4 +1,4 @@
-{% extends "wagtailadmin/admin_base.html" %}
+{% extends "wagtailadmin/base.html" %}
 {% load i18n wagtailadmin_tags %}
 {% block titletag %}{% trans "Sign in" %}{% endblock %}
 {% block bodyclass %}login{% endblock %}
@@ -31,21 +31,23 @@
                 <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
                 {% block fields %}
-                    {% field field=form.otp_token %}{% endfield %}
-
+                    {% formattedfield field=form.otp_token %}
                     {% block extra_fields %}
                         {% for field_name, field in form.extra_fields %}
-                            {% field field=field %}{% endfield %}
+                            {% formattedfield field=field %}
                         {% endfor %}
                     {% endblock extra_fields %}
-
                 {% endblock %}
             {% endblock %}
             <footer class="form-actions">
                 {% block submit_buttons %}
-                    <button type="submit" class="button button-longrunning" tabindex="3" data-clicked-text="{% trans 'Signing in…' %}">{% icon name="spinner" %}<em>{% trans 'Sign in' %}</em></button>
+                    <button type="submit" class="button button-longrunning" tabindex="3" data-controller="w-progress" data-action="w-progress#activate" data-w-progress-active-value="{% trans 'Signing in…' %}">{% icon name="spinner" %}<em>{% trans 'Sign in' %}</em></button>
+
                     <span style="margin-top:1rem;display:block;">
-                        <a href="{% url 'wagtailadmin_logout' %}" class="button button-secondary" tabindex="4">{% trans 'Sign out' %}</a>                    
+                        <button type="submit" class="button button-secondary"
+                            formaction="{% url 'wagtailadmin_logout' %}?next={% url 'wagtailadmin_login' %}" formmethod="post" tabindex="4">
+                            {% trans "Sign out" %}
+                        </button>
                     </span>
                 {% endblock %}
             </footer>
@@ -55,8 +57,10 @@
 
         {% block branding_logo %}
             <div class="login-logo">
-                <img class="login-logo-img" alt="" src="{% versioned_static 'wagtailadmin/images/icons/wagtail.svg' %}" />
+                {% include "wagtailadmin/icons/wagtail.svg" %}
             </div>
         {% endblock %}
+
+        
     </main>
 {% endblock %}
