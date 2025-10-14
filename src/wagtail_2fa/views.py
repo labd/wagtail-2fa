@@ -201,7 +201,7 @@ class DeviceQRCodeView(OtpRequiredMixin, View):
 
     def get(self, request):
         device = utils.get_unconfirmed_device(self.request.user)
-        img = qrcode.make(device.config_url, image_factory=qrcode.image.svg.SvgImage)
+        img = qrcode.make(device.config_url, image_factory=qrcode.image.svg.SvgFillImage)
         response = HttpResponse(content_type="image/svg+xml")
         img.save(response)
 
