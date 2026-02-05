@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 install_requires = [
     "Django>=3.2",
     "Wagtail>=4.1",
-    "django-otp>=0.8.1",
+    "django-otp>=1.7.0",
     "six>=1.14.0",
     "qrcode>=6.1",
 ]

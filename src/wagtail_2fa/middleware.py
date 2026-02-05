@@ -36,7 +36,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
     def process_request(self, request):
         if request.user:
             request.user = SimpleLazyObject(
-                partial(self._verify_user, request, request.user)
+                partial(self._verify_user_sync, request, request.user)
             )
         user = request.user
         if self._require_verified_user(request):
