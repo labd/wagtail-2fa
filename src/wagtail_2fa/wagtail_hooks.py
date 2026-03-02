@@ -1,23 +1,26 @@
 from django.conf import settings
 from django.contrib.auth.models import Permission
-from django.urls import path, re_path, reverse
+from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import hooks
+from wagtail import hooks, VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
-from wagtail.users.widgets import UserListingButton
+
+if WAGTAIL_VERSION >= (7, 1):
+    from wagtail.admin.widgets import Button
+else:
+    from wagtail.users.widgets import UserListingButton
+
 
 from wagtail_2fa import views
-
-from wagtail import VERSION as WAGTAIL_VERSION
 
 
 @hooks.register("register_admin_urls")
 def urlpatterns():
     return [
         path("2fa/auth", views.LoginView.as_view(), name="wagtail_2fa_auth"),
-        re_path(
-            r"^2fa/devices/(?P<user_id>\d+)$",
+        path(
+            "2fa/devices/<int:user_id>",
             views.DeviceListView.as_view(),
             name="wagtail_2fa_device_list",
         ),
@@ -26,18 +29,18 @@ def urlpatterns():
             views.DeviceCreateView.as_view(),
             name="wagtail_2fa_device_new",
         ),
-        re_path(
-            r"^2fa/devices/(?P<pk>\d+)/update$",
+        path(
+            "2fa/devices/<int:pk>/update",
             views.DeviceUpdateView.as_view(),
             name="wagtail_2fa_device_update",
         ),
-        re_path(
-            r"^2fa/devices/(?P<pk>\d+)/remove$",
+        path(
+            "2fa/devices/<int:pk>/remove",
             views.DeviceDeleteView.as_view(),
             name="wagtail_2fa_device_remove",
         ),
-        re_path(
-            r"^2fa/devices/qr-code$",
+        path(
+            "2fa/devices/qr-code",
             views.DeviceQRCodeView.as_view(),
             name="wagtail_2fa_device_qrcode",
         ),
@@ -70,25 +73,22 @@ def register(request):
     }
 
 
-if WAGTAIL_VERSION >= (6, 0):
-    @hooks.register("register_user_listing_buttons")
-    def register_user_listing_buttons(user, request_user):
+@hooks.register("register_user_listing_buttons")
+def register_user_listing_buttons(user, request_user):
+    if WAGTAIL_VERSION >= (7, 1):
+        yield Button(
+            _("Manage 2FA"),
+            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
+            attrs={"title": _("Edit this user")},
+            priority=100,
+        )
+    else:
         yield UserListingButton(
             _("Manage 2FA"),
             reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
             attrs={"title": _("Edit this user")},
             priority=100,
         )
-else:
-    @hooks.register("register_user_listing_buttons")
-    def register_user_listing_buttons(context, user):
-        yield UserListingButton(
-            _("Manage 2FA"),
-            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
-            attrs={"title": _("Edit this user")},
-            priority=100,
-        )
-
 
 
 @hooks.register("register_permissions")

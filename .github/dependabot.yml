@@ -9,20 +9,19 @@ updates:
   ignore:
   - dependency-name: flake8
     versions:
-    - 3.8.4
-    - 3.9.0
+    - 7.3.0
   - dependency-name: coverage
     versions:
-    - "5.4"
+    - "7.10.1"
   - dependency-name: pytest
     versions:
-    - 6.2.2
+    - 8.4.1
   - dependency-name: isort
     versions:
-    - 5.7.0
+    - 6.0.1
   - dependency-name: django-debug-toolbar
     versions:
-    - "3.2"
+    - "6.0"
   - dependency-name: pytest-django
     versions:
-    - 4.1.0
+    - 4.11.1

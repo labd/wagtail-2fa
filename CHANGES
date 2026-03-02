@@ -1,3 +1,11 @@
+Unreleased
+==========
+ - Add testing for Python 3.14 and Wagtail 7.2 
+ - Update dependencies to latest versions
+ - Update Wagtail supported versions to 6.3, 7.0 and 7.1 (Currently supported versions)
+ - Update Django supported versions to 4.2, 5.1 and 5.2 (Currently supported versions)
+ - Removed old code for handling no longer supported versions
+
 1.7.1 (2025-07-24)
 =================
  - Update python release workflow to use Python 3.11
@@ -6,7 +14,6 @@
 1.7.0 (2025-07-24)
 =================
  - Added support for wagtail 6.2 and above
- 
 
 1.6.9 (2023-12-20)
 =================

@@ -3,28 +3,29 @@ import re
 from setuptools import find_packages, setup
 
 install_requires = [
-    "Django>=3.2",
-    "Wagtail>=4.1",
-    "django-otp>=0.8.1",
-    "six>=1.14.0",
-    "qrcode>=6.1",
+    "Django>=4.2",
+    "Wagtail>=6.3",
+    "django-otp>=1.6.1",
+    "six>=1.17.0",
+    "qrcode>=8.2",
 ]
 
 docs_require = [
-    "sphinx>=1.4.1",
-    "sphinx_rtd_theme>=0.4.3",
+    "sphinx>=8.2.3",
+    "sphinx_rtd_theme>=3.0.2",
 ]
 
 tests_require = [
-    "coverage==5.5",
-    "pytest==7.2.2",
-    "pytest-cov==2.12.1",
-    "pytest-django==4.4.0",
+    "coverage==7.10.1",
+    "pytest==8.4.1",
+    "pytest-cov==6.2.1",
+    "pytest-django==4.11.1",
     # Linting
-    "flake8==3.9.2",  # 3.7.9
-    "isort==5.12.0",
-    "flake8-blind-except==0.2.0",
-    "flake8-debugger==4.0.0",
+    "flake8==7.3.0",
+    "isort==6.0.1",
+    "flake8-blind-except==0.2.1",
+    "flake8-debugger==4.1.2",
+    "wagtail-modeladmin==2.2.0"
 ]
 
 with open("README.rst") as fh:
@@ -46,7 +47,7 @@ setup(
         "docs": docs_require,
         "test": tests_require,
     },
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     use_scm_version=True,
     entry_points={},
     package_dir={"": "src"},
@@ -57,19 +58,19 @@ setup(
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
         "Framework :: Django",
-        "Framework :: Django :: 3.2",
-        "Framework :: Django :: 4.1",
         "Framework :: Django :: 4.2",
+        "Framework :: Django :: 5.1",
+        "Framework :: Django :: 5.2",
         "Framework :: Wagtail",
-        "Framework :: Wagtail :: 2",
-        "Framework :: Wagtail :: 3",
-        "Framework :: Wagtail :: 4",
+        "Framework :: Wagtail :: 6",
+        "Framework :: Wagtail :: 7",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
     zip_safe=False,
 )
