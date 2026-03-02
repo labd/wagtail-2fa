@@ -1,4 +1,5 @@
 import pytest
+from unittest import mock
 from django.conf import settings
 
 
@@ -29,8 +30,6 @@ def pytest_configure():
             "wagtail.search",
             "wagtail.admin",
             "wagtail",
-            # "wagtail_modeladmin",          # if Wagtail >=5.1; Don't repeat if it's there already
-            "wagtail.contrib.modeladmin",    # if Wagtail <5.1;  Don't repeat if it's there already
             "modelcluster",
             "taggit",
             "django.contrib.admin",
@@ -99,18 +98,25 @@ def user(django_user_model):
 
 
 @pytest.fixture
-def verified_user(django_user_model, rf):
+def otpmiddleware():
+    from django_otp.middleware import OTPMiddleware
+
+    get_response = mock.MagicMock()
+    return OTPMiddleware(get_response)
+
+
+@pytest.fixture
+def verified_user(django_user_model, rf, otpmiddleware):
     """Create a user and verify it using the OTP middleware. Add a device
     to complete the verification for the user."""
-    from django_otp.middleware import OTPMiddleware as _OTPMiddleware
     from django_otp.plugins.otp_totp.models import TOTPDevice
 
     user = django_user_model.objects.create(username="verified-user")
     device = TOTPDevice.objects.create(user=user, confirmed=True)
     request = rf.get("/foo/")
     request.user = user
-    middleware = _OTPMiddleware()
-    user = middleware._verify_user(request, user)
+    middleware = otpmiddleware
+    user = middleware._verify_user_sync(request, user)
     user.otp_device = device
     return user
 
