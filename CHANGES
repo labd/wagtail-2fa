@@ -1,3 +1,9 @@
+Unreleased
+==================
+ - Add testing for Python 3.14, Wagtail 7.2, and Wagtail 7.3
+ - Update dependencies to latest versions
+
+
 1.8.0 (2026-02-05)
 ==================
  - bump required version of django-otp and update middleware
