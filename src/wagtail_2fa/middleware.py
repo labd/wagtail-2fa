@@ -17,6 +17,10 @@ class VerifyUserMiddleware(_OTPMiddleware):
         "wagtailadmin_sprite",
     ]
 
+    def get_allowed_url_names(self):
+        extra = getattr(settings, "WAGTAIL_2FA_ALLOWED_URL_NAMES", [])
+        return self._allowed_url_names + list(extra)
+
     # These URLs do not require verification if the user has no devices
     _allowed_url_names_no_device = [
         "wagtail_2fa_device_list",
@@ -75,7 +79,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
 
         # Don't require verification for specified URL names
         request_url_name = resolve(request.path_info).url_name
-        if request_url_name in self._allowed_url_names:
+        if request_url_name in self.get_allowed_url_names():
             return False
 
         # If the user does not have a device, don't require verification
