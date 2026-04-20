@@ -2,6 +2,7 @@ from functools import partial
 
 import django_otp
 from django.conf import settings
+from django.urls.exceptions import Resolver404
 from django.contrib.auth.views import redirect_to_login
 from django.urls import resolve, reverse
 from django.utils.functional import SimpleLazyObject
@@ -74,7 +75,11 @@ class VerifyUserMiddleware(_OTPMiddleware):
             return False
 
         # Don't require verification for specified URL names
-        request_url_name = resolve(request.path_info).url_name
+        try:
+            request_url_name = resolve(request.path_info).url_name
+        except Resolver404:
+            return False
+
         if request_url_name in self._allowed_url_names:
             return False
 
