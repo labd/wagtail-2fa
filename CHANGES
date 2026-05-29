@@ -1,3 +1,20 @@
+Unreleased
+==================
+ - Add support for Wagtail 7.4 (LTS) and Django 6.0
+ - Expand test matrix to cover Python 3.10, 3.11, and 3.12 (previously
+   declared in classifiers but not exercised in tox); CI now tests against
+   Wagtail 7.0, 7.3, and 7.4 (LTS + current + previous current)
+ - Declare upper bounds: ``Django>=5.2,<7`` and ``Wagtail>=7.0,<8``.
+   Users on Wagtail 7.0 with Django 4.2 should remain on ``wagtail-2fa
+   1.8.x``; this release requires Django 5.2 or newer
+ - Remove vestigial ``six`` install dependency (unused since the Python 2
+   compatibility shim was dropped)
+ - Remove dead ``DJANGO_VERSION`` import guard in ``views.py`` (the
+   ``Django < 4.1`` branch is unreachable now that ``Django>=5.2`` is
+   required)
+ - Update dependencies to latest versions
+
+
 1.8.0 (2026-02-05)
 ==================
  - bump required version of django-otp and update middleware
