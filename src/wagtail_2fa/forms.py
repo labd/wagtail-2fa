@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
@@ -15,6 +17,12 @@ class TokenForm(OTPAuthenticationFormMixin, forms.Form):
         self.fields["otp_token"].widget.attrs.update(
             {"autofocus": "autofocus", "autocomplete": "off"}
         )
+
+    def clean_otp_token(self):
+        '''Remove whitespace because authentication apps often present token
+        as "123 456". It is very confusing for user if this exact format
+        isn't supported.'''
+        return re.sub(r'\s', '', self.cleaned_data.get('otp_token', ''))
 
     def clean(self):
         self.clean_otp(self.user)
