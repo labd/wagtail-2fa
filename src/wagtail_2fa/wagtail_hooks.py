@@ -3,13 +3,15 @@ from django.contrib.auth.models import Permission
 from django.urls import path, re_path, reverse
 from django.utils.translation import gettext_lazy as _
 
-from wagtail import hooks
+from wagtail import hooks, VERSION as WAGTAIL_VERSION
 from wagtail.admin.menu import MenuItem
-from wagtail.users.widgets import UserListingButton
 
-from wagtail_2fa import views
+if WAGTAIL_VERSION >= (7, 1):
+    from wagtail.admin.widgets import Button
+else:
+    from wagtail.users.widgets import UserListingButton as Button
 
-from wagtail import VERSION as WAGTAIL_VERSION
+from wagtail_2fa import utils, views
 
 
 @hooks.register("register_admin_urls")
@@ -70,32 +72,32 @@ def register(request):
     }
 
 
-if WAGTAIL_VERSION >= (6, 0):
-    @hooks.register("register_user_listing_buttons")
-    def register_user_listing_buttons(user, request_user):
-        yield UserListingButton(
+@hooks.register("register_user_listing_buttons")
+def register_user_listing_buttons(user, request_user):
+    if user.pk == request_user.pk or utils.user_can_manage_other_users_devices(
+        request_user
+    ):
+        yield Button(
             _("Manage 2FA"),
             reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
             attrs={"title": _("Edit this user")},
             priority=100,
         )
-else:
-    @hooks.register("register_user_listing_buttons")
-    def register_user_listing_buttons(context, user):
-        yield UserListingButton(
-            _("Manage 2FA"),
-            reverse("wagtail_2fa_device_list", kwargs={"user_id": user.id}),
-            attrs={"title": _("Edit this user")},
-            priority=100,
-        )
-
 
 
 @hooks.register("register_permissions")
 def register_2fa_permission():
+    permissions = Permission.objects.none()
+
     if "wagtail_2fa.middleware.VerifyUserPermissionsMiddleware" in settings.MIDDLEWARE:
-        return Permission.objects.filter(
+        permissions |= Permission.objects.filter(
             content_type__app_label="wagtailadmin", codename="enable_2fa"
         )
 
-    return Permission.objects.none()
+    # Always registered, regardless of which VerifyUser*Middleware is in
+    # use - this is a Wagtail Group-management permission.
+    permissions |= Permission.objects.filter(
+        content_type__app_label="wagtailadmin", codename="manage_2fa_devices"
+    )
+
+    return permissions

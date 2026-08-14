@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.core.exceptions import PermissionDenied
 from django.http.response import Http404
 from django.test import override_settings
@@ -143,13 +144,19 @@ def test_delete_user_device_unauthorized(client, user, monkeypatch):
 
 class TestViewsChangeUserPermission:
     """Test suite which ensures that:
-    - users without the change_user permission cannot manage other users' 2FA devices
+    - users without the manage_2fa_devices/change_user permission cannot
+      manage other users' 2FA devices
+    - users with either permission can manage other users' 2FA devices
     - users can manage their own devices
     """
 
-    def test_verified_user_has_no_change_user_perm(self, verified_user):
-        """Sanity check."""
-        assert not verified_user.has_perm("user.change_user")
+    def test_verified_user_has_no_manage_devices_or_change_user_perm(self, verified_user):
+        """Sanity check - a freshly-created user has no special permissions."""
+        assert not verified_user.has_perm("wagtailadmin.manage_2fa_devices")
+        # The consuming project's actual user model app_label/name here is
+        # auth.User, since these tests don't configure a custom
+        # AUTH_USER_MODEL - see conftest.py's settings.configure().
+        assert not verified_user.has_perm("auth.change_user")
 
     def test_device_list_view_for_own_user_returns_200(self, verified_user, rf):
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
@@ -194,6 +201,73 @@ class TestViewsChangeUserPermission:
 
             with pytest.raises(PermissionDenied):
                 DeviceDeleteView.as_view()(request, pk=other_device.id)
+
+    def test_device_list_view_for_other_user_allowed_with_manage_2fa_devices_perm(
+        self, user, verified_user, rf
+    ):
+        """The narrow manage_2fa_devices permission is enough on its own -
+        no change_user permission required."""
+        permission = Permission.objects.get(
+            content_type__app_label="wagtailadmin", codename="manage_2fa_devices"
+        )
+        verified_user.user_permissions.add(permission)
+        # has_perm caches permissions on the instance; clear just that
+        # cache rather than refetching the user, which would lose the
+        # is_verified method django_otp's middleware attached to this
+        # specific instance in the verified_user fixture.
+        for cache_attr in ("_perm_cache", "_user_perm_cache", "_group_perm_cache"):
+            if hasattr(verified_user, cache_attr):
+                delattr(verified_user, cache_attr)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            request = rf.get("foo")
+            request.user = verified_user
+
+            response = DeviceListView.as_view()(request, user_id=user.id)
+            assert response.status_code == 200
+
+    def test_device_delete_view_for_other_user_allowed_with_manage_2fa_devices_perm(
+        self, user, verified_user, rf
+    ):
+        permission = Permission.objects.get(
+            content_type__app_label="wagtailadmin", codename="manage_2fa_devices"
+        )
+        verified_user.user_permissions.add(permission)
+        for cache_attr in ("_perm_cache", "_user_perm_cache", "_group_perm_cache"):
+            if hasattr(verified_user, cache_attr):
+                delattr(verified_user, cache_attr)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            other_device = TOTPDevice.objects.create(
+                name="Initial", user=user, confirmed=True
+            )
+            request = rf.get("foo")
+            request.user = verified_user
+
+            response = DeviceDeleteView.as_view()(request, pk=other_device.id)
+            assert response.status_code == 200
+
+    def test_device_list_view_for_other_user_allowed_with_change_user_perm(
+        self, user, verified_user, rf
+    ):
+        """The broad change_user permission still works too (e.g. for
+        existing superusers/admins who already hold it), derived
+        dynamically from AUTH_USER_MODEL rather than the old hardcoded
+        "user.change_user" string that could never match a real project."""
+        permission = Permission.objects.get(
+            content_type__app_label="auth", codename="change_user"
+        )
+        verified_user.user_permissions.add(permission)
+        for cache_attr in ("_perm_cache", "_user_perm_cache", "_group_perm_cache"):
+            if hasattr(verified_user, cache_attr):
+                delattr(verified_user, cache_attr)
+
+        with override_settings(WAGTAIL_2FA_REQUIRED=True):
+            request = rf.get("foo")
+            request.user = verified_user
+
+            response = DeviceListView.as_view()(request, user_id=user.id)
+            assert response.status_code == 200
 
     def test_device_update_view_for_own_user_returns_200(self, verified_user, rf):
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
