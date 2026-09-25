@@ -139,10 +139,7 @@ class DeviceCreateView(OtpRequiredMixin, FormView):
 
     @cached_property
     def device(self):
-        if self.request.method.lower() == "get":
-            return utils.new_unconfirmed_device(self.request.user)
-        else:
-            return utils.get_unconfirmed_device(self.request.user)
+        return utils.get_or_create_unconfirmed_device(self.request.user)
 
 
 class DeviceUpdateView(OtpRequiredMixin, UpdateView):
@@ -200,7 +197,7 @@ class DeviceQRCodeView(OtpRequiredMixin, View):
     if_configured = True
 
     def get(self, request):
-        device = utils.get_unconfirmed_device(self.request.user)
+        device = utils.get_or_create_unconfirmed_device(self.request.user)
         img = qrcode.make(device.config_url, image_factory=qrcode.image.svg.SvgFillImage)
         response = HttpResponse(content_type="image/svg+xml")
         img.save(response)
