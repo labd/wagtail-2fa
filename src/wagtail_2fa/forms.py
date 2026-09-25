@@ -6,11 +6,16 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
 class TokenForm(OTPAuthenticationFormMixin, forms.Form):
+    otp_device = forms.CharField(required=False, widget=forms.HiddenInput)
     otp_token = forms.CharField(required=True)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super().__init__(*args, **kwargs)
+
+        devices = list(self.device_choices(user))
+        if devices:
+            self.fields["otp_device"].initial = devices[0][0]
 
         self.fields["otp_token"].widget.attrs.update(
             {"autofocus": "autofocus", "autocomplete": "off"}

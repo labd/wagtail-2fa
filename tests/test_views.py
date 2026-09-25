@@ -7,11 +7,73 @@ from django.http.response import Http404
 from django.test import override_settings
 from django.urls import reverse
 from django_otp import DEVICE_ID_SESSION_KEY
+from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from wagtail_2fa.views import (
     DeviceDeleteView, DeviceListView, DeviceUpdateView)
 
+
+
+def _current_token(device):
+    token = TOTP(device.bin_key, device.step, device.t0, device.digits).token()
+    return str(token).zfill(device.digits)
+
+
+@pytest.mark.django_db
+class TestLoginView:
+    endpoint = "/cms/2fa/auth"
+
+    @pytest.fixture(autouse=True)
+    def require_2fa(self, settings):
+        settings.WAGTAIL_2FA_REQUIRED = True
+
+    def test_renders_hidden_device_field(self, admin_client, admin_user):
+        device = TOTPDevice.objects.create(user=admin_user, confirmed=True)
+
+        response = admin_client.get(self.endpoint)
+
+        assert (
+            f'<input type="hidden" name="otp_device" value="{device.persistent_id}"'
+            in response.content.decode()
+        )
+
+    def test_login_with_valid_token(self, admin_client, admin_user):
+        device = TOTPDevice.objects.create(user=admin_user, confirmed=True)
+
+        response = admin_client.post(
+            self.endpoint,
+            {"otp_device": device.persistent_id, "otp_token": _current_token(device)},
+        )
+
+        assert response.status_code == 302, response.context["form"].errors
+        assert admin_client.session[DEVICE_ID_SESSION_KEY] == device.persistent_id
+
+    def test_login_with_invalid_token(self, admin_client, admin_user):
+        device = TOTPDevice.objects.create(user=admin_user, confirmed=True)
+
+        response = admin_client.post(
+            self.endpoint,
+            {"otp_device": device.persistent_id, "otp_token": "000000"},
+        )
+
+        assert response.status_code == 200
+        assert DEVICE_ID_SESSION_KEY not in admin_client.session
+
+    def test_other_users_device_is_rejected(self, admin_client, admin_user, user):
+        TOTPDevice.objects.create(user=admin_user, confirmed=True)
+        other_device = TOTPDevice.objects.create(user=user, confirmed=True)
+
+        response = admin_client.post(
+            self.endpoint,
+            {
+                "otp_device": other_device.persistent_id,
+                "otp_token": _current_token(other_device),
+            },
+        )
+
+        assert response.status_code == 200
+        assert DEVICE_ID_SESSION_KEY not in admin_client.session
 
 
 def test_device_list_view(admin_client, admin_user, django_assert_max_num_queries):
@@ -61,7 +123,14 @@ def test_device_list_update(admin_client, monkeypatch):
 
         # Login with 2fa
         endpoint = reverse("wagtail_2fa_auth")
-        response = admin_client.post(endpoint, {"otp_token": "123456", "next": "/cms/"})
+        response = admin_client.post(
+            endpoint,
+            {
+                "otp_device": instance.persistent_id,
+                "otp_token": "123456",
+                "next": "/cms/",
+            },
+        )
         assert response.status_code == 302, response.context["form"].errors
 
         # Get update view

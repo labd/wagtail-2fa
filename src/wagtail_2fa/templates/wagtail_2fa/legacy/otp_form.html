@@ -31,6 +31,7 @@
                 <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
                 {% block fields %}
+                    {{ form.otp_device }}
                     {% field field=form.otp_token %}{% endfield %}
 
                     {% block extra_fields %}
