@@ -1,3 +1,8 @@
+Unreleased
+==========
+ - Keep the same secret on the "Add device" page until the device is confirmed, so reloading the page no longer invalidates a scanned QR code, and fix a crash in the QR code view when no pending device exists
+
+
 1.8.0 (2026-02-05)
 ==================
  - bump required version of django-otp and update middleware

@@ -92,6 +92,61 @@ def test_device_qr(admin_client, monkeypatch):
         assert response.status_code == 200
 
 
+def test_device_create_reuses_unconfirmed_device(admin_client, admin_user):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        endpoint = reverse("wagtail_2fa_device_new")
+
+        # Reloading the page (or a duplicate request) must not replace the
+        # secret the user may already have scanned.
+        admin_client.get(endpoint)
+        first = TOTPDevice.objects.get(user=admin_user, confirmed=False)
+        admin_client.get(endpoint)
+        second = TOTPDevice.objects.get(user=admin_user, confirmed=False)
+
+        assert second.pk == first.pk
+        assert second.key == first.key
+
+
+def test_device_qr_matches_device_create(admin_client, admin_user):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        response = admin_client.get(reverse("wagtail_2fa_device_new"))
+        device = TOTPDevice.objects.get(user=admin_user, confirmed=False)
+        assert device.config_url in response.content.decode().replace("&amp;", "&")
+
+        admin_client.get(reverse("wagtail_2fa_device_qrcode"))
+        assert TOTPDevice.objects.get(user=admin_user, confirmed=False).pk == device.pk
+
+
+def test_device_qr_without_unconfirmed_device(admin_client, admin_user):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        assert not TOTPDevice.objects.filter(user=admin_user).exists()
+
+        response = admin_client.get(reverse("wagtail_2fa_device_qrcode"))
+
+        assert response.status_code == 200
+        assert TOTPDevice.objects.filter(user=admin_user, confirmed=False).count() == 1
+
+
+def test_device_create_after_confirming_starts_fresh(admin_client, admin_user):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        endpoint = reverse("wagtail_2fa_device_new")
+        admin_client.get(endpoint)
+        with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
+            fn.return_value = True
+            response = admin_client.post(
+                endpoint,
+                {"name": "Phone", "otp_token": "123456", "password": "password"},
+            )
+        assert response.status_code == 302, response.context["form"].errors
+        confirmed = TOTPDevice.objects.get(user=admin_user, confirmed=True)
+
+        # Adding a second device must get its own, new secret.
+        admin_client.get(endpoint)
+        new = TOTPDevice.objects.get(user=admin_user, confirmed=False)
+        assert new.pk != confirmed.pk
+        assert new.key != confirmed.key
+
+
 def test_delete_user_device_as_admin(client, admin_user, user, monkeypatch):
     with override_settings(WAGTAIL_2FA_REQUIRED=True):
         device = TOTPDevice.objects.create(name="Initial", user=user, confirmed=True)
