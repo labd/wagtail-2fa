@@ -1,4 +1,4 @@
-.PHONY: install test upload docs sandbox
+.PHONY: install test upload docs sandbox format lint
 
 
 install:
@@ -12,6 +12,14 @@ retest:
 
 coverage:
 	py.test --cov=wagtail_2fa --cov-report=term-missing --cov-report=html
+
+format:
+	ruff check --fix src tests sandbox
+	ruff format src tests sandbox
+
+lint:
+	ruff format --check src tests sandbox
+	ruff check src tests sandbox
 
 docs:
 	$(MAKE) -C docs html
