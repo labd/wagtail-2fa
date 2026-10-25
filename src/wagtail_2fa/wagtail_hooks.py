@@ -2,14 +2,12 @@ from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.urls import path, re_path, reverse
 from django.utils.translation import gettext_lazy as _
-
+from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail import hooks
 from wagtail.admin.menu import MenuItem
 from wagtail.users.widgets import UserListingButton
 
 from wagtail_2fa import views
-
-from wagtail import VERSION as WAGTAIL_VERSION
 
 
 @hooks.register("register_admin_urls")
@@ -71,6 +69,7 @@ def register(request):
 
 
 if WAGTAIL_VERSION >= (6, 0):
+
     @hooks.register("register_user_listing_buttons")
     def register_user_listing_buttons(user, request_user):
         yield UserListingButton(
@@ -80,6 +79,7 @@ if WAGTAIL_VERSION >= (6, 0):
             priority=100,
         )
 else:
+
     @hooks.register("register_user_listing_buttons")
     def register_user_listing_buttons(context, user):
         yield UserListingButton(
@@ -88,7 +88,6 @@ else:
             attrs={"title": _("Edit this user")},
             priority=100,
         )
-
 
 
 @hooks.register("register_permissions")
