@@ -5,7 +5,11 @@ from django.utils.translation import gettext_lazy as _
 from wagtail import VERSION as WAGTAIL_VERSION
 from wagtail import hooks
 from wagtail.admin.menu import MenuItem
-from wagtail.users.widgets import UserListingButton
+
+try:
+    from wagtail.users.widgets import UserListingButton
+except ImportError:  # Wagtail 8 removed UserListingButton
+    from wagtail.admin.widgets import ListingButton as UserListingButton
 
 from wagtail_2fa import views
 

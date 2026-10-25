@@ -43,7 +43,7 @@ setup(
         "docs": docs_require,
         "test": tests_require,
     },
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     use_scm_version=True,
     entry_points={},
     package_dir={"": "src"},
