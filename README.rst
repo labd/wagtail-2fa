@@ -111,7 +111,7 @@ and 2FA can be enabled or disabled per group.
 Sandbox
 =======
 
-First create a new virtualenv with Python 3.8 and activate it. Then run
+First create a new virtualenv with Python 3.11 or newer and activate it. Then run
 the following commands:
 
 .. code-block:: shell
