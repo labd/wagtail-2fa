@@ -1,22 +1,15 @@
-.. start-no-pypi
-
-.. image:: https://github.com/labd/wagtail-2fa/workflows/Python%20Tests/badge.svg
-    :target: https://github.com/labd/wagtail-2fa/actions?query=workflow%3A%22Python+Tests%22
-
-.. image:: https://img.shields.io/pypi/v/wagtail-2fa.svg
-    :target: https://pypi.python.org/pypi/wagtail-2fa/
-
-.. image:: https://readthedocs.org/projects/wagtail-2fa/badge/?version=stable
-    :target: https://wagtail-2fa.readthedocs.io/en/stable/?badge=stable
-
-.. image:: https://img.shields.io/github/stars/labd/wagtail-2fa.svg?style=social&logo=github
-    :target: https://github.com/labd/wagtail-2fa/stargazers
-
-.. end-no-pypi
-
 ===========
 wagtail-2fa
 ===========
+
+.. image:: https://img.shields.io/pypi/v/wagtail-2fa.svg
+    :target: https://pypi.org/project/wagtail-2fa/
+
+.. image:: https://github.com/labd/wagtail-2fa/actions/workflows/python-test.yml/badge.svg
+    :target: https://github.com/labd/wagtail-2fa/actions/workflows/python-test.yml
+
+.. image:: https://readthedocs.org/projects/wagtail-2fa/badge/?version=stable
+    :target: https://wagtail-2fa.readthedocs.io/en/stable/?badge=stable
 
 This Django app adds two factor authentication to Wagtail. Behind the scenes
 it use django-otp_ which supports Time-based One-Time Passwords (TOTP). This
