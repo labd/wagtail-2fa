@@ -1,43 +1,42 @@
-.PHONY: install test upload docs sandbox format lint
+.PHONY: install test retest coverage format lint docs makemessages compilemessages release sandbox
 
 
 install:
-	pip install -e .[docs,test]
+	uv sync --all-groups
 
 test:
-	py.test
+	uv run pytest
 
 retest:
-	py.test -vvv --lf
+	uv run pytest -vvv --lf
 
 coverage:
-	py.test --cov=wagtail_2fa --cov-report=term-missing --cov-report=html
+	uv run pytest --cov=wagtail_2fa --cov-report=term-missing --cov-report=html
 
 format:
-	ruff check --fix src tests sandbox
-	ruff format src tests sandbox
+	uv run ruff check --fix src tests sandbox
+	uv run ruff format src tests sandbox
 
 lint:
-	ruff format --check src tests sandbox
-	ruff check src tests sandbox
+	uv run ruff format --check src tests sandbox
+	uv run ruff check src tests sandbox
 
 docs:
-	$(MAKE) -C docs html
+	uv run --group docs $(MAKE) -C docs html
 
 makemessages:
-	cd src/wagtail_2fa && django-admin makemessages -a
+	cd src/wagtail_2fa && uv run django-admin makemessages -a
 
 compilemessages:
-	cd src/wagtail_2fa && django-admin compilemessages
+	cd src/wagtail_2fa && uv run django-admin compilemessages
 
 release:
 	rm -rf dist/*
-	python setup.py sdist bdist_wheel
-	twine upload dist/*
+	uv build
 
 
 sandbox:
-	pip install -r sandbox/requirements.txt
-	sandbox/manage.py migrate
-	sandbox/manage.py loaddata sandbox/exampledata/users.json
-	sandbox/manage.py runserver
+	uv sync --group sandbox
+	uv run sandbox/manage.py migrate
+	uv run sandbox/manage.py loaddata sandbox/exampledata/users.json
+	uv run sandbox/manage.py runserver
