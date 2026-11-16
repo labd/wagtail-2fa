@@ -6,7 +6,7 @@ readme = "README.rst"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Lab Digital", email = "opensource@labdigital.nl" }]
-requires-python = ">=3.11"
+requires-python = ">=3.11.5"
 dependencies = [
     "Django>=5.2",
     "Wagtail>=7.0",
@@ -64,6 +64,8 @@ build-backend = "hatchling.build"
 exclude-newer = "14 days"
 
 [tool.uv.exclude-newer-package]
+# Newer than the 14-day cutoff; remove after 2026-11-18
+soupsieve = "2026-11-05T00:00:00Z"  # 4.0.1 fixes GHSA-6655-6qjp-jx7x GHSA-7g44-g9rc-x53w GHSA-mmhr-3c5m-f64f
 # Locked versions newer than the 14-day cutoff; remove after 2026-11-09
 certifi = "2026-10-27T00:00:00Z"  # 2026.10.23 fixes GHSA-6q48-6c7w-9gw2
 filelock = "2026-10-27T00:00:00Z"  # 4.2.4 fixes GHSA-2g95-wg33-c5x2 GHSA-567q-5qvw-pf92 GHSA-9vhv-jxww-xfm5 ...
