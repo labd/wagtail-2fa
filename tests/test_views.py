@@ -296,3 +296,38 @@ def test_login_rejects_other_users_device(admin_client, admin_user, monkeypatch)
         )
         assert response.status_code == 200
         assert "otp_device" in response.context["form"].errors
+
+
+def test_login_accepts_token_with_spaces(admin_client, admin_user, monkeypatch):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        TOTPDevice.objects.create(name="Phone", user=admin_user, confirmed=True)
+        verified = []
+
+        def verify_token(self, value):
+            verified.append(value)
+            return value == "123456"
+
+        monkeypatch.setattr(TOTPDevice, "verify_token", verify_token)
+
+        response = admin_client.post(
+            reverse("wagtail_2fa_auth"), {"otp_token": "123 456", "next": "/cms/"}
+        )
+        assert response.status_code == 302, response.context["form"].errors
+        assert verified == ["123456"]
+
+
+def test_device_create_accepts_token_with_spaces(admin_client):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        endpoint = reverse("wagtail_2fa_device_new")
+        admin_client.get(endpoint)
+
+        with patch("django_otp.plugins.otp_totp.models.TOTPDevice.verify_token") as fn:
+            fn.return_value = True
+            response = admin_client.post(
+                endpoint,
+                {"name": "Phone", "otp_token": "123 456", "password": "password"},
+            )
+
+        assert response.status_code == 302, response.context["form"].errors
+        fn.assert_called_once_with("123456")
+        assert TOTPDevice.objects.filter(confirmed=True).count() == 1
