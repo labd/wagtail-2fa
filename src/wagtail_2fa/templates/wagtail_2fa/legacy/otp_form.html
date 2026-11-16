@@ -31,6 +31,11 @@
                 <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
                 {% block fields %}
+                    {% if form.otp_device.is_hidden %}
+                        {{ form.otp_device }}
+                    {% else %}
+                        {% field field=form.otp_device %}{% endfield %}
+                    {% endif %}
                     {% field field=form.otp_token %}{% endfield %}
 
                     {% block extra_fields %}

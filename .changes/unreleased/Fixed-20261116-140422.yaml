@@ -1,0 +1,3 @@
+kind: Fixed
+body: The 2FA login form works again with django-otp 1.7.1 and newer. Users with more than one device now choose which device to use when they log in.
+time: 2026-11-16T14:04:22.935651+01:00

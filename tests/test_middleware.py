@@ -1,4 +1,5 @@
 from unittest import mock
+
 import pytest
 from django.contrib.auth.models import Permission
 from django.test import override_settings

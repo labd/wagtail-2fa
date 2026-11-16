@@ -9,9 +9,7 @@ from django.urls import reverse
 from django_otp import DEVICE_ID_SESSION_KEY
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
-from wagtail_2fa.views import (
-    DeviceDeleteView, DeviceListView, DeviceUpdateView)
-
+from wagtail_2fa.views import DeviceDeleteView, DeviceListView, DeviceUpdateView
 
 
 def test_device_list_view(admin_client, admin_user, django_assert_max_num_queries):
@@ -220,3 +218,81 @@ class TestViewsChangeUserPermission:
 
             with pytest.raises(Http404):
                 DeviceUpdateView.as_view()(request, pk=other_device.id)
+
+
+def test_login_single_device_renders_hidden_device(admin_client, admin_user):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        device = TOTPDevice.objects.create(
+            name="Initial", user=admin_user, confirmed=True
+        )
+        response = admin_client.get(reverse("wagtail_2fa_auth"))
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert 'type="hidden" name="otp_device"' in content
+        assert device.persistent_id in content
+
+
+def test_login_with_selected_device(admin_client, admin_user, monkeypatch):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        TOTPDevice.objects.create(name="First", user=admin_user, confirmed=True)
+        second = TOTPDevice.objects.create(
+            name="Second", user=admin_user, confirmed=True
+        )
+        verified = []
+
+        def verify_token(self, value):
+            verified.append(self.pk)
+            return True
+
+        monkeypatch.setattr(TOTPDevice, "verify_token", verify_token)
+
+        endpoint = reverse("wagtail_2fa_auth")
+        response = admin_client.get(endpoint)
+        assert '<select name="otp_device"' in response.content.decode()
+
+        response = admin_client.post(
+            endpoint,
+            {
+                "otp_device": second.persistent_id,
+                "otp_token": "123456",
+                "next": "/cms/",
+            },
+        )
+        assert response.status_code == 302, response.context["form"].errors
+        assert verified == [second.pk]
+        assert admin_client.session[DEVICE_ID_SESSION_KEY] == second.persistent_id
+
+
+def test_login_multiple_devices_requires_device(admin_client, admin_user):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        TOTPDevice.objects.create(name="First", user=admin_user, confirmed=True)
+        TOTPDevice.objects.create(name="Second", user=admin_user, confirmed=True)
+
+        response = admin_client.post(
+            reverse("wagtail_2fa_auth"), {"otp_token": "123456", "next": "/cms/"}
+        )
+        assert response.status_code == 200
+        assert response.context["form"].errors["__all__"] == ["Please select a device."]
+
+
+def test_login_rejects_other_users_device(admin_client, admin_user, monkeypatch):
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        TOTPDevice.objects.create(name="Mine", user=admin_user, confirmed=True)
+        other = get_user_model().objects.create_user(
+            username="other", email="other@example.com", password="password"
+        )
+        other_device = TOTPDevice.objects.create(
+            name="Other", user=other, confirmed=True
+        )
+        monkeypatch.setattr(TOTPDevice, "verify_token", lambda self, value: True)
+
+        response = admin_client.post(
+            reverse("wagtail_2fa_auth"),
+            {
+                "otp_device": other_device.persistent_id,
+                "otp_token": "123456",
+                "next": "/cms/",
+            },
+        )
+        assert response.status_code == 200
+        assert "otp_device" in response.context["form"].errors
