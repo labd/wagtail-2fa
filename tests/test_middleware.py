@@ -91,6 +91,19 @@ def test_adding_new_device_does_not_require_verification_when_user_has_no_device
         assert response is request
 
 
+def test_unresolvable_path_does_not_raise(rf, superuser):
+    # Paths outside the URLconf (e.g. Wagtail preview requests) must reach the
+    # view instead of failing with Resolver404 inside the middleware.
+    request = rf.get("/does-not-match-any-url-pattern.txt")
+    request.user = superuser
+
+    middleware = VerifyUserMiddleware(lambda x: x)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        response = middleware(request)
+
+    assert response is request
+
+
 @pytest.mark.skip
 def test_always_require_verification_when_user_has_device(rf, user, settings):
     TOTPDevice.objects.create(user=user, confirmed=True)

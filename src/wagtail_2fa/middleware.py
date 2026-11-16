@@ -2,9 +2,9 @@ from functools import partial
 
 import django_otp
 from django.conf import settings
-from django.urls.exceptions import Resolver404
 from django.contrib.auth.views import redirect_to_login
 from django.urls import resolve, reverse
+from django.urls.exceptions import Resolver404
 from django.utils.functional import SimpleLazyObject
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 
