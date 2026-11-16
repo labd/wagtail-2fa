@@ -64,14 +64,8 @@ build-backend = "hatchling.build"
 exclude-newer = "14 days"
 
 [tool.uv.exclude-newer-package]
-# Newer than the 14-day cutoff; remove after 2026-11-18
+# Locked versions newer than the 14-day cutoff; remove after 2026-11-18
 soupsieve = "2026-11-05T00:00:00Z"  # 4.0.1 fixes GHSA-6655-6qjp-jx7x GHSA-7g44-g9rc-x53w GHSA-mmhr-3c5m-f64f
-# Locked versions newer than the 14-day cutoff; remove after 2026-11-09
-certifi = "2026-10-27T00:00:00Z"  # 2026.10.23 fixes GHSA-6q48-6c7w-9gw2
-filelock = "2026-10-27T00:00:00Z"  # 4.2.4 fixes GHSA-2g95-wg33-c5x2 GHSA-567q-5qvw-pf92 GHSA-9vhv-jxww-xfm5 ...
-pillow = "2026-10-27T00:00:00Z"  # 13.0.0 fixes GHSA-24rc-8hj2-v98c GHSA-462x-pgg6-55fp GHSA-4rm8-3hmm-39fg ...
-uv = "2026-10-27T00:00:00Z"  # 0.13.5 fixes GHSA-hq85-5cpj-mr62
-virtualenv = "2026-10-27T00:00:00Z"  # 21.14.13 fixes GHSA-394h-qwmc-48pf GHSA-43mp-35q3-x3fq GHSA-494p-63j8-28p3 ...
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/wagtail_2fa"]
