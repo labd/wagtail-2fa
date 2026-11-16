@@ -1,0 +1,3 @@
+kind: Fixed
+body: The 2FA code can now be entered with spaces, as authenticator apps often show it (for example "123 456"), both at login and when adding a device.
+time: 2026-11-16T17:31:40.821323+01:00
