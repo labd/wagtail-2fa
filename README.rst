@@ -1,25 +1,15 @@
-.. start-no-pypi
-
-.. image:: https://github.com/labd/wagtail-2fa/workflows/Python%20Tests/badge.svg
-    :target: https://github.com/labd/wagtail-2fa/actions?query=workflow%3A%22Python+Tests%22
-
-.. image:: http://codecov.io/github/labd/wagtail-2fa/coverage.svg?branch=master
-    :target: http://codecov.io/github/labd/wagtail-2fa?branch=master
-
-.. image:: https://img.shields.io/pypi/v/wagtail-2fa.svg
-    :target: https://pypi.python.org/pypi/wagtail-2fa/
-
-.. image:: https://readthedocs.org/projects/wagtail-2fa/badge/?version=stable
-    :target: https://wagtail-2fa.readthedocs.io/en/stable/?badge=stable
-
-.. image:: https://img.shields.io/github/stars/labd/wagtail-2fa.svg?style=social&logo=github
-    :target: https://github.com/labd/wagtail-2fa/stargazers
-
-.. end-no-pypi
-
 ===========
 wagtail-2fa
 ===========
+
+.. image:: https://img.shields.io/pypi/v/wagtail-2fa.svg
+    :target: https://pypi.org/project/wagtail-2fa/
+
+.. image:: https://github.com/labd/wagtail-2fa/actions/workflows/python-test.yml/badge.svg
+    :target: https://github.com/labd/wagtail-2fa/actions/workflows/python-test.yml
+
+.. image:: https://readthedocs.org/projects/wagtail-2fa/badge/?version=stable
+    :target: https://wagtail-2fa.readthedocs.io/en/stable/?badge=stable
 
 This Django app adds two factor authentication to Wagtail. Behind the scenes
 it use django-otp_ which supports Time-based One-Time Passwords (TOTP). This
@@ -114,7 +104,7 @@ and 2FA can be enabled or disabled per group.
 Sandbox
 =======
 
-First create a new virtualenv with Python 3.8 and activate it. Then run
+First create a new virtualenv with Python 3.11 or newer and activate it. Then run
 the following commands:
 
 .. code-block:: shell
@@ -127,3 +117,14 @@ credentials:
 
 - E-mail: ``superuser@example.com``
 - Password: ``testing``
+
+Releasing
+=========
+
+Releases are managed with `changie <https://changie.dev>`_:
+
+1. Add a changelog entry to your pull request with ``changie new``.
+2. After merging to ``master``, a release pull request is opened (or updated)
+   automatically, with the new version and the updated ``CHANGELOG.md``.
+3. Merging the release pull request creates the GitHub release, which publishes
+   the package to PyPI.

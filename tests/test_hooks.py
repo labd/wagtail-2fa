@@ -1,18 +1,17 @@
 from django.test import override_settings
 from django_otp import user_has_device
-from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 from wagtail.admin.menu import MenuItem
 
 from wagtail_2fa.wagtail_hooks import remove_menu_if_unverified
 
 
 class TestHooks:
-    def test_remove_menu_if_unverified(self, user, rf):
+    def test_remove_menu_if_unverified(self, user, rf, otpmiddleware):
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             request = rf.get("/cms/")
             request.user = user
-            middleware = _OTPMiddleware()
-            user = middleware._verify_user(request, user)
+            middleware = otpmiddleware
+            user = middleware._verify_user_sync(request, user)
             assert not user_has_device(user)
             assert user.is_authenticated
 

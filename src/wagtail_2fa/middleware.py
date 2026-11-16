@@ -4,6 +4,7 @@ import django_otp
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.urls import resolve, reverse
+from django.urls.exceptions import Resolver404
 from django.utils.functional import SimpleLazyObject
 from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 
@@ -13,6 +14,8 @@ class VerifyUserMiddleware(_OTPMiddleware):
         "wagtail_2fa_auth",
         "wagtailadmin_login",
         "wagtailadmin_logout",
+        "wagtailadmin_javascript_catalog",
+        "wagtailadmin_sprite",
     ]
 
     # These URLs do not require verification if the user has no devices
@@ -34,7 +37,7 @@ class VerifyUserMiddleware(_OTPMiddleware):
     def process_request(self, request):
         if request.user:
             request.user = SimpleLazyObject(
-                partial(self._verify_user, request, request.user)
+                partial(self._verify_user_sync, request, request.user)
             )
         user = request.user
         if self._require_verified_user(request):
@@ -72,7 +75,11 @@ class VerifyUserMiddleware(_OTPMiddleware):
             return False
 
         # Don't require verification for specified URL names
-        request_url_name = resolve(request.path_info).url_name
+        try:
+            request_url_name = resolve(request.path_info).url_name
+        except Resolver404:
+            return False
+
         if request_url_name in self._allowed_url_names:
             return False
 

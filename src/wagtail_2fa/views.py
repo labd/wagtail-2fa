@@ -1,27 +1,42 @@
 import qrcode
 import qrcode.image.svg
+from django import VERSION as DJANGO_VERSION
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+
+if DJANGO_VERSION >= (4, 1):
+    from django.contrib.auth.views import RedirectURLMixin
+else:
+    from django.contrib.auth.views import (
+        SuccessURLAllowedHostsMixin as RedirectURLMixin,
+    )
+
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import resolve_url
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import DeleteView, FormView, ListView, UpdateView, View
 from django_otp import login as otp_login
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from wagtail import VERSION as WAGTAIL_VERSION
 
 from wagtail_2fa import forms, utils
 from wagtail_2fa.mixins import OtpRequiredMixin
 
 
-class LoginView(SuccessURLAllowedHostsMixin, FormView):
-    template_name = "wagtail_2fa/otp_form.html"
+class LoginView(RedirectURLMixin, FormView):
+    if WAGTAIL_VERSION >= (6, 0):
+        template_name = "wagtail_2fa/otp_form_v6.html"
+    elif WAGTAIL_VERSION < (6, 0) and WAGTAIL_VERSION >= (5, 0):
+        template_name = "wagtail_2fa/otp_form.html"
+    else:
+        template_name = "wagtail_2fa/legacy/otp_form.html"
+
     form_class = forms.TokenForm
     redirect_field_name = REDIRECT_FIELD_NAME
 
@@ -49,7 +64,7 @@ class LoginView(SuccessURLAllowedHostsMixin, FormView):
         redirect_to = self.request.POST.get(
             self.redirect_field_name, self.request.GET.get(self.redirect_field_name, "")
         )
-        url_is_safe = is_safe_url(
+        url_is_safe = url_has_allowed_host_and_scheme(
             url=redirect_to,
             allowed_hosts=self.get_success_url_allowed_hosts(),
             require_https=self.request.is_secure(),
@@ -185,7 +200,9 @@ class DeviceQRCodeView(OtpRequiredMixin, View):
 
     def get(self, request):
         device = utils.get_unconfirmed_device(self.request.user)
-        img = qrcode.make(device.config_url, image_factory=qrcode.image.svg.SvgImage)
+        img = qrcode.make(
+            device.config_url, image_factory=qrcode.image.svg.SvgFillImage
+        )
         response = HttpResponse(content_type="image/svg+xml")
         img.save(response)
 

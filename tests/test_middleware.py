@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 from django.contrib.auth.models import Permission
 from django.test import override_settings
@@ -14,7 +16,8 @@ def test_verified_request(rf, superuser):
     device = TOTPDevice.objects.create(user=superuser, confirmed=True)
     otp_login(request, device)
 
-    middleware = VerifyUserMiddleware()
+    get_response = mock.MagicMock()
+    middleware = VerifyUserMiddleware(get_response)
     response = middleware.process_request(request)
     assert response is None
 
@@ -24,7 +27,8 @@ def test_superuser_force_mfa_auth(rf, superuser):
     request.user = superuser
     TOTPDevice.objects.create(user=superuser, confirmed=True)
 
-    middleware = VerifyUserMiddleware(lambda x: x)
+    get_response = mock.MagicMock()
+    middleware = VerifyUserMiddleware(get_response)
     with override_settings(WAGTAIL_2FA_REQUIRED=True):
         response = middleware(request)
     assert response.url == "%s?next=/admin/" % reverse("wagtail_2fa_auth")
@@ -33,7 +37,8 @@ def test_superuser_force_mfa_auth(rf, superuser):
 def test_superuser_require_register_device(rf, superuser):
     request = rf.get("/admin/")
     request.user = superuser
-    middleware = VerifyUserMiddleware(lambda x: x)
+    get_response = mock.MagicMock()
+    middleware = VerifyUserMiddleware(get_response)
     with override_settings(WAGTAIL_2FA_REQUIRED=True):
         response = middleware(request)
     assert response.url == "%s?next=/admin/" % reverse("wagtail_2fa_device_new")
@@ -45,7 +50,8 @@ def test_superuser_dont_require_register_device(rf, superuser, settings):
     request = rf.get("/admin/")
     request.user = superuser
 
-    middleware = VerifyUserMiddleware(lambda x: x)
+    get_response = mock.MagicMock()
+    middleware = VerifyUserMiddleware(get_response)
     response = middleware.process_request(request)
     assert response is None
 
@@ -61,7 +67,8 @@ def test_adding_new_device_requires_verification_when_user_has_device(
         request = rf.get(url_new_device)
         request.user = superuser
 
-        middleware = VerifyUserMiddleware(lambda x: x)
+        get_response = mock.MagicMock()
+        middleware = VerifyUserMiddleware(get_response)
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             response = middleware(request)
 
@@ -84,6 +91,19 @@ def test_adding_new_device_does_not_require_verification_when_user_has_no_device
         assert response is request
 
 
+def test_unresolvable_path_does_not_raise(rf, superuser):
+    # Paths outside the URLconf (e.g. Wagtail preview requests) must reach the
+    # view instead of failing with Resolver404 inside the middleware.
+    request = rf.get("/does-not-match-any-url-pattern.txt")
+    request.user = superuser
+
+    middleware = VerifyUserMiddleware(lambda x: x)
+    with override_settings(WAGTAIL_2FA_REQUIRED=True):
+        response = middleware(request)
+
+    assert response is request
+
+
 @pytest.mark.skip
 def test_always_require_verification_when_user_has_device(rf, user, settings):
     TOTPDevice.objects.create(user=user, confirmed=True)
@@ -92,7 +112,8 @@ def test_always_require_verification_when_user_has_device(rf, user, settings):
     request = rf.get("/admin/")
     request.user = user
 
-    middleware = VerifyUserMiddleware(lambda x: x)
+    get_response = mock.MagicMock()
+    middleware = VerifyUserMiddleware(get_response)
     with override_settings(WAGTAIL_2FA_REQUIRED=True):
         response = middleware(request)
 
@@ -107,7 +128,9 @@ class TestVerifyUserPermissionsMiddleware:
 
         request = rf.get("/admin/")
         request.user = user_no_2fa
-        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        get_response = mock.MagicMock()
+        middleware = VerifyUserPermissionsMiddleware(get_response)
 
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             result = middleware._require_verified_user(request)
@@ -121,7 +144,9 @@ class TestVerifyUserPermissionsMiddleware:
 
         request = rf.get("/admin/")
         request.user = user_2fa
-        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        get_response = mock.MagicMock()
+        middleware = VerifyUserPermissionsMiddleware(get_response)
 
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             result = middleware._require_verified_user(request)
@@ -136,7 +161,9 @@ class TestVerifyUserPermissionsMiddleware:
 
         request = rf.get("/admin/")
         request.user = user_2fa
-        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        get_response = mock.MagicMock()
+        middleware = VerifyUserPermissionsMiddleware(get_response)
 
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             result = middleware._require_verified_user(request)
@@ -152,7 +179,9 @@ class TestVerifyUserPermissionsMiddleware:
 
         request = rf.get("/admin/")
         request.user = user_no_2fa
-        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        get_response = mock.MagicMock()
+        middleware = VerifyUserPermissionsMiddleware(get_response)
 
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             middleware.process_request(request)
@@ -166,7 +195,9 @@ class TestVerifyUserPermissionsMiddleware:
 
         request = rf.get("/admin/")
         request.user = user_2fa
-        middleware = VerifyUserPermissionsMiddleware(lambda x: x)
+
+        get_response = mock.MagicMock()
+        middleware = VerifyUserPermissionsMiddleware(get_response)
 
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             middleware.process_request(request)

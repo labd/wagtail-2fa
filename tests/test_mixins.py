@@ -3,7 +3,6 @@ from django.core.exceptions import PermissionDenied
 from django.test import override_settings
 from django.urls import reverse
 from django_otp import user_has_device
-from django_otp.middleware import OTPMiddleware as _OTPMiddleware
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from wagtail_2fa.mixins import OtpRequiredMixin
@@ -50,12 +49,14 @@ class TestOtpRequiredMixin:
             result = mixin.user_allowed(user)
             assert result is True
 
-    def test_user_allowed_when_no_device_and_if_configured_returns_true(self, rf, user):
+    def test_user_allowed_when_no_device_and_if_configured_returns_true(
+        self, rf, user, otpmiddleware
+    ):
         with override_settings(WAGTAIL_2FA_REQUIRED=True):
             request = rf.get("/admin/")
             request.user = user
-            middleware = _OTPMiddleware()
-            user = middleware._verify_user(request, user)
+            middleware = otpmiddleware
+            user = middleware._verify_user_sync(request, user)
             assert not user_has_device(user)
             assert user.is_authenticated
 
