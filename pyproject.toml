@@ -1,6 +1,6 @@
 [project]
 name = "wagtail-2fa"
-version = "1.8.0"
+version = "2.0.0"
 description = "Two factor authentication for Wagtail"
 readme = "README.rst"
 license = "MIT"
